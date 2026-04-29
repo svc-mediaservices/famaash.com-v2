@@ -8,7 +8,9 @@
       "Bash(sed -i '165,275d' index.html)",
       "Bash(sed -i '164r .intake_block.tmp' index.html)",
       "Bash(sed -n '163,170p' index.html)",
-      "Bash(sed -n '264,270p' index.html)"
+      "Bash(sed -n '264,270p' index.html)",
+      "Bash(python -m http.server 8765)",
+      "Bash(curl -s -o /dev/null -w \"Server status: HTTP %{http_code}\\\\n\" \"http://localhost:8765/book.html\")"
     ]
   }
 }

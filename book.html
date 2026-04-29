@@ -59,19 +59,24 @@
     margin: 32px auto 80px;
     padding: 0 24px;
   }
-  .book-cal__frame {
+  .book-cal__shell {
     width: 100%;
-    height: 820px;
+    height: 1100px;
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 32px rgba(7,7,12,0.06);
     overflow: hidden;
   }
+  #my-cal-inline-njaj-followup {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+  }
   @media (max-width: 720px) {
     .book-page { padding-top: 72px; }
     .book-hero { padding: 32px 20px 16px; }
     .book-cal { padding: 0 12px; margin-bottom: 48px; }
-    .book-cal__frame { height: 760px; }
+    .book-cal__shell { height: 980px; }
   }
 </style>
 </head>
@@ -206,7 +211,9 @@
   </section>
 
   <section class="book-cal">
-    <div class="book-cal__frame" id="my-cal-inline-njaj-followup"></div>
+    <div class="book-cal__shell">
+      <div id="my-cal-inline-njaj-followup"></div>
+    </div>
   </section>
 </main>
 
@@ -214,15 +221,15 @@
 <script type="text/javascript">
   (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "Cal");
 
-  Cal("init", "njaj-followup", {origin:"https://app.cal.com"});
+  Cal("init", {origin:"https://cal.com"});
 
-  Cal.ns["njaj-followup"]("inline", {
+  Cal("inline", {
     elementOrSelector:"#my-cal-inline-njaj-followup",
     config: {"layout":"column_view","useSlotsViewOnSmallScreen":"true"},
     calLink: "faisal-shabir/njaj-followup",
   });
 
-  Cal.ns["njaj-followup"]("ui", {"hideEventTypeDetails":false,"layout":"column_view"});
+  Cal("ui", {"hideEventTypeDetails":false,"layout":"column_view"});
 </script>
 
 <footer class="foot" data-screen-label="Footer">
