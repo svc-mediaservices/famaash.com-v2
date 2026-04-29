@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/audit", "destination": "/audit.html" },
+    { "source": "/audit-leaderboard", "destination": "/audit.html" },
+    { "source": "/geo", "destination": "/personal-injury/client-acquisition.html" },
+    { "source": "/njaj", "destination": "/njaj.html" },
+    { "source": "/book", "destination": "/book.html" }
+  ]
+}
