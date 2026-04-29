@@ -1,0 +1,77 @@
+// ===== Mega-dropdown (matches preview/famaash-nav-preview.html) =====
+(function() {
+  const trigger = document.getElementById('capTrigger');
+  const dropdown = document.getElementById('capDropdown');
+  const navInner = document.querySelector('.nav__inner');
+  if (!trigger || !dropdown || !navInner) return;
+
+  const industries = document.querySelectorAll('.mega__industry');
+  const capPanels = document.querySelectorAll('.mega__cap-content');
+  let openTimer = null, closeTimer = null;
+
+  function openMega() {
+    clearTimeout(closeTimer);
+    dropdown.classList.add('open');
+    trigger.setAttribute('aria-expanded', 'true');
+    dropdown.setAttribute('aria-hidden', 'false');
+  }
+  function closeMega() {
+    dropdown.classList.remove('open');
+    trigger.setAttribute('aria-expanded', 'false');
+    dropdown.setAttribute('aria-hidden', 'true');
+  }
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (dropdown.classList.contains('open')) closeMega(); else openMega();
+  });
+  trigger.addEventListener('mouseenter', () => {
+    clearTimeout(closeTimer);
+    openTimer = setTimeout(openMega, 80);
+  });
+  navInner.addEventListener('mouseleave', () => {
+    clearTimeout(openTimer);
+    closeTimer = setTimeout(closeMega, 200);
+  });
+  dropdown.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+  dropdown.addEventListener('mouseleave', () => {
+    closeTimer = setTimeout(closeMega, 200);
+  });
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target) && !trigger.contains(e.target)) closeMega();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMega();
+  });
+  industries.forEach(item => {
+    const switchTo = () => {
+      industries.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      const target = item.dataset.industry;
+      capPanels.forEach(p => {
+        if (p.dataset.industry === target) p.removeAttribute('hidden');
+        else p.setAttribute('hidden', '');
+      });
+    };
+    item.addEventListener('mouseenter', switchTo);
+    item.addEventListener('focus', switchTo);
+    item.addEventListener('click', switchTo);
+  });
+})();
+
+// ===== Fade-up on scroll =====
+(function() {
+  const els = document.querySelectorAll('.fade-up, .pedigree__card--stagger');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(el => el.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  els.forEach(el => io.observe(el));
+})();

@@ -1,0 +1,221 @@
+/* =====================================================
+   FAMAASH, Colors & Type Tokens
+   Forest green + gold | Cormorant + DM Sans + DM Mono
+   Single source of truth for color and type variables.
+   ===================================================== */
+
+@font-face {
+  font-family: 'Cormorant';
+  src: url('fonts/Cormorant-VariableFont_wght.ttf') format('truetype-variations');
+  font-weight: 300 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DM Sans';
+  src: url('fonts/DMSans-VariableFont.ttf') format('truetype-variations');
+  font-weight: 100 1000;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DM Mono';
+  src: url('fonts/DMMono-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DM Mono';
+  src: url('fonts/DMMono-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'DM Mono';
+  src: url('fonts/DMMono-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* ---------- COLOR, SURFACES (DARK) ---------- */
+  --ink:        #07070C;   /* primary dark */
+  --ink-2:      #0F0F1A;   /* panel dark */
+  --ink-3:      #181828;   /* raised dark */
+  --ink-line:   #1F1F30;   /* border on dark */
+
+  /* ---------- COLOR, SURFACES (CREAM) ---------- */
+  --cream:      #F7F5F0;
+  --cream-2:    #EFEBE2;
+  --cream-3:    #E5DFD2;
+  --cream-line: #D9D3C5;
+
+  /* ---------- COLOR, ACCENT (FOREST GREEN) ---------- */
+  --accent:      #0D4A3D;   /* primary CTA */
+  --accent-h:    #0A3A30;   /* hover */
+  --accent-lt:   #E5EFE9;   /* tag bg on cream */
+  --accent-mid:  #4A8B7A;   /* on dark, muted */
+  --accent-glow: rgba(13,74,61,0.14);
+  --accent-line: rgba(13,74,61,0.22);
+
+  /* ---------- COLOR, GOLD (PREMIUM MARKERS) ---------- */
+  --gold:       #C9A961;
+  --gold-h:     #B8954E;
+  --gold-lt:    #F5EFD9;
+  --gold-deep:  #8B7333;
+  --gold-glow:  rgba(201,169,97,0.12);
+
+  /* ---------- COLOR, SEMANTIC ---------- */
+  --positive:    #2D7A5F;
+  --positive-bg: #E1EEE7;
+  --warning:     #B8860B;
+  --warning-bg:  #FBF1D6;
+  --negative:    #8B1A1A;
+  --negative-bg: #F5DBDB;
+
+  /* ---------- COLOR, TYPE ---------- */
+  --on-ink:      #FFFFFF;
+  --muted-ink:   #8B8B9E;
+  --dim-ink:     #5C5C70;
+  --on-cream:    #0A0A14;
+  --muted-cream: #4B5563;
+  --dim-cream:   #6B7280;
+
+  /* ---------- TYPE, FAMILIES ---------- */
+  --font-display: 'Cormorant', Georgia, 'Times New Roman', serif;
+  --font-body:    'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'DM Mono', ui-monospace, monospace;
+
+  /* ---------- TYPE, SCALE (FLUID) ---------- */
+  --t-display-xl: clamp(72px, 9vw, 140px);  /* hero stats */
+  --t-display-lg: clamp(48px, 5.5vw, 84px); /* hero headlines */
+  --t-display-md: clamp(36px, 4vw, 56px);   /* section heads */
+  --t-display-sm: clamp(24px, 2.6vw, 34px); /* card titles */
+  --t-body-lg:    18px;
+  --t-body:       16px;
+  --t-body-sm:    14px;
+  --t-eyebrow:    11px;
+  --t-mono-data:  13px;
+
+  /* ---------- TYPE, LINE ---------- */
+  --lh-tight:   1.08;
+  --lh-snug:    1.2;
+  --lh-normal:  1.6;
+  --lh-loose:   1.75;
+
+  /* ---------- TYPE, TRACKING ---------- */
+  --ls-tight:   -0.02em;
+  --ls-display: -0.01em;
+  --ls-normal:  0;
+  --ls-mono:    0.06em;
+  --ls-eyebrow: 0.16em;
+  --ls-bracket: 0.18em;
+
+  /* ---------- LAYOUT, CONTAINER ---------- */
+  --container-max:    1280px;
+  --container-prose:  880px;
+  --container-narrow: 680px;
+
+  /* ---------- LAYOUT, SPACING ---------- */
+  --s-1:  4px;
+  --s-2:  8px;
+  --s-3:  12px;
+  --s-4:  16px;
+  --s-5:  24px;
+  --s-6:  32px;
+  --s-7:  48px;
+  --s-8:  64px;
+  --s-9:  96px;
+  --s-10: 128px;
+
+  /* ---------- LAYOUT, RADII (low, "serious") ---------- */
+  --r-1: 2px;
+  --r-2: 3px;
+  --r-3: 4px;
+  --r-4: 6px;
+  --r-pill: 999px;
+
+  /* ---------- ELEVATION ---------- */
+  --shadow-1: 0 1px 2px rgba(7,7,12,0.06);
+  --shadow-2: 0 8px 24px rgba(7,7,12,0.10);
+  --shadow-3: 0 30px 60px rgba(0,0,0,0.40);
+  --inner-gold: inset 0 2px 0 var(--gold);
+
+  /* ---------- MOTION ---------- */
+  --ease-out:   cubic-bezier(0.2, 0, 0, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --t-fast:   180ms;
+  --t-base:   220ms;
+  --t-slow:   600ms;
+  --t-anim:   1200ms;
+}
+
+/* ---------- GLOBAL: enforce no-italic ---------- */
+* { font-style: normal !important; }
+
+/* ---------- SEMANTIC TYPE STYLES ---------- */
+.t-display-xl, .t-h-hero {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--t-display-xl);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+}
+.t-display-lg, h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--t-display-lg);
+  line-height: 1.02;
+  letter-spacing: var(--ls-display);
+}
+.t-display-md, h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--t-display-md);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-display);
+}
+.t-display-sm, h3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--t-display-sm);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--ls-display);
+}
+.t-body-lg {
+  font-family: var(--font-body);
+  font-size: var(--t-body-lg);
+  line-height: var(--lh-loose);
+}
+.t-body {
+  font-family: var(--font-body);
+  font-size: var(--t-body);
+  line-height: var(--lh-normal);
+}
+.t-body-sm {
+  font-family: var(--font-body);
+  font-size: var(--t-body-sm);
+  line-height: var(--lh-normal);
+}
+.t-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--t-eyebrow);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  font-weight: 400;
+}
+.t-bracket {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: var(--ls-bracket);
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+.t-mono-data {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono-data);
+  letter-spacing: var(--ls-mono);
+}

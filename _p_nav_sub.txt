@@ -1,0 +1,119 @@
+<header class="nav" id="topNav">
+  <div class="nav__inner">
+    <a href="../index.html" class="nav__brand" aria-label="Famaash home">
+      <img src="../assets/famaash-logo-white.svg" alt="Famaash" />
+    </a>
+
+    <ul class="nav__items">
+      <li>
+        <button class="nav__item" id="capTrigger" aria-expanded="false" aria-controls="capDropdown">
+          Capabilities
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2 4 5 7 8 4"></polyline></svg>
+        </button>
+      </li>
+      <li><a class="nav__item" href="../approach.html">Our Approach</a></li>
+      <li><a class="nav__item" href="../case-studies.html">Case Studies</a></li>
+      <li><a class="nav__item" href="../insights.html">Insights</a></li>
+      <li><a class="nav__item active" href="../about.html">About</a></li>
+    </ul>
+
+    <div class="nav__cta">
+      <a class="btn-primary" href="../audit.html">Book a Discovery Call <span class="arrow">→</span></a>
+    </div>
+
+    <div class="mega" id="capDropdown" role="menu" aria-hidden="true">
+      <div class="mega__grid">
+        <aside class="mega__industries">
+          <h3 class="mega__col-h">Industries</h3>
+          <ul class="mega__industry-list" id="industryList">
+            <li class="mega__industry active" data-industry="pi" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name mega__industry-name--anchor">Personal Injury Law</div>
+                <div class="mega__industry-meta">Operating partner for plaintiff PI firms.</div>
+              </div>
+            </li>
+            <li class="mega__industry" data-industry="healthcare" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name">Healthcare</div>
+                <div class="mega__industry-meta">For health systems and specialty groups.</div>
+              </div>
+            </li>
+            <li class="mega__industry" data-industry="finance" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name">Financial Services</div>
+                <div class="mega__industry-meta">For RIAs, banks, and wealth practices.</div>
+              </div>
+            </li>
+            <li class="mega__industry" data-industry="consulting" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name">Management Consulting</div>
+                <div class="mega__industry-meta">For Tier-1 strategy and Big Four firms.</div>
+              </div>
+            </li>
+          </ul>
+          <div class="mega__divider"></div>
+          <div class="mega__divider-label">Practice Areas</div>
+          <ul class="mega__horizontal-list">
+            <li class="mega__horizontal" role="menuitem" tabindex="0"><span class="mega__horizontal-name">Marketing</span><span class="mega__horizontal-arrow">→</span></li>
+            <li class="mega__horizontal" role="menuitem" tabindex="0"><span class="mega__horizontal-name">Talent</span><span class="mega__horizontal-arrow">→</span></li>
+            <li class="mega__horizontal" role="menuitem" tabindex="0"><span class="mega__horizontal-name">Engineering &amp; AI</span><span class="mega__horizontal-arrow">→</span></li>
+          </ul>
+        </aside>
+
+        <section class="mega__capabilities" id="capPanel">
+          <div class="mega__cap-content" data-industry="pi">
+            <div class="mega__cap-eyebrow-row"><span class="mega__cap-eyebrow">For Personal Injury Law Firms</span></div>
+            <h2 class="mega__cap-title">The operating partner for personal injury firms.</h2>
+            <p class="mega__cap-sub">Marketing, intake, case operations, and the dashboard above all three. One accountable team. One bill. Cost per signed case, reported quarterly.</p>
+            <div class="mega__cap-grid">
+              <a href="../personal-injury/client-acquisition.html" class="mega__cap mega__cap--featured"><span class="mega__cap-num">01</span><span class="mega__cap-name">Client Acquisition</span><span class="mega__cap-meta">Be the first name they remember.</span></a>
+              <a href="../personal-injury/intake-conversion.html" class="mega__cap"><span class="mega__cap-num">02</span><span class="mega__cap-name">Intake &amp; Conversion</span><span class="mega__cap-meta">Every call answered, every retainer signed.</span></a>
+              <a href="../personal-injury/case-operations.html" class="mega__cap"><span class="mega__cap-num">03</span><span class="mega__cap-name">Case Operations</span><span class="mega__cap-meta">PI-certified staff on your team in 30 days.</span></a>
+              <a href="../personal-injury/command-center.html" class="mega__cap"><span class="mega__cap-num">04</span><span class="mega__cap-name">Command Center</span><span class="mega__cap-meta">Finally see inside your own firm.</span></a>
+            </div>
+            <div class="mega__footer"><a href="../personal-injury/index.html" class="mega__footer-link">See the Personal Injury practice</a></div>
+          </div>
+
+          <div class="mega__cap-content" data-industry="healthcare" hidden>
+            <div class="mega__cap-eyebrow-row"><span class="mega__cap-eyebrow">For Healthcare</span></div>
+            <h2 class="mega__cap-title">Patient acquisition. Referral capture. Clinical workflow AI.</h2>
+            <p class="mega__cap-sub">Built for regional health systems, multi-specialty groups, MSOs, and telehealth platforms. HIPAA-compliant intake across every service line.</p>
+            <div class="mega__cap-grid">
+              <a href="#" class="mega__cap"><span class="mega__cap-num">01</span><span class="mega__cap-name">Patient Acquisition</span><span class="mega__cap-meta">Be the practice patients choose first.</span></a>
+              <a href="#" class="mega__cap"><span class="mega__cap-num">02</span><span class="mega__cap-name">Referral &amp; Intake</span><span class="mega__cap-meta">Every referral captured, every patient routed.</span></a>
+              <a href="#" class="mega__cap"><span class="mega__cap-num">03</span><span class="mega__cap-name">RCM &amp; Back-Office</span><span class="mega__cap-meta">Coding, prior auth, and denials handled.</span></a>
+              <a href="#" class="mega__cap"><span class="mega__cap-num">04</span><span class="mega__cap-name">Clinical AI Workflows</span><span class="mega__cap-meta">Documentation, scheduling, and triage that scale.</span></a>
+            </div>
+            <div class="mega__footer"><a href="../industries/healthcare.html" class="mega__footer-link">See the Healthcare practice</a></div>
+          </div>
+
+          <div class="mega__cap-content" data-industry="finance" hidden>
+            <div class="mega__cap-eyebrow-row"><span class="mega__cap-eyebrow">For Financial Services</span></div>
+            <h2 class="mega__cap-title">Acquisition, advisor productivity, compliance-aware content.</h2>
+            <p class="mega__cap-sub">For RIAs, regional banks, private wealth practices, and insurance brokerages. Compliant by default. Measured against AUM growth, not impressions.</p>
+            <div class="mega__cap-grid">
+              <a href="#" class="mega__cap"><span class="mega__cap-num">01</span><span class="mega__cap-name">Lead Acquisition</span><span class="mega__cap-meta">Reach the clients your advisors actually want.</span></a>
+              <a href="#" class="mega__cap"><span class="mega__cap-num">02</span><span class="mega__cap-name">Advisor Productivity</span><span class="mega__cap-meta">Free advisors to do what they do best.</span></a>
+              <a href="#" class="mega__cap"><span class="mega__cap-num">03</span><span class="mega__cap-name">Compliance Content</span><span class="mega__cap-meta">Review-ready content, on the first draft.</span></a>
+              <a href="#" class="mega__cap"><span class="mega__cap-num">04</span><span class="mega__cap-name">Back-Office Staffing</span><span class="mega__cap-meta">Operations that keep up with your book.</span></a>
+            </div>
+            <div class="mega__footer"><a href="#" class="mega__footer-link">See the Financial Services practice</a></div>
+          </div>
+
+          <div class="mega__cap-content" data-industry="consulting" hidden>
+            <div class="mega__cap-eyebrow-row"><span class="mega__cap-eyebrow">For Management Consulting</span></div>
+            <h2 class="mega__cap-title">AI research. Analyst augmentation. Partner-pipeline support.</h2>
+            <p class="mega__cap-sub">Trusted by Tier-1 strategy firms and Big Four advisory practices. Proprietary research workflows. Analyst-grade output. Confidentiality is the default.</p>
+            <div class="mega__cap-grid">
+              <a href="#" class="mega__cap"><span class="mega__cap-num">01</span><span class="mega__cap-name">AI Research Workflows</span><span class="mega__cap-meta">Synthesize faster than your competition.</span></a>
+              <a href="#" class="mega__cap"><span class="mega__cap-num">02</span><span class="mega__cap-name">Analyst Augmentation</span><span class="mega__cap-meta">Give every case team a force multiplier.</span></a>
+              <a href="#" class="mega__cap"><span class="mega__cap-num">03</span><span class="mega__cap-name">Thought Leadership</span><span class="mega__cap-meta">Publish the POVs that win mandates.</span></a>
+              <a href="#" class="mega__cap"><span class="mega__cap-num">04</span><span class="mega__cap-name">BD &amp; Pipeline</span><span class="mega__cap-meta">Turn partner relationships into pipeline.</span></a>
+            </div>
+            <div class="mega__footer"><a href="#" class="mega__footer-link">See the Management Consulting practice</a></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Famaash — Nav Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500;600&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --ink:        #07070C;
+  --ink-2:      #0F0F1A;
+  --ink-3:      #181828;
+  --ink-line:   #1F1F30;
+  --cream:      #F7F5F0;
+  --cream-2:    #EFEBE2;
+  --cream-3:    #E5DFD2;
+  --cream-line: #D9D3C5;
+  --accent:     #0D4A3D;
+  --accent-h:   #0A3A30;
+  --accent-lt:  #E5EFE9;
+  --accent-mid: #4A8B7A;
+  --gold:       #C9A961;
+  --gold-h:     #B8954E;
+  --gold-deep:  #8B7333;
+  --gold-glow:  rgba(201, 169, 97, 0.12);
+  --on-ink:     #FFFFFF;
+  --muted-ink:  #8B8B9E;
+  --dim-ink:    #5C5C70;
+  --on-cream:   #0A0A14;
+  --muted-cream:#4B5563;
+  --dim-cream:  #6B7280;
+}
+*, *::before, *::after { box-sizing: border-box; }
+* { font-style: normal !important; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--on-ink);
+  background: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; border: none; background: none; }
+
+/* ========== TOP NAV ========== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(7, 7, 12, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--ink-line);
+}
+.nav__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  position: relative;
+}
+.nav__logo {
+  font-family: 'Cormorant', Georgia, serif;
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+  color: var(--on-ink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav__logo-mark {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  position: relative;
+}
+.nav__logo-mark::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  background: var(--gold);
+  border-radius: 50%;
+}
+.nav__items {
+  display: flex;
+  gap: 36px;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav__item {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--on-ink);
+  opacity: 0.78;
+  transition: opacity 180ms;
+  cursor: pointer;
+  padding: 8px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+}
+.nav__item:hover, .nav__item.active { opacity: 1; }
+.nav__item .chev {
+  width: 10px;
+  height: 10px;
+  opacity: 0.6;
+  transition: transform 200ms;
+}
+.nav__item[aria-expanded="true"] .chev { transform: rotate(180deg); }
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  padding: 13px 24px;
+  border-radius: 3px;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--on-ink);
+  transition: all 200ms cubic-bezier(0.2, 0, 0, 1);
+  white-space: nowrap;
+}
+.btn-primary:hover {
+  background: var(--accent-h);
+  border-color: var(--accent-h);
+  transform: translateY(-1px);
+}
+
+/* ========== MEGA DROPDOWN ========== */
+.mega {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  width: min(1180px, calc(100vw - 64px));
+  background: var(--ink-2);
+  border: 1px solid var(--ink-line);
+  border-top: 2px solid var(--gold);
+  border-radius: 0 0 4px 4px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 240ms cubic-bezier(0.4, 0, 0.2, 1), visibility 240ms, transform 240ms cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 1px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+.mega.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+.mega__grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  min-height: 480px;
+}
+
+/* === Industries column === */
+.mega__industries {
+  background: var(--ink);
+  padding: 32px 0 32px 32px;
+  border-right: 1px solid var(--ink-line);
+}
+.mega__col-h {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 20px;
+  font-weight: 400;
+}
+.mega__industry-list {
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+}
+.mega__industry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px 14px 0;
+  cursor: pointer;
+  position: relative;
+  transition: all 200ms;
+  border-left: 2px solid transparent;
+  margin-left: -32px;
+  padding-left: 32px;
+}
+.mega__industry::after {
+  content: '→';
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  color: var(--gold);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mega__industry:hover, .mega__industry.active {
+  background: rgba(201, 169, 97, 0.04);
+  border-left-color: var(--gold);
+}
+.mega__industry.active::after, .mega__industry:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+.mega__industry-content {
+  flex: 1;
+  min-width: 0;
+}
+.mega__industry-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--on-ink);
+  letter-spacing: -0.005em;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mega__industry-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 2px 6px;
+  border: 1px solid rgba(201, 169, 97, 0.4);
+  border-radius: 2px;
+  font-weight: 400;
+}
+.mega__industry-name--anchor {
+  color: var(--gold);
+}
+.mega__industry-meta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  color: var(--muted-ink);
+  letter-spacing: 0;
+  font-weight: 400;
+}
+.mega__industry.active .mega__industry-meta { color: var(--accent-mid); }
+
+.mega__divider {
+  height: 1px;
+  background: var(--ink-line);
+  margin: 0 0 24px;
+  margin-left: -32px;
+}
+.mega__divider-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim-ink);
+  margin-bottom: 16px;
+}
+.mega__horizontal-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mega__horizontal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 24px 11px 0;
+  cursor: pointer;
+  transition: all 180ms;
+  margin-left: -32px;
+  padding-left: 32px;
+  border-left: 2px solid transparent;
+}
+.mega__horizontal:hover {
+  background: rgba(201, 169, 97, 0.03);
+  border-left-color: rgba(201, 169, 97, 0.6);
+}
+.mega__horizontal-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--on-ink);
+  opacity: 0.85;
+}
+.mega__horizontal-arrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--muted-ink);
+  opacity: 0;
+  transition: opacity 180ms;
+}
+.mega__horizontal:hover .mega__horizontal-arrow { opacity: 1; }
+
+/* === Capabilities column === */
+.mega__capabilities {
+  padding: 32px 36px;
+  background: var(--ink-2);
+  position: relative;
+}
+.mega__cap-eyebrow-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+.mega__cap-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 400;
+}
+.mega__cap-anchor-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.mega__cap-title {
+  font-family: 'Cormorant', Georgia, serif;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--on-ink);
+  margin: 0 0 8px;
+}
+.mega__cap-sub {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--muted-ink);
+  margin: 0 0 24px;
+  max-width: 56ch;
+}
+
+.mega__cap-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--ink-line);
+  border-top: 1px solid var(--ink-line);
+  border-bottom: 1px solid var(--ink-line);
+}
+.mega__cap {
+  background: var(--ink-2);
+  padding: 18px 18px;
+  cursor: pointer;
+  transition: background 180ms;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+}
+.mega__cap:hover { background: var(--ink-3); }
+.mega__cap--featured::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 2px;
+  background: var(--gold);
+}
+.mega__cap-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--gold-deep);
+}
+.mega__cap-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--on-ink);
+  letter-spacing: -0.005em;
+}
+.mega__cap-meta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12.5px;
+  color: var(--muted-ink);
+  letter-spacing: 0;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.mega__cap-coming {
+  background: var(--ink-2);
+  padding: 24px 0;
+  text-align: left;
+}
+.mega__cap-coming-h {
+  font-family: 'Cormorant', serif;
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--gold);
+  margin: 0 0 8px;
+}
+.mega__cap-coming-sub {
+  font-size: 13.5px;
+  color: var(--muted-ink);
+  line-height: 1.6;
+  max-width: 50ch;
+  margin: 0 0 16px;
+}
+.mega__cap-coming-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+/* Footer of mega */
+.mega__footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 22px 0 0;
+  margin-top: 24px;
+  border-top: 1px solid var(--ink-line);
+  gap: 24px;
+}
+.mega__footer-link {
+  font-family: 'Cormorant', Georgia, serif;
+  font-weight: 500;
+  font-size: 18px;
+  letter-spacing: -0.005em;
+  color: var(--gold);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  transition: color 180ms;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(201, 169, 97, 0.4);
+}
+.mega__footer-link:hover {
+  color: var(--gold-h);
+  border-bottom-color: var(--gold);
+}
+.mega__footer-link::after {
+  content: '→';
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  transition: transform 200ms;
+}
+.mega__footer-link:hover::after { transform: translateX(4px); }
+
+/* ========== HERO PREVIEW (so the nav has context) ========== */
+.hero {
+  background: var(--cream);
+  color: var(--on-cream);
+  padding: 64px 32px 32px;
+  border-bottom: 1px solid var(--cream-line);
+}
+.hero__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.hero__eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+.hero__h1 {
+  font-family: 'Cormorant', serif;
+  font-weight: 500;
+  font-size: clamp(40px, 5.5vw, 84px);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+  margin: 0 0 24px;
+  max-width: 18ch;
+}
+.hero__lede {
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--muted-cream);
+  max-width: 56ch;
+  margin: 0;
+}
+
+/* Trust strip */
+.trust {
+  background: var(--cream);
+  border-top: 1px solid var(--cream-line);
+  border-bottom: 1px solid var(--cream-line);
+  padding: 18px 32px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim-cream);
+  text-align: center;
+}
+.trust__inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.trust__dot {
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Hint */
+.hint {
+  background: var(--cream-2);
+  padding: 32px;
+  text-align: center;
+  border-bottom: 1px solid var(--cream-line);
+  color: var(--muted-cream);
+}
+.hint p {
+  margin: 0 auto;
+  max-width: 56ch;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.hint kbd {
+  font-family: 'DM Mono', monospace;
+  font-size: 11.5px;
+  background: var(--cream);
+  border: 1px solid var(--cream-line);
+  padding: 3px 8px;
+  border-radius: 3px;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+@media (max-width: 1080px) {
+  .mega__grid { grid-template-columns: 1fr; }
+  .mega__industries { border-right: none; border-bottom: 1px solid var(--ink-line); padding: 28px 24px; }
+  .mega__capabilities { padding: 28px 24px; }
+}
+@media (max-width: 760px) {
+  .nav__items { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="topNav">
+  <div class="nav__inner">
+    <a href="/" class="nav__logo">
+      <span class="nav__logo-mark"></span>
+      Famaash
+    </a>
+
+    <ul class="nav__items">
+      <li>
+        <button class="nav__item" id="capTrigger" aria-expanded="false" aria-controls="capDropdown">
+          Capabilities
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2 4 5 7 8 4"/></svg>
+        </button>
+      </li>
+      <li><a class="nav__item" href="#">Our Approach</a></li>
+      <li><a class="nav__item" href="#">Case Studies</a></li>
+      <li><a class="nav__item" href="#">Insights</a></li>
+      <li><a class="nav__item" href="#">About</a></li>
+      <li><a class="btn-primary" href="#">Book your Audit</a></li>
+    </ul>
+
+    <!-- ============= MEGA DROPDOWN ============= -->
+    <div class="mega" id="capDropdown" role="menu" aria-hidden="true">
+      <div class="mega__grid">
+
+        <!-- Industries column -->
+        <aside class="mega__industries">
+          <h3 class="mega__col-h">Industries</h3>
+
+          <ul class="mega__industry-list" id="industryList">
+            <li class="mega__industry active" data-industry="pi" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name mega__industry-name--anchor">
+                  Personal Injury Law
+                </div>
+                <div class="mega__industry-meta">Operating partner for plaintiff PI firms.</div>
+              </div>
+            </li>
+
+            <li class="mega__industry" data-industry="healthcare" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name">Healthcare</div>
+                <div class="mega__industry-meta">For health systems and specialty groups.</div>
+              </div>
+            </li>
+
+            <li class="mega__industry" data-industry="finance" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name">Financial Services</div>
+                <div class="mega__industry-meta">For RIAs, banks, and wealth practices.</div>
+              </div>
+            </li>
+
+            <li class="mega__industry" data-industry="consulting" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name">Management Consulting</div>
+                <div class="mega__industry-meta">For Tier-1 strategy and Big Four firms.</div>
+              </div>
+            </li>
+          </ul>
+
+          <div class="mega__divider"></div>
+
+          <div class="mega__divider-label">Practice Areas</div>
+          <ul class="mega__horizontal-list">
+            <li class="mega__horizontal" role="menuitem" tabindex="0">
+              <span class="mega__horizontal-name">Marketing</span>
+              <span class="mega__horizontal-arrow">→</span>
+            </li>
+            <li class="mega__horizontal" role="menuitem" tabindex="0">
+              <span class="mega__horizontal-name">Talent</span>
+              <span class="mega__horizontal-arrow">→</span>
+            </li>
+            <li class="mega__horizontal" role="menuitem" tabindex="0">
+              <span class="mega__horizontal-name">Engineering &amp; AI</span>
+              <span class="mega__horizontal-arrow">→</span>
+            </li>
+          </ul>
+        </aside>
+
+        <!-- Capabilities column (per-industry) -->
+        <section class="mega__capabilities" id="capPanel">
+          <!-- PI (default) -->
+          <div class="mega__cap-content" data-industry="pi">
+            <div class="mega__cap-eyebrow-row">
+              <span class="mega__cap-eyebrow">For Personal Injury Law Firms</span>
+            </div>
+            <h2 class="mega__cap-title">The operating partner for personal injury firms.</h2>
+            <p class="mega__cap-sub">Marketing, intake, case operations, and the dashboard above all three. One accountable team. One bill. Cost per signed case, reported quarterly.</p>
+
+            <div class="mega__cap-grid">
+              <a href="#" class="mega__cap mega__cap--featured">
+                <span class="mega__cap-num">01</span>
+                <span class="mega__cap-name">Client Acquisition</span>
+                <span class="mega__cap-meta">Be the first name they remember.</span>
+              </a>
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">02</span>
+                <span class="mega__cap-name">Intake &amp; Conversion</span>
+                <span class="mega__cap-meta">Every call answered, every retainer signed.</span>
+              </a>
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">03</span>
+                <span class="mega__cap-name">Case Operations</span>
+                <span class="mega__cap-meta">PI-certified staff on your team in 30 days.</span>
+              </a>
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">04</span>
+                <span class="mega__cap-name">Command Center</span>
+                <span class="mega__cap-meta">Finally see inside your own firm.</span>
+              </a>
+            </div>
+
+            <div class="mega__footer">
+              <span></span>
+              <a href="#" class="mega__footer-link">See the Personal Injury practice</a>
+            </div>
+          </div>
+
+          <!-- Healthcare -->
+          <div class="mega__cap-content" data-industry="healthcare" hidden>
+            <div class="mega__cap-eyebrow-row">
+              <span class="mega__cap-eyebrow">For Healthcare</span>
+            </div>
+            <h2 class="mega__cap-title">Patient acquisition. Referral capture. Clinical workflow AI.</h2>
+            <p class="mega__cap-sub">Built for regional health systems, multi-specialty groups, MSOs, and telehealth platforms. HIPAA-compliant intake across every service line.</p>
+
+            <div class="mega__cap-grid">
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">01</span>
+                <span class="mega__cap-name">Patient Acquisition</span>
+                <span class="mega__cap-meta">Be the practice patients choose first.</span>
+              </a>
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">02</span>
+                <span class="mega__cap-name">Referral &amp; Intake</span>
+                <span class="mega__cap-meta">Every referral captured, every patient routed.</span>
+              </a>
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">03</span>
+                <span class="mega__cap-name">RCM &amp; Back-Office</span>
+                <span class="mega__cap-meta">Coding, prior auth, and denials &mdash; handled.</span>
+              </a>
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">04</span>
+                <span class="mega__cap-name">Clinical AI Workflows</span>
+                <span class="mega__cap-meta">Documentation, scheduling, and triage that scale.</span>
+              </a>
+            </div>
+
+            <div class="mega__footer">
+              <span></span>
+              <a href="#" class="mega__footer-link">See the Healthcare practice</a>
+            </div>
+          </div>
+
+          <!-- Financial Services -->
+          <div class="mega__cap-content" data-industry="finance" hidden>
+            <div class="mega__cap-eyebrow-row">
+              <span class="mega__cap-eyebrow">For Financial Services</span>
+            </div>
+            <h2 class="mega__cap-title">Acquisition, advisor productivity, compliance-aware content.</h2>
+            <p class="mega__cap-sub">For RIAs, regional banks, private wealth practices, and insurance brokerages. Compliant by default. Measured against AUM growth, not impressions.</p>
+
+            <div class="mega__cap-grid">
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">01</span>
+                <span class="mega__cap-name">Lead Acquisition</span>
+                <span class="mega__cap-meta">Reach the clients your advisors actually want.</span>
+              </a>
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">02</span>
+                <span class="mega__cap-name">Advisor Productivity</span>
+                <span class="mega__cap-meta">Free advisors to do what they do best.</span>
+              </a>
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">03</span>
+                <span class="mega__cap-name">Compliance Content</span>
+                <span class="mega__cap-meta">Review-ready content, on the first draft.</span>
+              </a>
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">04</span>
+                <span class="mega__cap-name">Back-Office Staffing</span>
+                <span class="mega__cap-meta">Operations that keep up with your book.</span>
+              </a>
+            </div>
+
+            <div class="mega__footer">
+              <span></span>
+              <a href="#" class="mega__footer-link">See the Financial Services practice</a>
+            </div>
+          </div>
+
+          <!-- Management Consulting -->
+          <div class="mega__cap-content" data-industry="consulting" hidden>
+            <div class="mega__cap-eyebrow-row">
+              <span class="mega__cap-eyebrow">For Management Consulting</span>
+            </div>
+            <h2 class="mega__cap-title">AI research. Analyst augmentation. Partner-pipeline support.</h2>
+            <p class="mega__cap-sub">Trusted by Tier-1 strategy firms and Big Four advisory practices. Proprietary research workflows. Analyst-grade output. Confidentiality is the default.</p>
+
+            <div class="mega__cap-grid">
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">01</span>
+                <span class="mega__cap-name">AI Research Workflows</span>
+                <span class="mega__cap-meta">Synthesize faster than your competition.</span>
+              </a>
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">02</span>
+                <span class="mega__cap-name">Analyst Augmentation</span>
+                <span class="mega__cap-meta">Give every case team a force multiplier.</span>
+              </a>
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">03</span>
+                <span class="mega__cap-name">Thought Leadership</span>
+                <span class="mega__cap-meta">Publish the POVs that win mandates.</span>
+              </a>
+              <a href="#" class="mega__cap">
+                <span class="mega__cap-num">04</span>
+                <span class="mega__cap-name">BD &amp; Pipeline</span>
+                <span class="mega__cap-meta">Turn partner relationships into pipeline.</span>
+              </a>
+            </div>
+
+            <div class="mega__footer">
+              <span></span>
+              <a href="#" class="mega__footer-link">See the Management Consulting practice</a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Hero context -->
+<section class="hero">
+  <div class="hero__inner">
+    <div class="hero__eyebrow">Built only for personal injury</div>
+    <h1 class="hero__h1">Run the firm<br/>you always pictured running.</h1>
+    <p class="hero__lede">The calls answered. The cases moving. The team trained. The dashboard that finally tells you what each signed case cost. One operating partner runs all of it.</p>
+  </div>
+</section>
+
+<!-- Trust strip -->
+<div class="trust">
+  <div class="trust__inner">
+    <span>Trusted by</span><span class="trust__dot"></span>
+    <span>AmLaw 100</span><span class="trust__dot"></span>
+    <span>Tier-1 Consulting</span><span class="trust__dot"></span>
+    <span>$2B+ AUM RIAs</span><span class="trust__dot"></span>
+    <span>4-Hospital Health Systems</span><span class="trust__dot"></span>
+    <span>13 Years</span>
+  </div>
+</div>
+
+<!-- Hint -->
+<div class="hint">
+  <p>Hover or click <kbd>Capabilities</kbd> in the nav to open the mega-dropdown. Hover any industry on the left to see its tailored capabilities on the right.</p>
+</div>
+
+<script>
+const trigger = document.getElementById('capTrigger');
+const dropdown = document.getElementById('capDropdown');
+const navInner = document.querySelector('.nav__inner');
+const industries = document.querySelectorAll('.mega__industry');
+const capPanels = document.querySelectorAll('.mega__cap-content');
+
+let openTimer = null;
+let closeTimer = null;
+
+function openMega() {
+  clearTimeout(closeTimer);
+  dropdown.classList.add('open');
+  trigger.setAttribute('aria-expanded', 'true');
+  dropdown.setAttribute('aria-hidden', 'false');
+}
+function closeMega() {
+  dropdown.classList.remove('open');
+  trigger.setAttribute('aria-expanded', 'false');
+  dropdown.setAttribute('aria-hidden', 'true');
+}
+
+// Click toggle
+trigger.addEventListener('click', (e) => {
+  e.stopPropagation();
+  if (dropdown.classList.contains('open')) closeMega();
+  else openMega();
+});
+
+// Hover open (desktop)
+trigger.addEventListener('mouseenter', () => {
+  clearTimeout(closeTimer);
+  openTimer = setTimeout(openMega, 80);
+});
+navInner.addEventListener('mouseleave', () => {
+  clearTimeout(openTimer);
+  closeTimer = setTimeout(closeMega, 200);
+});
+dropdown.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+dropdown.addEventListener('mouseleave', () => {
+  closeTimer = setTimeout(closeMega, 200);
+});
+
+// Close on outside click
+document.addEventListener('click', (e) => {
+  if (!dropdown.contains(e.target) && !trigger.contains(e.target)) closeMega();
+});
+// Close on escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeMega();
+});
+
+// Industry switch (hover OR click)
+industries.forEach(item => {
+  const switchTo = () => {
+    industries.forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    const target = item.dataset.industry;
+    capPanels.forEach(p => {
+      if (p.dataset.industry === target) p.removeAttribute('hidden');
+      else p.setAttribute('hidden', '');
+    });
+  };
+  item.addEventListener('mouseenter', switchTo);
+  item.addEventListener('focus', switchTo);
+  item.addEventListener('click', switchTo);
+});
+</script>
+
+</body>
+</html>

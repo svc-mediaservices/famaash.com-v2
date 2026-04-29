@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contact — Famaash</title>
+<meta name="description" content="Tell us what you're trying to solve. Most messages are answered within one business day, by name." />
+<link rel="canonical" href="https://famaash.com/contact" />
+<meta property="og:title" content="Contact — Famaash" />
+<meta property="og:description" content="For audits, book directly. For everything else, this form goes to a real person." />
+<meta property="og:type" content="website" />
+<link rel="stylesheet" href="_shared.css?v=18" />
+<link rel="stylesheet" href="homepage.css?v=67" />
+</head>
+<body data-screen-label="08a Contact">
+
+<header class="nav" id="topNav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__brand" aria-label="Famaash home">
+      <img src="assets/famaash-logo-white.svg" alt="Famaash" />
+    </a>
+
+    <ul class="nav__items">
+      <li>
+        <button class="nav__item" id="capTrigger" aria-expanded="false" aria-controls="capDropdown">
+          Capabilities
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2 4 5 7 8 4"></polyline></svg>
+        </button>
+      </li>
+      <li><a class="nav__item" href="approach.html">Our Approach</a></li>
+      <li><a class="nav__item" href="case-studies.html">Case Studies</a></li>
+      <li><a class="nav__item" href="insights.html">Insights</a></li>
+      <li><a class="nav__item active" href="about.html">About</a></li>
+    </ul>
+
+    <div class="nav__cta">
+      <a class="btn-primary" href="audit.html">Book a Discovery Call <span class="arrow">→</span></a>
+    </div>
+
+    <div class="mega" id="capDropdown" role="menu" aria-hidden="true">
+      <div class="mega__grid">
+        <aside class="mega__industries">
+          <h3 class="mega__col-h">Industries</h3>
+          <ul class="mega__industry-list" id="industryList">
+            <li class="mega__industry active" data-industry="pi" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name mega__industry-name--anchor">Personal Injury Law</div>
+                <div class="mega__industry-meta">Operating partner for plaintiff PI firms.</div>
+              </div>
+            </li>
+            <li class="mega__industry" data-industry="healthcare" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name">Healthcare</div>
+                <div class="mega__industry-meta">For health systems and specialty groups.</div>
+              </div>
+            </li>
+            <li class="mega__industry" data-industry="finance" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name">Financial Services</div>
+                <div class="mega__industry-meta">For RIAs, banks, and wealth practices.</div>
+              </div>
+            </li>
+            <li class="mega__industry" data-industry="consulting" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name">Management Consulting</div>
+                <div class="mega__industry-meta">For Tier-1 strategy and Big Four firms.</div>
+              </div>
+            </li>
+          </ul>
+          <div class="mega__divider"></div>
+          <div class="mega__divider-label">Practice Areas</div>
+          <ul class="mega__horizontal-list">
+            <li class="mega__horizontal" role="menuitem" tabindex="0"><a href="practices/marketing.html" style="display:flex;align-items:center;justify-content:space-between;width:100%;color:inherit;text-decoration:none;"><span class="mega__horizontal-name">Marketing</span><span class="mega__horizontal-arrow">→</span></a></li>
+            <li class="mega__horizontal" role="menuitem" tabindex="0"><a href="practices/talent.html" style="display:flex;align-items:center;justify-content:space-between;width:100%;color:inherit;text-decoration:none;"><span class="mega__horizontal-name">Talent</span><span class="mega__horizontal-arrow">→</span></a></li>
+            <li class="mega__horizontal" role="menuitem" tabindex="0"><a href="practices/engineering.html" style="display:flex;align-items:center;justify-content:space-between;width:100%;color:inherit;text-decoration:none;"><span class="mega__horizontal-name">Engineering &amp; AI</span><span class="mega__horizontal-arrow">→</span></a></li>
+          </ul>
+        </aside>
+
+        <section class="mega__capabilities" id="capPanel">
+          <div class="mega__cap-content" data-industry="pi">
+            <div class="mega__cap-eyebrow-row"><span class="mega__cap-eyebrow">For Personal Injury Law Firms</span></div>
+            <h2 class="mega__cap-title">The operating partner for personal injury firms.</h2>
+            <p class="mega__cap-sub">Marketing, intake, case operations, and the dashboard above all three. One accountable team. One bill. Cost per signed case, reported quarterly.</p>
+            <div class="mega__cap-grid">
+              <a href="personal-injury/client-acquisition.html" class="mega__cap mega__cap--featured"><span class="mega__cap-num">01</span><span class="mega__cap-name">Client Acquisition</span><span class="mega__cap-meta">Be the first name they remember.</span></a>
+              <a href="personal-injury/intake-conversion.html" class="mega__cap"><span class="mega__cap-num">02</span><span class="mega__cap-name">Intake &amp; Conversion</span><span class="mega__cap-meta">Every call answered, every retainer signed.</span></a>
+              <a href="personal-injury/case-operations.html" class="mega__cap"><span class="mega__cap-num">03</span><span class="mega__cap-name">Case Operations</span><span class="mega__cap-meta">PI-certified staff on your team in 30 days.</span></a>
+              <a href="personal-injury/command-center.html" class="mega__cap"><span class="mega__cap-num">04</span><span class="mega__cap-name">Command Center</span><span class="mega__cap-meta">Finally see inside your own firm.</span></a>
+            </div>
+            <div class="mega__footer"><a href="personal-injury/index.html" class="mega__footer-link">See the Personal Injury practice</a></div>
+          </div>
+
+          <div class="mega__cap-content" data-industry="healthcare" hidden>
+            <div class="mega__cap-eyebrow-row"><span class="mega__cap-eyebrow">For Healthcare</span></div>
+            <h2 class="mega__cap-title">Patient acquisition. Referral capture. Clinical workflow AI.</h2>
+            <p class="mega__cap-sub">Built for regional health systems, multi-specialty groups, MSOs, and telehealth platforms. HIPAA-compliant intake across every service line.</p>
+            <div class="mega__cap-grid">
+              <a href="industries/healthcare/patient-acquisition.html" class="mega__cap"><span class="mega__cap-num">01</span><span class="mega__cap-name">Patient Acquisition</span><span class="mega__cap-meta">Be the practice patients choose first.</span></a>
+              <a href="industries/healthcare/referral-intake.html" class="mega__cap"><span class="mega__cap-num">02</span><span class="mega__cap-name">Referral &amp; Intake</span><span class="mega__cap-meta">Every referral captured, every patient routed.</span></a>
+              <a href="industries/healthcare/rcm-back-office.html" class="mega__cap"><span class="mega__cap-num">03</span><span class="mega__cap-name">RCM &amp; Back-Office</span><span class="mega__cap-meta">Coding, prior auth, and denials handled.</span></a>
+              <a href="industries/healthcare/clinical-ai.html" class="mega__cap"><span class="mega__cap-num">04</span><span class="mega__cap-name">Clinical AI Workflows</span><span class="mega__cap-meta">Documentation, scheduling, and triage that scale.</span></a>
+            </div>
+            <div class="mega__footer"><a href="industries/healthcare.html" class="mega__footer-link">See the Healthcare practice</a></div>
+          </div>
+
+          <div class="mega__cap-content" data-industry="finance" hidden>
+            <div class="mega__cap-eyebrow-row"><span class="mega__cap-eyebrow">For Financial Services</span></div>
+            <h2 class="mega__cap-title">Acquisition, advisor productivity, compliance-aware content.</h2>
+            <p class="mega__cap-sub">For RIAs, regional banks, private wealth practices, and insurance brokerages. Compliant by default. Measured against AUM growth, not impressions.</p>
+            <div class="mega__cap-grid">
+              <a href="industries/financial-services/lead-acquisition.html" class="mega__cap"><span class="mega__cap-num">01</span><span class="mega__cap-name">Lead Acquisition</span><span class="mega__cap-meta">Reach the clients your advisors actually want.</span></a>
+              <a href="industries/financial-services/advisor-productivity.html" class="mega__cap"><span class="mega__cap-num">02</span><span class="mega__cap-name">Advisor Productivity</span><span class="mega__cap-meta">Free advisors to do what they do best.</span></a>
+              <a href="industries/financial-services/compliance-content.html" class="mega__cap"><span class="mega__cap-num">03</span><span class="mega__cap-name">Compliance Content</span><span class="mega__cap-meta">Review-ready content, on the first draft.</span></a>
+              <a href="industries/financial-services/back-office.html" class="mega__cap"><span class="mega__cap-num">04</span><span class="mega__cap-name">Back-Office Staffing</span><span class="mega__cap-meta">Operations that keep up with your book.</span></a>
+            </div>
+            <div class="mega__footer"><a href="industries/financial-services.html" class="mega__footer-link">See the Financial Services practice</a></div>
+          </div>
+
+          <div class="mega__cap-content" data-industry="consulting" hidden>
+            <div class="mega__cap-eyebrow-row"><span class="mega__cap-eyebrow">For Management Consulting</span></div>
+            <h2 class="mega__cap-title">AI research. Analyst augmentation. Partner-pipeline support.</h2>
+            <p class="mega__cap-sub">Trusted by Tier-1 strategy firms and Big Four advisory practices. Proprietary research workflows. Analyst-grade output. Confidentiality is the default.</p>
+            <div class="mega__cap-grid">
+              <a href="industries/consulting/research-surge.html" class="mega__cap"><span class="mega__cap-num">01</span><span class="mega__cap-name">AI Research Workflows</span><span class="mega__cap-meta">Synthesize faster than your competition.</span></a>
+              <a href="industries/consulting/delivery-surge.html" class="mega__cap"><span class="mega__cap-num">02</span><span class="mega__cap-name">Analyst Augmentation</span><span class="mega__cap-meta">Give every case team a force multiplier.</span></a>
+              <a href="industries/consulting/proposals.html" class="mega__cap"><span class="mega__cap-num">03</span><span class="mega__cap-name">Thought Leadership</span><span class="mega__cap-meta">Publish the POVs that win mandates.</span></a>
+              <a href="industries/consulting/pipeline.html" class="mega__cap"><span class="mega__cap-num">04</span><span class="mega__cap-name">BD &amp; Pipeline</span><span class="mega__cap-meta">Turn partner relationships into pipeline.</span></a>
+            </div>
+            <div class="mega__footer"><a href="industries/consulting.html" class="mega__footer-link">See the Management Consulting practice</a></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="contact-hero" data-screen-label="Hero">
+  <div class="contact-hero__inner">
+    <div class="contact-hero__left">
+      <div class="contact-hero__eyebrow"><span class="contact-hero__eyebrow-dot"></span> Get in touch</div>
+      <h1 class="contact-hero__h1">Tell us what you're<br/>trying to solve.</h1>
+      <p class="contact-hero__lede">For audits, book directly. For everything else, this form goes to a real person. Most messages are answered within one business day, by name.</p>
+    </div>
+    <aside class="contact-lines" aria-label="Direct lines">
+      <div class="contact-lines__eyebrow">Direct Lines</div>
+      <div class="contact-lines__rule" aria-hidden="true"></div>
+      <div class="contact-lines__row">
+        <div class="contact-lines__lbl">New Business</div>
+        <div class="contact-lines__val"><a href="mailto:hello@famaash.com">hello@famaash.com</a></div>
+        <div class="contact-lines__sub">Routed to a Famaash partner within <span style="font-weight:600;font-variant-numeric:tabular-nums lining-nums;">4</span> business hours</div>
+      </div>
+      <div class="contact-lines__row">
+        <div class="contact-lines__lbl">Compliance</div>
+        <div class="contact-lines__val"><a href="mailto:compliance@famaash.com">compliance@famaash.com</a></div>
+        <div class="contact-lines__sub">Same-day response, NDA-first when needed</div>
+      </div>
+      <div class="contact-lines__row">
+        <div class="contact-lines__lbl">Press</div>
+        <div class="contact-lines__val"><a href="mailto:press@famaash.com">press@famaash.com</a></div>
+        <div class="contact-lines__sub">Routed to communications lead</div>
+      </div>
+      <div class="contact-lines__row">
+        <div class="contact-lines__lbl">Phone</div>
+        <div class="contact-lines__val">(XXX) XXX-XXXX</div>
+        <div class="contact-lines__sub">Mon to Fri, <span style="font-weight:600;font-variant-numeric:tabular-nums lining-nums;">9</span>am to <span style="font-weight:600;font-variant-numeric:tabular-nums lining-nums;">6</span>pm ET</div>
+      </div>
+      <div class="contact-lines__rule contact-lines__rule--bot" aria-hidden="true"></div>
+      <div class="contact-lines__office">
+        <div class="contact-lines__office-name">Famaash LLC</div>
+        <div class="contact-lines__office-addr">Somerset, NJ<br/>United States</div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="contact-form-sec" data-screen-label="Contact Form">
+  <div class="contact-form-sec__inner">
+    <header class="contact-form-sec__head fade-up">
+      <div class="contact-form-sec__eyebrow">Send a Message</div>
+      <h2 class="contact-form-sec__h">Real person on the other end. Always.</h2>
+      <p class="contact-form-sec__sub">One business day response is our floor, not our ceiling. Most messages are answered same-day.</p>
+    </header>
+    <form class="contact-form fade-up" id="contactForm" novalidate>
+      <div class="contact-form__row contact-form__row--3">
+        <div class="contact-field">
+          <label class="contact-field__label" for="cf-name">Full Name <span class="req">*</span></label>
+          <input class="contact-field__input" type="text" id="cf-name" name="name" autocomplete="name" required />
+          <div class="contact-field__error" data-error-for="cf-name"></div>
+        </div>
+        <div class="contact-field">
+          <label class="contact-field__label" for="cf-email">Work Email <span class="req">*</span></label>
+          <input class="contact-field__input" type="email" id="cf-email" name="email" autocomplete="email" required />
+          <div class="contact-field__error" data-error-for="cf-email"></div>
+        </div>
+        <div class="contact-field">
+          <label class="contact-field__label" for="cf-phone">Phone</label>
+          <input class="contact-field__input" type="tel" id="cf-phone" name="phone" autocomplete="tel" />
+          <div class="contact-field__error" data-error-for="cf-phone"></div>
+        </div>
+      </div>
+      <div class="contact-form__row contact-form__row--3">
+        <div class="contact-field">
+          <label class="contact-field__label" for="cf-firm">Firm or Company <span class="req">*</span></label>
+          <input class="contact-field__input" type="text" id="cf-firm" name="firm" autocomplete="organization" required />
+          <div class="contact-field__error" data-error-for="cf-firm"></div>
+        </div>
+        <div class="contact-field">
+          <label class="contact-field__label" for="cf-industry">Industry</label>
+          <select class="contact-field__select" id="cf-industry" name="industry">
+            <option value="">Select industry</option>
+            <option value="pi">Personal Injury Law</option>
+            <option value="healthcare">Healthcare</option>
+            <option value="finance">Financial Services</option>
+            <option value="consulting">Management Consulting</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="contact-field">
+          <label class="contact-field__label" for="cf-role">Role</label>
+          <select class="contact-field__select" id="cf-role" name="role">
+            <option value="">Select role</option>
+            <option>Managing Partner</option>
+            <option>Partner</option>
+            <option>COO</option>
+            <option>CMO</option>
+            <option>Operations Lead</option>
+            <option>Marketing Lead</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="contact-form__row contact-form__row--1">
+        <div class="contact-field">
+          <label class="contact-field__label" for="cf-reason">Reason for Contact</label>
+          <select class="contact-field__select" id="cf-reason" name="reason">
+            <option value="">Select reason</option>
+            <option value="audit">I want an audit</option>
+            <option value="partnership">I'm exploring a partnership</option>
+            <option value="press">I'm a journalist</option>
+            <option value="docs">I need compliance documents (BAA, MSA, DPA)</option>
+            <option value="careers">I'm interested in joining Famaash</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="contact-docs" id="cfDocs" aria-hidden="true">
+          <div class="contact-docs__lbl">Which document?</div>
+          <div class="contact-docs__pills" role="group" aria-label="Document selection">
+            <button type="button" class="contact-docs__pill" data-doc="MSA" aria-pressed="false">MSA</button>
+            <button type="button" class="contact-docs__pill" data-doc="BAA" aria-pressed="false">BAA</button>
+            <button type="button" class="contact-docs__pill" data-doc="DPA" aria-pressed="false">DPA</button>
+            <button type="button" class="contact-docs__pill" data-doc="Subprocessor List" aria-pressed="false">Subprocessor List</button>
+            <button type="button" class="contact-docs__pill" data-doc="SOC 2 Readiness" aria-pressed="false">SOC 2 Readiness</button>
+            <button type="button" class="contact-docs__pill" data-doc="Cyber + E&amp;O" aria-pressed="false">Cyber + E&amp;O</button>
+          </div>
+        </div>
+      </div>
+      <div class="contact-form__row contact-form__row--1">
+        <div class="contact-field">
+          <label class="contact-field__label" for="cf-message">Message</label>
+          <textarea class="contact-field__textarea" id="cf-message" name="message" rows="6" maxlength="1000" placeholder="What are you trying to solve?"></textarea>
+          <div class="contact-field__counter" id="cfCounter"><span class="num">0</span> / <span class="num">1000</span></div>
+          <div class="contact-field__error" data-error-for="cf-message"></div>
+        </div>
+      </div>
+      <div class="contact-form__row contact-form__row--2">
+        <label class="contact-nda" for="cf-nda">
+          <input type="checkbox" id="cf-nda" name="nda" />
+          <span class="contact-nda__lbl">I want this conversation under NDA from the start. Send me the mutual NDA template.</span>
+        </label>
+        <div class="contact-field">
+          <label class="contact-field__label" for="cf-source">How did you hear about us?</label>
+          <select class="contact-field__select" id="cf-source" name="source">
+            <option value="">Select source</option>
+            <option>Referral</option>
+            <option>Search</option>
+            <option>Industry conference</option>
+            <option>Article or podcast</option>
+            <option>Direct outreach</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="contact-form__submit-row">
+        <button type="submit" class="btn-primary">Send message <span class="arrow">→</span></button>
+        <p class="contact-form__support">We respond by name within one business day.</p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="contact-next" data-screen-label="What Happens Next">
+  <div class="contact-next__inner">
+    <header class="contact-next__head fade-up">
+      <div class="contact-next__eyebrow">What Happens After You Hit Send</div>
+      <h2 class="contact-next__h">No auto-replies. Real routing.</h2>
+    </header>
+    <div class="contact-next__grid">
+      <article class="contact-next__col fade-up">
+        <div class="contact-next__phase"><span class="num">01</span> Within <span class="num">4</span> Hours</div>
+        <h3 class="contact-next__title">Routed by reason</h3>
+        <p class="contact-next__body">Your message is read by a Famaash operator. Routed by reason. A name picks it up.</p>
+      </article>
+      <article class="contact-next__col fade-up">
+        <div class="contact-next__phase"><span class="num">02</span> Within <span class="num">1</span> Business Day</div>
+        <h3 class="contact-next__title">By name</h3>
+        <p class="contact-next__body">You hear back. By name. Not a generic auto-reply. Not a sales rep.</p>
+      </article>
+      <article class="contact-next__col fade-up">
+        <div class="contact-next__phase"><span class="num">03</span> Within <span class="num">1</span> Week</div>
+        <h3 class="contact-next__title">Deliverable shipped</h3>
+        <p class="contact-next__body">If we agreed to it on the first email, the call, document, or scope is in your inbox.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="contact-hours surface-dark" data-screen-label="Response Times">
+  <div class="contact-hours__inner">
+    <header class="contact-hours__head fade-up">
+      <div class="contact-hours__eyebrow">Response Times</div>
+      <h2 class="contact-hours__h">What you can expect.</h2>
+    </header>
+    <div class="contact-hours__grid">
+      <article class="contact-hours__tile fade-up">
+        <div class="contact-hours__num"><span>9</span>&ndash;<span>6</span><sub>ET</sub></div>
+        <p class="contact-hours__sub">Monday through Friday</p>
+        <div class="contact-hours__lbl">Office Hours</div>
+      </article>
+      <article class="contact-hours__tile fade-up">
+        <div class="contact-hours__num">&lt;<span>1</span><sub>DAY</sub></div>
+        <p class="contact-hours__sub">By name, never auto-reply</p>
+        <div class="contact-hours__lbl">Response Floor</div>
+      </article>
+      <article class="contact-hours__tile fade-up">
+        <div class="contact-hours__num"><span>4</span><sub>HRS</sub></div>
+        <p class="contact-hours__sub">Routed to a partner</p>
+        <div class="contact-hours__lbl">New Business SLA</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="contact-final" data-screen-label="Final CTA">
+  <div class="contact-final__inner">
+    <div class="contact-final__eyebrow">Or Skip the Form</div>
+    <h2 class="contact-final__h">If you already know you want an audit, book it.</h2>
+    <a class="btn-cream" href="audit.html">Book a Discovery Call <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<footer class="foot" data-screen-label="Footer">
+  <div class="foot__inner">
+    <div class="foot__top">
+      <div class="foot__brand">
+        <img src="assets/famaash-logo-white.svg" alt="Famaash" />
+        <div class="foot__tag">The operating partner for personal injury law firms.</div>
+      </div>
+      <div class="foot__news">
+        <span class="foot__news-l">PI Benchmark Report, quarterly</span>
+        <div class="foot__news-row">
+          <input type="email" placeholder="Work email" aria-label="Email" />
+          <button type="button">Subscribe</button>
+        </div>
+      </div>
+    </div>
+    <div class="foot__cols">
+      <div class="foot__col">
+        <h4>Capabilities</h4>
+        <ul>
+          <li><a href="personal-injury/client-acquisition.html">Client Acquisition</a></li>
+          <li><a href="personal-injury/intake-conversion.html">Intake &amp; Conversion</a></li>
+          <li><a href="personal-injury/case-operations.html">Case Operations</a></li>
+          <li><a href="personal-injury/command-center.html">Command Center</a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="approach.html">Our Approach</a></li>
+          <li><a href="case-studies.html">Case Studies</a></li>
+          <li><a href="insights.html">Insights</a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h4>Compliance &amp; Trust</h4>
+        <ul>
+          <li><a href="compliance.html">Compliance posture</a></li>
+          <li><a href="security.html">Security</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__bot">
+      <span>© 2026 Famaash LLC.</span>
+      <div class="foot__legal">
+        <a href="privacy.html">Privacy</a><span>,</span>
+        <a href="terms.html">Terms</a><span>,</span>
+        <a href="compliance.html">Compliance</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== Mega-dropdown (matches preview/famaash-nav-preview.html) =====
+(function() {
+  const trigger = document.getElementById('capTrigger');
+  const dropdown = document.getElementById('capDropdown');
+  const navInner = document.querySelector('.nav__inner');
+  if (!trigger || !dropdown || !navInner) return;
+
+  const industries = document.querySelectorAll('.mega__industry');
+  const capPanels = document.querySelectorAll('.mega__cap-content');
+  let openTimer = null, closeTimer = null;
+
+  function openMega() {
+    clearTimeout(closeTimer);
+    dropdown.classList.add('open');
+    trigger.setAttribute('aria-expanded', 'true');
+    dropdown.setAttribute('aria-hidden', 'false');
+  }
+  function closeMega() {
+    dropdown.classList.remove('open');
+    trigger.setAttribute('aria-expanded', 'false');
+    dropdown.setAttribute('aria-hidden', 'true');
+  }
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (dropdown.classList.contains('open')) closeMega(); else openMega();
+  });
+  trigger.addEventListener('mouseenter', () => {
+    clearTimeout(closeTimer);
+    openTimer = setTimeout(openMega, 80);
+  });
+  navInner.addEventListener('mouseleave', () => {
+    clearTimeout(openTimer);
+    closeTimer = setTimeout(closeMega, 200);
+  });
+  dropdown.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+  dropdown.addEventListener('mouseleave', () => {
+    closeTimer = setTimeout(closeMega, 200);
+  });
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target) && !trigger.contains(e.target)) closeMega();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMega();
+  });
+  industries.forEach(item => {
+    const switchTo = () => {
+      industries.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      const target = item.dataset.industry;
+      capPanels.forEach(p => {
+        if (p.dataset.industry === target) p.removeAttribute('hidden');
+        else p.setAttribute('hidden', '');
+      });
+    };
+    item.addEventListener('mouseenter', switchTo);
+    item.addEventListener('focus', switchTo);
+    item.addEventListener('click', switchTo);
+  });
+})();
+
+// ===== Fade-up on scroll =====
+(function() {
+  const els = document.querySelectorAll('.fade-up');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(el => el.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  els.forEach(el => io.observe(el));
+})();
+
+// ===== Contact form: validation, NDA, reason-dependent docs, char counter =====
+(function() {
+  const form = document.getElementById("contactForm");
+  if (!form) return;
+
+  const FREE_EMAIL_DOMAINS = new Set([
+    "gmail.com","googlemail.com","yahoo.com","yahoo.co.uk","yahoo.ca","yahoo.fr",
+    "ymail.com","rocketmail.com","hotmail.com","hotmail.co.uk","outlook.com",
+    "live.com","msn.com","icloud.com","me.com","mac.com","aol.com","protonmail.com",
+    "proton.me","gmx.com","gmx.us","gmx.de","mail.com","yandex.com","yandex.ru",
+    "fastmail.com","hey.com","tutanota.com","pm.me","duck.com","mailinator.com",
+    "throwaway.email"
+  ]);
+  function isFreeEmail(email) {
+    const at = (email || "").lastIndexOf("@");
+    if (at < 0) return false;
+    const dom = email.slice(at + 1).trim().toLowerCase();
+    return FREE_EMAIL_DOMAINS.has(dom);
+  }
+
+  function setError(id, msg) {
+    const f = document.querySelector("[data-error-for=\"" + id + "\"]");
+    if (f) f.textContent = msg || "";
+    const input = document.getElementById(id);
+    if (input) input.style.borderBottomColor = msg ? "#B91C1C" : "";
+  }
+
+  const reasonSel = document.getElementById("cf-reason");
+  const docsBox = document.getElementById("cfDocs");
+  reasonSel.addEventListener("change", () => {
+    if (reasonSel.value === "docs") {
+      docsBox.classList.add("is-open");
+      docsBox.setAttribute("aria-hidden", "false");
+    } else {
+      docsBox.classList.remove("is-open");
+      docsBox.setAttribute("aria-hidden", "true");
+    }
+  });
+
+  document.querySelectorAll(".contact-docs__pill").forEach(p => {
+    p.addEventListener("click", () => {
+      const cur = p.getAttribute("aria-pressed") === "true";
+      p.setAttribute("aria-pressed", cur ? "false" : "true");
+    });
+  });
+
+  const msg = document.getElementById("cf-message");
+  const counter = document.getElementById("cfCounter");
+  if (msg && counter) {
+    const update = () => {
+      counter.querySelector(".num").textContent = String(msg.value.length);
+    };
+    msg.addEventListener("input", update);
+    update();
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (reasonSel.value === "audit") {
+      window.location.href = "audit.html";
+      return;
+    }
+    let ok = true;
+    const name = document.getElementById("cf-name");
+    const email = document.getElementById("cf-email");
+    const firm = document.getElementById("cf-firm");
+    setError("cf-name", "");
+    setError("cf-email", "");
+    setError("cf-firm", "");
+    if (!name.value.trim()) { setError("cf-name", "Please enter your name."); ok = false; }
+    const emailRe = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+    if (!email.value.trim()) {
+      setError("cf-email", "Please enter your work email.");
+      ok = false;
+    } else if (!emailRe.test(email.value.trim())) {
+      setError("cf-email", "Please enter a valid email.");
+      ok = false;
+    } else if (isFreeEmail(email.value.trim())) {
+      setError("cf-email", "Please use your work email, not a personal account.");
+      ok = false;
+    }
+    if (!firm.value.trim()) { setError("cf-firm", "Please enter your firm or company."); ok = false; }
+    if (!ok) return;
+    window.location.href = "thank-you.html";
+  });
+})();
+</script>
+
+</body>
+</html>

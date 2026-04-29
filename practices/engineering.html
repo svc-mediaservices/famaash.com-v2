@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Engineering &amp; AI Practice — Famaash</title>
+<meta name="description" content="Engineering that respects the rules of your practice. ABA Op. 512, HIPAA, FINRA, IP confidentiality — wired into the architecture, not bolted on after." />
+<link rel="canonical" href="https://famaash.com/practices/engineering" />
+<meta property="og:title" content="Engineering & AI Practice — Famaash" />
+<meta property="og:description" content="Compliance is the architecture, not the audit." />
+<link rel="stylesheet" href="../_shared.css?v=20" />
+<link rel="stylesheet" href="../homepage.css?v=67" />
+</head>
+<body data-screen-label="20c Engineering Practice">
+
+<header class="nav" id="topNav">
+  <div class="nav__inner">
+    <a href="../index.html" class="nav__brand" aria-label="Famaash home">
+      <img src="../assets/famaash-logo-white.svg" alt="Famaash" />
+    </a>
+
+    <ul class="nav__items">
+      <li>
+        <button class="nav__item" id="capTrigger" aria-expanded="false" aria-controls="capDropdown">
+          Capabilities
+          <svg class="chev" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="2 4 5 7 8 4"></polyline></svg>
+        </button>
+      </li>
+      <li><a class="nav__item" href="../approach.html">Our Approach</a></li>
+      <li><a class="nav__item" href="../case-studies.html">Case Studies</a></li>
+      <li><a class="nav__item" href="../insights.html">Insights</a></li>
+      <li><a class="nav__item active" href="../about.html">About</a></li>
+    </ul>
+
+    <div class="nav__cta">
+      <a class="btn-primary" href="../audit.html">Book a Discovery Call <span class="arrow">→</span></a>
+    </div>
+
+    <div class="mega" id="capDropdown" role="menu" aria-hidden="true">
+      <div class="mega__grid">
+        <aside class="mega__industries">
+          <h3 class="mega__col-h">Industries</h3>
+          <ul class="mega__industry-list" id="industryList">
+            <li class="mega__industry active" data-industry="pi" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name mega__industry-name--anchor">Personal Injury Law</div>
+                <div class="mega__industry-meta">Operating partner for plaintiff PI firms.</div>
+              </div>
+            </li>
+            <li class="mega__industry" data-industry="healthcare" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name">Healthcare</div>
+                <div class="mega__industry-meta">For health systems and specialty groups.</div>
+              </div>
+            </li>
+            <li class="mega__industry" data-industry="finance" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name">Financial Services</div>
+                <div class="mega__industry-meta">For RIAs, banks, and wealth practices.</div>
+              </div>
+            </li>
+            <li class="mega__industry" data-industry="consulting" role="menuitem" tabindex="0">
+              <div class="mega__industry-content">
+                <div class="mega__industry-name">Management Consulting</div>
+                <div class="mega__industry-meta">For Tier-1 strategy and Big Four firms.</div>
+              </div>
+            </li>
+          </ul>
+          <div class="mega__divider"></div>
+          <div class="mega__divider-label">Practice Areas</div>
+          <ul class="mega__horizontal-list">
+            <li class="mega__horizontal" role="menuitem" tabindex="0"><a href="../practices/marketing.html" style="display:flex;align-items:center;justify-content:space-between;width:100%;color:inherit;text-decoration:none;"><span class="mega__horizontal-name">Marketing</span><span class="mega__horizontal-arrow">→</span></a></li>
+            <li class="mega__horizontal" role="menuitem" tabindex="0"><a href="../practices/talent.html" style="display:flex;align-items:center;justify-content:space-between;width:100%;color:inherit;text-decoration:none;"><span class="mega__horizontal-name">Talent</span><span class="mega__horizontal-arrow">→</span></a></li>
+            <li class="mega__horizontal" role="menuitem" tabindex="0"><a href="../practices/engineering.html" style="display:flex;align-items:center;justify-content:space-between;width:100%;color:inherit;text-decoration:none;"><span class="mega__horizontal-name">Engineering &amp; AI</span><span class="mega__horizontal-arrow">→</span></a></li>
+          </ul>
+        </aside>
+
+        <section class="mega__capabilities" id="capPanel">
+          <div class="mega__cap-content" data-industry="pi">
+            <div class="mega__cap-eyebrow-row"><span class="mega__cap-eyebrow">For Personal Injury Law Firms</span></div>
+            <h2 class="mega__cap-title">The operating partner for personal injury firms.</h2>
+            <p class="mega__cap-sub">Marketing, intake, case operations, and the dashboard above all three. One accountable team. One bill. Cost per signed case, reported quarterly.</p>
+            <div class="mega__cap-grid">
+              <a href="../personal-injury/client-acquisition.html" class="mega__cap mega__cap--featured"><span class="mega__cap-num">01</span><span class="mega__cap-name">Client Acquisition</span><span class="mega__cap-meta">Be the first name they remember.</span></a>
+              <a href="../personal-injury/intake-conversion.html" class="mega__cap"><span class="mega__cap-num">02</span><span class="mega__cap-name">Intake &amp; Conversion</span><span class="mega__cap-meta">Every call answered, every retainer signed.</span></a>
+              <a href="../personal-injury/case-operations.html" class="mega__cap"><span class="mega__cap-num">03</span><span class="mega__cap-name">Case Operations</span><span class="mega__cap-meta">PI-certified staff on your team in 30 days.</span></a>
+              <a href="../personal-injury/command-center.html" class="mega__cap"><span class="mega__cap-num">04</span><span class="mega__cap-name">Command Center</span><span class="mega__cap-meta">Finally see inside your own firm.</span></a>
+            </div>
+            <div class="mega__footer"><a href="../personal-injury/index.html" class="mega__footer-link">See the Personal Injury practice</a></div>
+          </div>
+
+          <div class="mega__cap-content" data-industry="healthcare" hidden>
+            <div class="mega__cap-eyebrow-row"><span class="mega__cap-eyebrow">For Healthcare</span></div>
+            <h2 class="mega__cap-title">Patient acquisition. Referral capture. Clinical workflow AI.</h2>
+            <p class="mega__cap-sub">Built for regional health systems, multi-specialty groups, MSOs, and telehealth platforms. HIPAA-compliant intake across every service line.</p>
+            <div class="mega__cap-grid">
+              <a href="../industries/healthcare/patient-acquisition.html" class="mega__cap"><span class="mega__cap-num">01</span><span class="mega__cap-name">Patient Acquisition</span><span class="mega__cap-meta">Be the practice patients choose first.</span></a>
+              <a href="../industries/healthcare/referral-intake.html" class="mega__cap"><span class="mega__cap-num">02</span><span class="mega__cap-name">Referral &amp; Intake</span><span class="mega__cap-meta">Every referral captured, every patient routed.</span></a>
+              <a href="../industries/healthcare/rcm-back-office.html" class="mega__cap"><span class="mega__cap-num">03</span><span class="mega__cap-name">RCM &amp; Back-Office</span><span class="mega__cap-meta">Coding, prior auth, and denials handled.</span></a>
+              <a href="../industries/healthcare/clinical-ai.html" class="mega__cap"><span class="mega__cap-num">04</span><span class="mega__cap-name">Clinical AI Workflows</span><span class="mega__cap-meta">Documentation, scheduling, and triage that scale.</span></a>
+            </div>
+            <div class="mega__footer"><a href="../industries/healthcare.html" class="mega__footer-link">See the Healthcare practice</a></div>
+          </div>
+
+          <div class="mega__cap-content" data-industry="finance" hidden>
+            <div class="mega__cap-eyebrow-row"><span class="mega__cap-eyebrow">For Financial Services</span></div>
+            <h2 class="mega__cap-title">Acquisition, advisor productivity, compliance-aware content.</h2>
+            <p class="mega__cap-sub">For RIAs, regional banks, private wealth practices, and insurance brokerages. Compliant by default. Measured against AUM growth, not impressions.</p>
+            <div class="mega__cap-grid">
+              <a href="../industries/financial-services/lead-acquisition.html" class="mega__cap"><span class="mega__cap-num">01</span><span class="mega__cap-name">Lead Acquisition</span><span class="mega__cap-meta">Reach the clients your advisors actually want.</span></a>
+              <a href="../industries/financial-services/advisor-productivity.html" class="mega__cap"><span class="mega__cap-num">02</span><span class="mega__cap-name">Advisor Productivity</span><span class="mega__cap-meta">Free advisors to do what they do best.</span></a>
+              <a href="../industries/financial-services/compliance-content.html" class="mega__cap"><span class="mega__cap-num">03</span><span class="mega__cap-name">Compliance Content</span><span class="mega__cap-meta">Review-ready content, on the first draft.</span></a>
+              <a href="../industries/financial-services/back-office.html" class="mega__cap"><span class="mega__cap-num">04</span><span class="mega__cap-name">Back-Office Staffing</span><span class="mega__cap-meta">Operations that keep up with your book.</span></a>
+            </div>
+            <div class="mega__footer"><a href="../industries/financial-services.html" class="mega__footer-link">See the Financial Services practice</a></div>
+          </div>
+
+          <div class="mega__cap-content" data-industry="consulting" hidden>
+            <div class="mega__cap-eyebrow-row"><span class="mega__cap-eyebrow">For Management Consulting</span></div>
+            <h2 class="mega__cap-title">AI research. Analyst augmentation. Partner-pipeline support.</h2>
+            <p class="mega__cap-sub">Trusted by Tier-1 strategy firms and Big Four advisory practices. Proprietary research workflows. Analyst-grade output. Confidentiality is the default.</p>
+            <div class="mega__cap-grid">
+              <a href="../industries/consulting/research-surge.html" class="mega__cap"><span class="mega__cap-num">01</span><span class="mega__cap-name">AI Research Workflows</span><span class="mega__cap-meta">Synthesize faster than your competition.</span></a>
+              <a href="../industries/consulting/delivery-surge.html" class="mega__cap"><span class="mega__cap-num">02</span><span class="mega__cap-name">Analyst Augmentation</span><span class="mega__cap-meta">Give every case team a force multiplier.</span></a>
+              <a href="../industries/consulting/proposals.html" class="mega__cap"><span class="mega__cap-num">03</span><span class="mega__cap-name">Thought Leadership</span><span class="mega__cap-meta">Publish the POVs that win mandates.</span></a>
+              <a href="../industries/consulting/pipeline.html" class="mega__cap"><span class="mega__cap-num">04</span><span class="mega__cap-name">BD &amp; Pipeline</span><span class="mega__cap-meta">Turn partner relationships into pipeline.</span></a>
+            </div>
+            <div class="mega__footer"><a href="../industries/consulting.html" class="mega__footer-link">See the Management Consulting practice</a></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ========== HERO ========== -->
+<section class="pe-hero" data-screen-label="Hero">
+  <div class="pe-hero__inner">
+    <div class="pe-hero__left">
+      <div class="pe-hero__eyebrow"><span class="pe-hero__eyebrow-dot"></span> Engineering &amp; AI Practice</div>
+      <h1 class="pe-hero__h1">Engineering that respects<br/>the rules of your practice.</h1>
+      <p class="pe-hero__lede">ABA Op. <span class="num">512</span>. HIPAA. FINRA. IP confidentiality. Most engineering teams treat these as constraints to work around. We treat them as the architecture itself — the first decisions made, not the last audit completed.</p>
+      <div class="pe-hero__cta-row">
+        <a class="btn-primary" href="../audit.html">Book a Discovery Call <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <aside class="pe-arch" aria-label="Compliance-first architecture diagram">
+      <div class="pe-arch__head">
+        <span class="pe-arch__head-l">Compliance-First</span>
+        <span class="pe-arch__head-r">Architecture</span>
+      </div>
+      <div class="pe-arch__rule" aria-hidden="true"></div>
+      <div class="pe-arch__flow">
+        <div class="pe-arch__node pe-arch__node--io">
+          <div class="pe-arch__node-lbl">Input</div>
+          <div class="pe-arch__node-sub">Client data · matter context</div>
+        </div>
+        <div class="pe-arch__connector" aria-hidden="true">
+          <span class="pe-arch__line"></span>
+          <span class="pe-arch__caret">▾</span>
+        </div>
+        <div class="pe-arch__node pe-arch__node--gate">
+          <div class="pe-arch__node-lbl">Compliance Gate</div>
+          <div class="pe-arch__node-tags">
+            <span class="pe-arch__tag">ABA Op. <span class="num">512</span></span>
+            <span class="pe-arch__tag">HIPAA</span>
+            <span class="pe-arch__tag">FINRA</span>
+            <span class="pe-arch__tag">NDA + IP</span>
+          </div>
+        </div>
+        <div class="pe-arch__connector" aria-hidden="true">
+          <span class="pe-arch__line"></span>
+          <span class="pe-arch__caret">▾</span>
+        </div>
+        <div class="pe-arch__node pe-arch__node--ai">
+          <div class="pe-arch__node-lbl">AI Workflow</div>
+          <div class="pe-arch__node-sub">Agentic · supervised · audited</div>
+        </div>
+        <div class="pe-arch__connector" aria-hidden="true">
+          <span class="pe-arch__line"></span>
+          <span class="pe-arch__caret">▾</span>
+        </div>
+        <div class="pe-arch__node pe-arch__node--io">
+          <div class="pe-arch__node-lbl">Output</div>
+          <div class="pe-arch__node-sub">Reviewed · logged · attributable</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ========== SECTION 03 · THREE CAPABILITIES ========== -->
+<section class="pe-caps surface-cream-2" data-screen-label="Three Capabilities">
+  <div class="pe-caps__inner">
+    <header class="pe-caps__head fade-up">
+      <div class="pe-caps__eyebrow">What We Build</div>
+      <h2 class="pe-caps__h">Three capabilities. One compliance posture.</h2>
+    </header>
+    <div class="pe-caps__grid">
+      <article class="pe-caps__card fade-up">
+        <div class="pe-caps__num"><span class="num">01</span></div>
+        <h3 class="pe-caps__title">Agentic AI</h3>
+        <p class="pe-caps__lede">Supervised AI agents that operate inside compliance boundaries by design.</p>
+        <ul class="pe-caps__list">
+          <li>Live AI intake</li>
+          <li>Automated demand letters</li>
+          <li>Prior auth automation</li>
+          <li>Research synthesis</li>
+        </ul>
+      </article>
+      <article class="pe-caps__card fade-up">
+        <div class="pe-caps__num"><span class="num">02</span></div>
+        <h3 class="pe-caps__title">Workflow Automation</h3>
+        <p class="pe-caps__lede">Pipelines that route work, enforce gates, and leave an audit trail by default.</p>
+        <ul class="pe-caps__list">
+          <li>Intake routing &amp; triage</li>
+          <li>Denial-management consoles</li>
+          <li>KYC / AML pipelines</li>
+          <li>Pursuit-pipeline trackers</li>
+        </ul>
+      </article>
+      <article class="pe-caps__card fade-up">
+        <div class="pe-caps__num"><span class="num">03</span></div>
+        <h3 class="pe-caps__title">Product Engineering</h3>
+        <p class="pe-caps__lede">Operator-grade internal tools. Built once, owned outright by you, maintained by us.</p>
+        <ul class="pe-caps__list">
+          <li>Operations dashboards</li>
+          <li>RCM analyzers</li>
+          <li>Advisor referral CRMs</li>
+          <li>Partner-utilization views</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 04 · COMPLIANCE-FIRST ENGINEERING (5/7 pull-quote) ========== -->
+<section class="pe-comp" data-screen-label="Compliance-First Engineering">
+  <div class="pe-comp__inner">
+    <aside class="pe-comp__pull fade-up">
+      <div class="pe-comp__rule" aria-hidden="true"></div>
+      <p class="pe-comp__pq">Compliance is the architecture, not the audit.</p>
+      <div class="pe-comp__attr">Compliance-First Engineering</div>
+    </aside>
+    <div class="pe-comp__body fade-up">
+      <p class="pe-comp__lead">Most software treats compliance as a checklist applied at the end. We treat it as the first design decision.</p>
+      <p>For PI firms, that means UPL-boundary detection wired into the model layer itself. AI agents cannot give legal advice because the prompt scaffolding makes that path unreachable, not because a reviewer caught it. Every interaction is logged, attributed to a supervising attorney, and exportable for ABA Op. <span class="num">512</span> review.</p>
+      <p>For healthcare, that means PHI segmentation at the storage layer. Patient identifiers never enter the AI inference path; they are tokenized at ingress and re-hydrated only inside HIPAA-covered surfaces. BAAs are signed before the first byte moves. Audit logs are queryable, not buried.</p>
+      <p>For financial services, that means FINRA review gates baked into every advisor-facing surface. Communications draft inside the tool, route to compliance, and only ship after signoff is logged. The tool enforces the workflow your supervisor would build manually — because we built it with your supervisor in the room.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 05 · INDUSTRY APPLICATION MATRIX ========== -->
+<section class="pe-matrix surface-cream-2" data-screen-label="Industry Application Matrix">
+  <div class="pe-matrix__inner">
+    <header class="pe-matrix__head fade-up">
+      <div class="pe-matrix__eyebrow">Industry Application Matrix</div>
+      <h2 class="pe-matrix__h">Same posture. Different builds.</h2>
+    </header>
+    <div class="pe-matrix__table fade-up" role="table" aria-label="Industry application matrix">
+      <div class="pe-matrix__thead" role="row">
+        <div class="pe-matrix__th" role="columnheader">Industry</div>
+        <div class="pe-matrix__th" role="columnheader">Build 1</div>
+        <div class="pe-matrix__th" role="columnheader">Build 2</div>
+        <div class="pe-matrix__th" role="columnheader">Build 3</div>
+      </div>
+      <div class="pe-matrix__row" role="row">
+        <div class="pe-matrix__ind">Personal Injury</div>
+        <div class="pe-matrix__cell">UPL-safe AI intake</div>
+        <div class="pe-matrix__cell">Demand letter generator</div>
+        <div class="pe-matrix__cell">CPSC attribution model</div>
+      </div>
+      <div class="pe-matrix__row" role="row">
+        <div class="pe-matrix__ind">Healthcare</div>
+        <div class="pe-matrix__cell">HIPAA-compliant referral routing</div>
+        <div class="pe-matrix__cell">Prior auth automation</div>
+        <div class="pe-matrix__cell">BAA-first patient intake</div>
+      </div>
+      <div class="pe-matrix__row" role="row">
+        <div class="pe-matrix__ind">Financial Services</div>
+        <div class="pe-matrix__cell">FINRA-gated advisor CRM</div>
+        <div class="pe-matrix__cell">KYC / AML pipeline</div>
+        <div class="pe-matrix__cell">Custodian reconciliation</div>
+      </div>
+      <div class="pe-matrix__row" role="row">
+        <div class="pe-matrix__ind">Management Consulting</div>
+        <div class="pe-matrix__cell">NDA-walled research synthesis</div>
+        <div class="pe-matrix__cell">Pursuit pipeline tracker</div>
+        <div class="pe-matrix__cell">Partner-utilization dashboard</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 06 · FEATURED BUILD NARRATIVE ========== -->
+<section class="pe-build" data-screen-label="Featured Build">
+  <div class="pe-build__inner">
+    <div class="pe-build__head fade-up">
+      <div class="pe-build__kicker">Featured Build</div>
+      <div class="pe-build__attr">An anchor PI client &middot; Northeast US</div>
+      <h2 class="pe-build__h">The Command Center,<br/>built from first principles.</h2>
+    </div>
+    <div class="pe-build__body fade-up">
+      <p>The intake floor at this firm was running on three vendors, two contractors, and a Google Sheet. Median response to a new lead was <span class="num">38</span> minutes. By the time a paralegal called back, the lead had retained someone else. Cost per signed case had drifted to <span class="num">$3,200</span> against an industry median of <span class="num">$1,900</span>.</p>
+      <p>We rebuilt the intake stack as a single tool with one principle wired in: an AI agent could speak to a prospect, but it could never give legal advice. UPL boundary detection sits inside the prompt scaffolding itself. Every conversation is supervised by a named attorney, logged in real time, and exportable for ABA Op. <span class="num">512</span> review. The agent can answer process questions, schedule consultations, and route urgent matters to humans. It cannot, by construction, opine on a case.</p>
+      <p>Median response time dropped to <span class="num">14</span> seconds. Conversion from inbound to consultation rose <span class="num">31%</span>. The supervising attorney spends <span class="num">40</span> minutes a day reviewing flagged transcripts — down from the four-hour audit cycle that used to land on her desk weekly. The tool did not replace anyone; it gave the existing intake team six new hours a day to spend on warm consultations.</p>
+      <p>Cost per signed case is now <span class="num">$1,140</span> — <span class="num">41%</span> below the industry median. The firm owns the source code outright. We maintain it under a flat retainer that is roughly a third of what the previous vendor stack billed. The tool does one thing very well: it makes the firm faster without ever making it less compliant.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== INDUSTRY SHOWCASE ========== -->
+<section class="pe-shop surface-cream-2" data-screen-label="Industry Showcase">
+  <div class="pe-shop__inner">
+    <header class="pe-shop__head fade-up">
+      <div class="pe-shop__eyebrow">Practiced Across Four Industries</div>
+      <h2 class="pe-shop__h">The tooling behind every engagement.</h2>
+    </header>
+    <div class="pe-shop__grid">
+      <a class="pe-shop__card fade-up" href="../industries/personal-injury/index.html">
+        <div class="pe-shop__tag">Personal Injury</div>
+        <h3 class="pe-shop__metric">Intake router, <span class="num">14</span>s response</h3>
+        <p class="pe-shop__proof">An anchor PI client, Northeast US</p>
+        <span class="pe-shop__cta">See the practice <span class="arrow">→</span></span>
+      </a>
+      <a class="pe-shop__card fade-up" href="../industries/healthcare/index.html">
+        <div class="pe-shop__tag">Healthcare</div>
+        <h3 class="pe-shop__metric">Denial console, <span class="num">19%</span> recovery lift</h3>
+        <p class="pe-shop__proof">An anchor cardiology MSO</p>
+        <span class="pe-shop__cta">See the practice <span class="arrow">→</span></span>
+      </a>
+      <a class="pe-shop__card fade-up" href="../industries/financial-services/index.html">
+        <div class="pe-shop__tag">Financial Services</div>
+        <h3 class="pe-shop__metric">Advisor CRM, <span class="num">4×</span> referral conv.</h3>
+        <p class="pe-shop__proof">An anchor RIA</p>
+        <span class="pe-shop__cta">See the practice <span class="arrow">→</span></span>
+      </a>
+      <a class="pe-shop__card fade-up" href="../industries/management-consulting/index.html">
+        <div class="pe-shop__tag">Management Consulting</div>
+        <h3 class="pe-shop__metric">Pursuit tracker, partner-grade</h3>
+        <p class="pe-shop__proof">Tier-<span class="num">1</span> strategy firm</p>
+        <span class="pe-shop__cta">See the practice <span class="arrow">→</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FINAL CTA ========== -->
+<section class="pe-final" data-screen-label="Final CTA">
+  <div class="pe-final__inner">
+    <div class="pe-final__cartouche" aria-hidden="true">
+      <span class="pe-final__cartouche-line"></span>
+      <span class="pe-final__cartouche-dot"></span>
+      <span class="pe-final__cartouche-line"></span>
+    </div>
+    <div class="pe-final__eyebrow">The Engineering Audit</div>
+    <h2 class="pe-final__h">See what compliant engineering looks like.</h2>
+    <div class="pe-final__cta-row">
+      <a class="btn-cream" href="../audit.html">Calculate my revenue leak <span class="arrow">→</span></a>
+      <a class="btn-text pe-final__ghost" href="../approach.html">See our approach</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot" data-screen-label="Footer">
+  <div class="foot__inner">
+    <div class="foot__top">
+      <div class="foot__brand">
+        <img src="../assets/famaash-logo-white.svg" alt="Famaash" />
+        <div class="foot__tag">The operating partner for personal injury law firms.</div>
+      </div>
+      <div class="foot__news">
+        <span class="foot__news-l">PI Benchmark Report, quarterly</span>
+        <div class="foot__news-row">
+          <input type="email" placeholder="Work email" aria-label="Email" />
+          <button type="button">Subscribe</button>
+        </div>
+      </div>
+    </div>
+    <div class="foot__cols">
+      <div class="foot__col">
+        <h4>Capabilities</h4>
+        <ul>
+          <li><a href="../personal-injury/client-acquisition.html">Client Acquisition</a></li>
+          <li><a href="../personal-injury/intake-conversion.html">Intake &amp; Conversion</a></li>
+          <li><a href="../personal-injury/case-operations.html">Case Operations</a></li>
+          <li><a href="../personal-injury/command-center.html">Command Center</a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="../about.html">About</a></li>
+          <li><a href="../approach.html">Our Approach</a></li>
+          <li><a href="../case-studies.html">Case Studies</a></li>
+          <li><a href="../insights.html">Insights</a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h4>Compliance &amp; Trust</h4>
+        <ul>
+          <li><a href="../compliance.html">Compliance posture</a></li>
+          <li><a href="../security.html">Security</a></li>
+          <li><a href="../privacy.html">Privacy</a></li>
+          <li><a href="../terms.html">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__bot">
+      <span>© 2026 Famaash LLC.</span>
+      <div class="foot__legal">
+        <a href="../privacy.html">Privacy</a><span>,</span>
+        <a href="../terms.html">Terms</a><span>,</span>
+        <a href="../compliance.html">Compliance</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== Mega-dropdown (matches preview/famaash-nav-preview.html) =====
+(function() {
+  const trigger = document.getElementById('capTrigger');
+  const dropdown = document.getElementById('capDropdown');
+  const navInner = document.querySelector('.nav__inner');
+  if (!trigger || !dropdown || !navInner) return;
+
+  const industries = document.querySelectorAll('.mega__industry');
+  const capPanels = document.querySelectorAll('.mega__cap-content');
+  let openTimer = null, closeTimer = null;
+
+  function openMega() {
+    clearTimeout(closeTimer);
+    dropdown.classList.add('open');
+    trigger.setAttribute('aria-expanded', 'true');
+    dropdown.setAttribute('aria-hidden', 'false');
+  }
+  function closeMega() {
+    dropdown.classList.remove('open');
+    trigger.setAttribute('aria-expanded', 'false');
+    dropdown.setAttribute('aria-hidden', 'true');
+  }
+  trigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (dropdown.classList.contains('open')) closeMega(); else openMega();
+  });
+  trigger.addEventListener('mouseenter', () => {
+    clearTimeout(closeTimer);
+    openTimer = setTimeout(openMega, 80);
+  });
+  navInner.addEventListener('mouseleave', () => {
+    clearTimeout(openTimer);
+    closeTimer = setTimeout(closeMega, 200);
+  });
+  dropdown.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+  dropdown.addEventListener('mouseleave', () => {
+    closeTimer = setTimeout(closeMega, 200);
+  });
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target) && !trigger.contains(e.target)) closeMega();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMega();
+  });
+  industries.forEach(item => {
+    const switchTo = () => {
+      industries.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      const target = item.dataset.industry;
+      capPanels.forEach(p => {
+        if (p.dataset.industry === target) p.removeAttribute('hidden');
+        else p.setAttribute('hidden', '');
+      });
+    };
+    item.addEventListener('mouseenter', switchTo);
+    item.addEventListener('focus', switchTo);
+    item.addEventListener('click', switchTo);
+  });
+})();
+
+// ===== Fade-up on scroll =====
+(function() {
+  const els = document.querySelectorAll('.fade-up');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(el => el.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  els.forEach(el => io.observe(el));
+})();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,3247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Annual Revenue Leak Audit · Famaash</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-style: normal !important; }
+
+  :root {
+    /* Locked palette — forest green + gold */
+    --cream:       #F7F5F0;
+    --cream-2:     #EFEBE2;
+    --cream-3:     #E5DFD2;
+    --ink:         #07070C;
+    --ink-soft:    #0F0F18;
+    --ink-line:    rgba(255,255,255,0.08);
+    --muted:       #6B6B80;
+    --muted-2:     #9999AA;
+    --accent:      #0D4A3D;          /* forest green primary */
+    --accent-h:    #0A3A30;
+    --accent-lt:   #E5EFE9;
+    --accent-mid:  #4A8B7A;           /* on-dark forest variant */
+    --gold:        #C9A961;
+    --gold-soft:   #D9BD7C;
+    --gold-deep:   #8B7333;
+    --red:         #C9A961;           /* leak amounts render in gold */
+    --green:       #2D7A5F;
+    --on-cream:    #1A1A24;
+    --rule:        rgba(0,0,0,0.10);
+    --rule-soft:   rgba(0,0,0,0.06);
+    --rule-strong: rgba(0,0,0,0.20);
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* subtle paper grain */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    opacity: 0.035;
+    pointer-events: none;
+    z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* subtle vignette */
+  body::after {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.035) 100%);
+  }
+
+  /* ===================== DOCUMENT FRAME ===================== */
+  .app {
+    position: relative;
+    z-index: 2;
+    height: 100vh;
+    max-width: 1760px;
+    margin: 0 auto;
+    padding: 40px 80px 30px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* corner tick marks */
+  .corner {
+    position: absolute;
+    width: 20px; height: 20px;
+    border: 1px solid var(--ink);
+    z-index: 10;
+  }
+  .corner.tl { top: 30px; left: 40px; border-right: none; border-bottom: none; }
+  .corner.tr { top: 30px; right: 40px; border-left: none; border-bottom: none; }
+  .corner.bl { bottom: 30px; left: 40px; border-right: none; border-top: none; }
+  .corner.br { bottom: 30px; right: 40px; border-left: none; border-top: none; }
+
+  /* ===================== MASTHEAD (custom, no global nav) ===================== */
+  .masthead {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--gold);
+    flex-shrink: 0;
+    gap: 20px;
+    position: relative;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .brand:hover { opacity: 0.7; }
+  .brand img {
+    height: 26px;
+    width: auto;
+    display: block;
+  }
+  .brand-doc {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: right;
+    line-height: 1.7;
+  }
+  .brand-doc .num { color: var(--ink); }
+  @media (max-width: 900px) {
+    .brand-doc { display: none; }
+  }
+  /* legacy doc-meta / teaser-pill removed in v3 — masthead now uses .brand-doc only */
+
+  /* ===================== PROGRESS (4 evenly-spaced labels, hairline under active only) ===================== */
+  .progress-marks {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 18px 0 26px;
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .progress-mark {
+    position: relative;
+    text-align: center;
+    padding-bottom: 10px;
+    transition: color 0.4s ease;
+    color: var(--muted);
+  }
+  .progress-mark.active {
+    color: var(--gold);
+  }
+  .progress-mark.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+  }
+  @media (max-width: 700px) {
+    .progress-marks { font-size: 9px; letter-spacing: 0.14em; }
+    .progress-mark.active::after { width: 36px; }
+  }
+
+  /* ===================== MAIN ===================== */
+  main {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 44px 0 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===================== STEP ===================== */
+  .step {
+    width: 100%;
+    display: none;
+    animation: pageIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    flex: 1;
+  }
+  .step.active {
+    display: flex;
+    flex-direction: column;
+  }
+  @keyframes pageIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-kicker {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+
+  h1.display {
+    font-family: 'Cormorant', serif;
+    font-weight: 500;
+    font-size: clamp(48px, 5.6vw, 92px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  h2.display {
+    font-family: 'Cormorant', serif;
+    font-weight: 500;
+    font-size: clamp(36px, 4.2vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+    color: var(--ink);
+  }
+  .lead {
+    font-size: clamp(15px, 1.15vw, 19px);
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 720px;
+    margin-bottom: 48px;
+  }
+
+  /* ===================== INTRO SCREEN ===================== */
+  .intro {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .intro-top {
+    padding-top: 28px;
+    flex-shrink: 1;
+    min-height: 0;
+  }
+  .intro-kicker {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.26em;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 28px;
+  }
+  .intro-h1 {
+    font-family: 'Cormorant', serif;
+    font-weight: 500;
+    font-size: clamp(56px, 7vw, 128px);
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    max-width: 1500px;
+  }
+  .intro-h1 em {
+    color: var(--red);
+    font-style: normal !important;
+    font-weight: 600;
+  }
+  .intro-lede {
+    font-family: 'Cormorant', serif;
+    font-size: clamp(22px, 1.8vw, 30px);
+    line-height: 1.35;
+    color: var(--ink-soft);
+    max-width: 880px;
+    margin-top: 36px;
+    font-weight: 400;
+  }
+
+  .intro-middle {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 0.5px solid var(--rule);
+    border-bottom: 0.5px solid var(--rule);
+    margin: 48px 0;
+    flex-shrink: 0;
+  }
+  .intro-stat {
+    padding: 26px 32px;
+    border-right: 0.5px solid var(--rule-soft);
+  }
+  .intro-stat:last-child { border-right: none; }
+  .intro-stat-num {
+    font-family: 'Cormorant', serif;
+    font-size: 52px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .intro-stat-num .unit {
+    font-size: 26px;
+    color: var(--muted);
+    font-weight: 500;
+    margin-left: 4px;
+  }
+  .intro-stat-label {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    margin-top: 10px;
+  }
+
+  .intro-bottom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding-top: 20px;
+    flex-shrink: 0;
+  }
+
+  /* ===================== FORM FIELDS — underline style ===================== */
+  .field-grid {
+    display: grid;
+    gap: 36px 56px;
+  }
+  .field-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .field-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .field-label {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .field-label .req { color: var(--accent); margin-left: 2px; }
+
+  .field-input, .field-select {
+    width: 100%;
+    padding: 10px 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--ink);
+    color: var(--ink);
+    font-family: 'Cormorant', serif;
+    font-size: 26px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    transition: border-color 0.25s, color 0.25s;
+  }
+  .field-input:focus, .field-select:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+  }
+  .field-input::placeholder {
+    color: var(--muted-2);
+    font-weight: 400;
+  }
+  .field-input.invalid, .field-select.invalid {
+    border-bottom-color: var(--red);
+  }
+  .field-input.valid {
+    border-bottom-color: var(--green);
+  }
+
+  .field-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='14' height='8' viewBox='0 0 14 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%230D0D14' stroke-width='1.2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 4px center;
+    padding-right: 32px;
+    cursor: pointer;
+  }
+
+  .field-error {
+    font-size: 12px;
+    color: #8B1A1A;
+    font-family: 'DM Sans', sans-serif;
+    min-height: 16px;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .field-error.show { opacity: 1; }
+
+  /* ===================== SEARCHABLE COMBOBOX (Market) ===================== */
+  .combo {
+    position: relative;
+  }
+  .combo-list {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: 0; right: 0;
+    background: var(--cream);
+    border: 1px solid var(--ink);
+    box-shadow: 0 12px 28px rgba(7,7,12,0.12);
+    max-height: 280px;
+    overflow-y: auto;
+    z-index: 50;
+    display: none;
+  }
+  .combo.open .combo-list { display: block; }
+  .combo-option {
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    cursor: pointer;
+    border-bottom: 0.5px solid var(--rule-soft);
+    line-height: 1.4;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .combo-option:last-child { border-bottom: none; }
+  .combo-option:hover,
+  .combo-option.active {
+    background: var(--accent-lt);
+    color: var(--accent);
+  }
+  .combo-option mark {
+    background: transparent;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .combo-option .combo-tier {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    flex-shrink: 0;
+  }
+  .combo-option.combo-custom {
+    color: var(--muted);
+    font-style: italic !important;
+  }
+  .combo-option.combo-custom mark { color: var(--ink); }
+  .field-hint {
+    font-size: 11.5px;
+    color: var(--muted);
+    font-style: normal !important;
+    letter-spacing: 0.02em;
+  }
+
+  /* ===================== NUMERIC STEPPER (replaces sliders) ===================== */
+  .stepper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 24px;
+    border: 0.5px solid var(--rule);
+    background: var(--cream-2);
+  }
+  .stepper-btn {
+    width: 54px; height: 54px;
+    border: 0.5px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    font-family: 'Cormorant', serif;
+    font-size: 32px;
+    font-weight: 400;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+  }
+  .stepper-btn:hover:not(:disabled) {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .stepper-btn:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
+  .stepper-display {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-bottom: 4px;
+  }
+  .stepper-value {
+    font-family: 'Cormorant', serif;
+    font-size: 64px;
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "tnum" 1;
+  }
+  .stepper-value-unit {
+    font-size: 32px;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-right: 2px;
+  }
+  .stepper-label {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+  }
+  .stepper-presets {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .stepper-preset {
+    padding: 6px 14px;
+    border: 0.5px solid var(--rule);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-transform: uppercase;
+  }
+  .stepper-preset:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+  .stepper-preset.active {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+
+  /* ===================== OPTION CHECKBOXES ===================== */
+  .option-grid {
+    display: grid;
+    gap: 1px;
+    background: var(--rule);
+    border: 0.5px solid var(--rule);
+  }
+  .option-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .option-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .option-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .option-grid.cols-5 { grid-template-columns: repeat(5, 1fr); }
+
+  .option {
+    padding: 22px 26px;
+    background: var(--cream);
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+    font-family: inherit;
+  }
+  .option:hover {
+    background: var(--cream-2);
+  }
+  .option.selected {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .option-check {
+    width: 22px; height: 22px;
+    border: 1px solid var(--ink);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .option.selected .option-check {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+  .option-check svg {
+    width: 12px; height: 12px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .option.selected .option-check svg { opacity: 1; }
+  .option-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .option-label {
+    font-family: 'Cormorant', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+    line-height: 1.1;
+  }
+  .option.selected .option-label { color: var(--cream); }
+  .option-desc {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+  }
+  .option.selected .option-desc { color: var(--muted-2); }
+
+  /* ===================== NAVIGATION ===================== */
+  .step-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 28px;
+    border-top: 0.5px solid var(--rule);
+    flex-shrink: 0;
+  }
+  .btn {
+    padding: 18px 40px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 60px;
+  }
+  .btn-primary {
+    background: var(--ink);
+    color: var(--cream);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: var(--accent);
+  }
+  .btn-primary:disabled {
+    opacity: 0.25;
+    cursor: not-allowed;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--muted);
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .btn-ghost:hover {
+    color: var(--ink);
+  }
+  .btn-arrow {
+    font-family: 'Cormorant', serif;
+    font-size: 22px;
+    font-weight: 400;
+  }
+  .btn-intro {
+    padding: 24px 56px;
+    font-size: 15px;
+    min-height: 72px;
+    background: var(--ink);
+    color: var(--cream);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  }
+  .btn-intro:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 50px rgba(13,74,61,0.25);
+  }
+
+  /* ===================== CALCULATING ===================== */
+  .calc {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .calc-line {
+    width: 200px;
+    height: 1px;
+    background: var(--rule);
+    position: relative;
+    margin: 40px 0;
+    overflow: hidden;
+  }
+  .calc-line::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    height: 100%;
+    width: 50px;
+    background: var(--accent);
+    animation: scan 1.4s ease-in-out infinite;
+  }
+  @keyframes scan {
+    0% { left: -50px; }
+    100% { left: 200px; }
+  }
+  .calc-title {
+    font-family: 'Cormorant', serif;
+    font-size: clamp(42px, 4.5vw, 72px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .calc-status {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    min-height: 20px;
+    transition: opacity 0.3s;
+  }
+
+  /* ===================== RESULTS (LEAK REPORT) ===================== */
+  .result-title-block {
+    padding-bottom: 28px;
+    border-bottom: 0.5px solid var(--rule);
+    margin-bottom: 36px;
+  }
+  .result-eyebrow {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 18px;
+  }
+  .result-header-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 48px;
+    align-items: end;
+  }
+  .result-h1 {
+    font-family: 'Cormorant', serif;
+    font-size: clamp(54px, 6vw, 92px);
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+
+  .result-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 200px;
+    padding: 2px 0;
+    text-align: right;
+  }
+  .result-meta-field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .result-meta-field .label {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .result-meta-field .value {
+    font-family: 'Cormorant', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -0.005em;
+  }
+
+  .result-body {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 60px;
+    margin-top: 32px;
+    padding-bottom: 24px;
+  }
+
+  .result-col h3 {
+    font-family: 'Cormorant', serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 0.5px solid var(--rule-soft);
+    color: var(--ink);
+  }
+
+  .ledger { list-style: none; }
+  .ledger li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 14px 0;
+    border-bottom: 0.5px dotted var(--rule);
+    align-items: baseline;
+    gap: 16px;
+    opacity: 0;
+    animation: ledgerIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes ledgerIn {
+    from { opacity: 0; transform: translateX(-12px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  .leak-label strong {
+    font-family: 'Cormorant', serif;
+    font-weight: 600;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 6px;
+    font-size: 24px;
+    letter-spacing: -0.005em;
+    line-height: 1.15;
+  }
+  .leak-label span {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .leak-val {
+    font-family: 'Cormorant', serif;
+    font-size: clamp(28px, 2.4vw, 36px);
+    font-weight: 500;
+    color: var(--gold);
+    letter-spacing: -0.015em;
+    line-height: 1;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+  }
+
+  .total-row {
+    margin-top: 20px;
+    padding: 20px 0 4px;
+    border-top: 1.5px solid var(--ink);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+  }
+  .total-label {
+    font-family: 'Cormorant', serif;
+    font-size: 22px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .total-val {
+    font-family: 'Cormorant', serif;
+    font-size: clamp(64px, 6.4vw, 96px);
+    font-weight: 500;
+    color: var(--gold);
+    letter-spacing: -0.025em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+  }
+  .total-sub {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .method {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--muted);
+  }
+  .method p { margin-bottom: 12px; }
+  .method strong { color: var(--ink); font-weight: 500; }
+
+  .recovery {
+    margin-top: 24px;
+    padding: 26px 30px;
+    background: #080810;
+    border: 0.5px solid rgba(247,245,240,0.08);
+    color: var(--cream);
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .recovery h4 {
+    font-family: 'Cormorant', serif;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+  }
+  .recovery h4 em {
+    color: var(--accent-mid);
+    font-style: normal !important;
+    font-weight: 600;
+  }
+  .recovery ul {
+    list-style: none;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: rgba(247,245,240,0.72);
+  }
+  .recovery li {
+    padding: 4px 0 4px 18px;
+    position: relative;
+  }
+  .recovery li::before {
+    content: "→";
+    position: absolute; left: 0;
+    color: var(--accent-mid);
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 0.5px solid var(--rule);
+    flex-shrink: 0;
+  }
+  .result-actions .btn { flex: 1; justify-content: center; }
+
+  /* ===================== CONFIRMATION ===================== */
+  .confirm {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .confirm-seal {
+    width: 110px; height: 110px;
+    margin: 0 auto 36px;
+    border-radius: 50%;
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+    animation: seal 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes seal {
+    0% { transform: scale(0) rotate(-90deg); }
+    100% { transform: scale(1) rotate(0); }
+  }
+  .confirm-seal svg { width: 52px; height: 52px; }
+  .confirm-title {
+    font-family: 'Cormorant', serif;
+    font-size: clamp(52px, 5.5vw, 84px);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .confirm-msg {
+    font-family: 'Cormorant', serif;
+    font-size: 26px;
+    color: var(--muted);
+    font-weight: 400;
+    max-width: 640px;
+    line-height: 1.35;
+    margin: 0 auto 14px;
+  }
+  .confirm-email {
+    color: var(--accent);
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 18px;
+  }
+  .confirm-sub {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 22px auto 0;
+    line-height: 1.65;
+    letter-spacing: 0.02em;
+  }
+
+  /* ===================== TOAST ===================== */
+  .toast {
+    position: fixed;
+    bottom: 40px; left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: var(--red);
+    color: var(--cream);
+    padding: 14px 28px;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    box-shadow: 0 16px 40px rgba(201,169,97,0.3);
+    z-index: 1000;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .toast.visible { transform: translateX(-50%) translateY(0); }
+  .toast.success { background: var(--ink); box-shadow: 0 16px 40px rgba(13,13,20,0.2); }
+
+  /* ===================== RESET ===================== */
+  .reset-btn {
+    position: fixed;
+    bottom: 40px; left: 40px;
+    padding: 8px 16px;
+    background: transparent;
+    border: 0.5px solid var(--rule);
+    color: var(--muted);
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    cursor: pointer;
+    z-index: 100;
+    opacity: 0.4;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover {
+    opacity: 1;
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  /* ===================== STEP HEADER ===================== */
+  .step-head {
+    margin-bottom: 40px;
+  }
+  .step-head .label {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  /* tighter spacing for step 2 operations (dense) */
+  .ops-grid { display: grid; gap: 32px; }
+  .ops-field .field-label { margin-bottom: 14px; display: block; }
+
+  /* ===================== RESPONSIVE ===================== */
+  /* 15–16" laptops (≤1680px): scale down paddings and type so everything fits in viewport height */
+  @media (max-width: 1680px) {
+    .app { padding: 28px 56px 22px; max-width: 1500px; }
+    .corner.tl, .corner.tr { top: 22px; }
+    .corner.bl, .corner.br { bottom: 22px; }
+    .corner.tl, .corner.bl { left: 28px; }
+    .corner.tr, .corner.br { right: 28px; }
+
+    main { padding: 32px 0 14px; }
+    .step-head { margin-bottom: 28px; }
+    h2.display { font-size: clamp(30px, 3.4vw, 48px); margin-bottom: 12px; }
+    .lead { margin-bottom: 32px; font-size: clamp(14px, 1vw, 17px); }
+
+    .intro-top { padding-top: 12px; }
+    .intro-kicker { margin-bottom: 18px; font-size: 11px; }
+    .intro-h1 { font-size: clamp(48px, 5.6vw, 88px); }
+    .intro-lede { margin-top: 22px; font-size: clamp(19px, 1.5vw, 25px); }
+    .intro-middle { margin: 28px 0; }
+    .intro-stat { padding: 18px 24px; }
+    .intro-stat-num { font-size: 40px; }
+    .intro-stat-num .unit { font-size: 20px; }
+    .intro-stat-label { margin-top: 6px; }
+    .intro-bottom { padding-top: 10px; }
+    .btn-intro { padding: 18px 44px; font-size: 14px; min-height: 60px; }
+
+    .field-grid { gap: 28px 44px; }
+    .field-input, .field-select { font-size: 22px; }
+
+    .stepper { padding: 16px 20px; gap: 16px; }
+    .stepper-btn { width: 46px; height: 46px; font-size: 26px; }
+    .stepper-value { font-size: 52px; }
+    .stepper-value-unit { font-size: 26px; }
+    .stepper-display { gap: 10px; }
+
+    .option { padding: 16px 20px; gap: 12px; }
+    .option-label { font-size: 18px; }
+    .option-desc { font-size: 11.5px; }
+    .ops-grid { gap: 22px; }
+    .ops-field .field-label { margin-bottom: 10px; }
+
+    .step-nav { padding-top: 20px; }
+    .btn { padding: 14px 32px; min-height: 50px; font-size: 13px; }
+
+    .result-title-block { padding-bottom: 20px; margin-bottom: 24px; }
+    .result-eyebrow { margin-bottom: 12px; font-size: 11px; }
+    .result-h1 { font-size: clamp(44px, 5vw, 72px); }
+    .result-meta { padding: 14px 18px; min-width: 240px; gap: 10px; }
+    .result-meta-field .value { font-size: 18px; }
+    .result-body { gap: 40px; margin-top: 24px; padding-bottom: 16px; }
+    .result-col h3 { font-size: 20px; margin-bottom: 12px; padding-bottom: 8px; }
+    .ledger li { padding: 10px 0; }
+    .leak-label strong { font-size: 16px; }
+    .total-val { font-size: clamp(44px, 4.6vw, 64px); }
+    .recovery { padding: 20px 22px; gap: 22px; margin-top: 18px; }
+    .recovery h4 { font-size: 22px; }
+    .recovery ul { font-size: 11.5px; }
+    .result-actions { margin-top: 18px; padding-top: 16px; gap: 12px; }
+
+    .calc-title { font-size: clamp(36px, 3.8vw, 56px); }
+  }
+
+  @media (max-width: 1200px) {
+    .app { padding: 30px 50px; }
+    .corner.tl, .corner.bl { left: 22px; }
+    .corner.tr, .corner.br { right: 22px; }
+    .field-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+    .result-body { grid-template-columns: 1fr; gap: 32px; }
+    .result-header-row { grid-template-columns: 1fr; gap: 24px; align-items: start; }
+    .result-meta { min-width: 0; }
+    .recovery { grid-template-columns: 1fr; }
+    .intro-middle { grid-template-columns: 1fr 1fr; }
+    .intro-stat { border-right: none; border-bottom: 0.5px solid var(--rule-soft); }
+  }
+  @media (max-width: 700px) {
+    .app { padding: 20px 24px; }
+    .field-grid.cols-3, .field-grid.cols-2 { grid-template-columns: 1fr; }
+    .option-grid.cols-4, .option-grid.cols-5, .option-grid.cols-3, .option-grid.cols-2 {
+      grid-template-columns: 1fr;
+    }
+    .result-meta { grid-template-columns: 1fr; gap: 20px; }
+  }
+
+  /* ===================== HEIGHT-BASED (laptops, short viewports) ===================== */
+  /* Ensures the intro "Begin the audit" button stays visible without scrolling.
+     Targets 16" MBP (≤900px inner height) and 13" / smaller (≤780px) */
+  @media (max-height: 900px) {
+    .app { padding: 22px 56px 18px; }
+    .corner.tl, .corner.tr { top: 16px; }
+    .corner.bl, .corner.br { bottom: 16px; }
+    main { padding: 26px 0 12px; }
+    .progress-marks { padding: 10px 0 14px; }
+
+    .intro-top { padding-top: 0; }
+    .intro-kicker { margin-bottom: 14px; font-size: 11px; }
+    .intro-h1 { font-size: clamp(44px, 4.8vw, 72px); }
+    .intro-lede { margin-top: 18px; font-size: clamp(16px, 1.2vw, 20px); }
+    .intro-middle { margin: 20px 0; }
+    .intro-stat { padding: 14px 22px; }
+    .intro-stat-num { font-size: 34px; }
+    .intro-stat-num .unit { font-size: 17px; }
+    .intro-stat-label { margin-top: 4px; font-size: 9.5px; }
+    .intro-bottom { padding-top: 8px; }
+    .btn-intro { padding: 16px 40px; min-height: 54px; font-size: 13px; }
+
+    .step-head { margin-bottom: 22px; }
+    .lead { margin-bottom: 24px; }
+    .stepper { padding: 14px 18px; gap: 14px; }
+    .stepper-btn { width: 42px; height: 42px; font-size: 24px; }
+    .stepper-value { font-size: 48px; }
+    .stepper-value-unit { font-size: 24px; }
+    .option { padding: 14px 18px; }
+    .option-label { font-size: 17px; }
+    .ops-grid { gap: 18px; }
+    .result-title-block { padding-bottom: 16px; margin-bottom: 18px; }
+    .result-h1 { font-size: clamp(40px, 4.4vw, 60px); }
+    .recovery { padding: 18px 20px; }
+    .total-val { font-size: clamp(40px, 4.2vw, 58px); }
+  }
+
+  /* 13" laptops / low-res externals */
+  @media (max-height: 780px) {
+    .app { padding: 16px 48px 14px; }
+    main { padding: 20px 0 10px; }
+    .progress-marks { padding: 8px 0 10px; }
+
+    .intro-kicker { margin-bottom: 10px; font-size: 10px; }
+    .intro-h1 { font-size: clamp(36px, 4vw, 56px); }
+    .intro-lede { margin-top: 12px; font-size: 15px; line-height: 1.4; }
+    .intro-middle { margin: 14px 0; }
+    .intro-stat { padding: 10px 18px; }
+    .intro-stat-num { font-size: 26px; }
+    .intro-stat-num .unit { font-size: 14px; }
+    .intro-stat-label { font-size: 9px; margin-top: 2px; }
+    .btn-intro { padding: 13px 30px; min-height: 46px; font-size: 12px; }
+
+    .masthead { padding-bottom: 10px; }
+    .brand img { height: 20px; }
+    .doc-meta { font-size: 9px; line-height: 1.7; }
+  }
+
+  /* ===================== V2 ADDITIONS ===================== */
+
+  /* -- Live ticker bar (masthead) -- */
+  .live-ticker {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 9px 18px;
+    background: var(--ink);
+    color: var(--cream);
+    font-family: var(--ff-mono, 'DM Mono', ui-monospace, monospace);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-top: 10px;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .live-ticker-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #3BE38F;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(59,227,143,0.18);
+    animation: livepulse 1.6s ease-in-out infinite;
+  }
+  @keyframes livepulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(59,227,143,0.18); }
+    50% { box-shadow: 0 0 0 6px rgba(59,227,143,0.05); }
+  }
+  .live-ticker-label {
+    color: #3BE38F;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+  }
+  .live-ticker-items {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .live-ticker-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .live-ticker-item .tk-num {
+    font-family: 'DM Sans', sans-serif;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--cream);
+    letter-spacing: -0.01em;
+    text-transform: none;
+  }
+  .live-ticker-item .tk-label {
+    color: rgba(247,245,240,0.55);
+    font-size: 9.5px;
+  }
+  .live-ticker-sep {
+    width: 1px;
+    height: 10px;
+    background: rgba(247,245,240,0.15);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 900px) {
+    .live-ticker { font-size: 9px; gap: 10px; padding: 7px 12px; }
+    .live-ticker-items { gap: 16px; }
+    .live-ticker-item .tk-num { font-size: 11px; }
+  }
+
+  /* -- Peer benchmark block (results) — pure editorial -- */
+  .peer-benchmark {
+    margin-top: 28px;
+    padding: 22px 0 0;
+    border-top: 0.5px solid var(--rule);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: center;
+  }
+  .peer-benchmark-left {
+    min-width: 0;
+  }
+  .peer-benchmark-kicker {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .peer-benchmark-headline {
+    font-family: 'Cormorant', serif;
+    font-size: clamp(22px, 2.2vw, 30px);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .peer-benchmark-headline .peer-num {
+    font-family: 'Cormorant', serif;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    font-weight: 600;
+    color: var(--red);
+    letter-spacing: -0.015em;
+    font-style: normal !important;
+  }
+  .peer-benchmark-headline .peer-num.good { color: var(--green); }
+  .peer-benchmark-sub {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+  .peer-benchmark-vs {
+    text-align: right;
+    padding-left: 24px;
+    border-left: 0.5px solid var(--rule);
+    min-width: 180px;
+  }
+  .peer-bench-label {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .peer-bench-value {
+    font-family: 'DM Sans', sans-serif;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+  .peer-bench-sub {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .peer-benchmark { grid-template-columns: 1fr; gap: 16px; }
+    .peer-benchmark-vs { border-left: none; border-top: 0.5px solid var(--rule); padding-left: 0; padding-top: 14px; text-align: left; }
+  }
+
+  /* -- GEO / ChatGPT new-business block (results) -- unified dark tone -- */
+  .geo-block {
+    margin-top: 28px;
+    padding: 28px 30px;
+    background: #080810;
+    border: 0.5px solid rgba(247,245,240,0.08);
+    color: var(--cream);
+    position: relative;
+  }
+  .geo-block-kicker {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--accent-mid);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .geo-block-headline {
+    font-family: 'Cormorant', serif;
+    font-size: clamp(26px, 2.8vw, 38px);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 22px;
+    max-width: 760px;
+    color: var(--cream);
+  }
+  .geo-block-headline em {
+    color: var(--accent-mid);
+    font-weight: 600;
+    font-style: normal !important;
+  }
+  .geo-stat-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin: 22px 0 24px;
+    padding: 20px 0;
+    border-top: 0.5px solid rgba(247,245,240,0.12);
+    border-bottom: 0.5px solid rgba(247,245,240,0.12);
+  }
+  .geo-stat .n {
+    font-family: 'DM Sans', sans-serif;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    font-weight: 700;
+    font-size: clamp(28px, 3vw, 40px);
+    color: var(--cream);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .geo-stat .n .suffix {
+    font-size: 0.55em;
+    color: var(--accent-mid);
+    margin-left: 2px;
+  }
+  .geo-stat .l {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: rgba(247,245,240,0.5);
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  .geo-new-biz {
+    padding: 20px 0;
+    margin: 0 0 4px;
+    border-bottom: 0.5px solid rgba(247,245,240,0.12);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: center;
+  }
+  .geo-new-biz-left {
+    font-family: 'Cormorant', serif;
+    font-size: clamp(18px, 1.6vw, 22px);
+    line-height: 1.3;
+    color: var(--cream);
+    font-weight: 500;
+  }
+  .geo-new-biz-left strong {
+    color: var(--accent-mid);
+    font-weight: 600;
+  }
+  .geo-new-biz-right {
+    font-family: 'DM Sans', sans-serif;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    font-weight: 700;
+    font-size: clamp(32px, 3.2vw, 46px);
+    color: #3BE38F;
+    letter-spacing: -0.025em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .geo-fix-list {
+    list-style: none;
+    margin-top: 22px;
+    font-size: 12.5px;
+    color: rgba(247,245,240,0.72);
+    line-height: 1.6;
+  }
+  .geo-fix-list li {
+    padding: 5px 0 5px 20px;
+    position: relative;
+  }
+  .geo-fix-list li::before {
+    content: "→";
+    position: absolute; left: 0;
+    color: var(--accent-mid);
+    font-weight: 600;
+  }
+  .geo-fix-list strong {
+    color: var(--cream);
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .geo-new-biz { grid-template-columns: 1fr; text-align: left; }
+    .geo-stat-row { grid-template-columns: 1fr; gap: 14px; }
+  }
+
+  /* (AI row previously had accent emphasis — removed since every line is recoverable) */
+
+  /* -- Doc-ID pill in peer benchmark: flexible accent -- */
+  .peer-tag {
+    display: inline-block;
+    padding: 3px 9px;
+    background: var(--accent-lt);
+    color: var(--accent);
+    border-radius: 2px;
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 500;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<div class="app">
+
+  <!-- ================== MASTHEAD ================== -->
+  <header class="masthead">
+    <a href="index.html" class="brand" aria-label="Famaash home"><img src="assets/famaash-logo-dark.png" alt="Famaash" /></a>
+    <div class="brand-doc">
+      <div>Doc No. <span class="num" id="docNum">WEB-2026-0001</span></div>
+      <div id="docDate">Prepared today</div>
+    </div>
+  </header>
+
+  <!-- ================== PROGRESS (4 sections) ================== -->
+  <div class="progress-marks">
+    <div class="progress-mark" data-mark="0">I. Welcome</div>
+    <div class="progress-mark" data-mark="1">II. The Firm</div>
+    <div class="progress-mark" data-mark="2">III. Operations</div>
+    <div class="progress-mark" data-mark="3">IV. Report</div>
+  </div>
+
+  <main>
+
+    <!-- ================== STEP 0 — INTRO ================== -->
+    <section class="step active" data-step="0">
+      <div class="intro">
+        <div class="intro-top">
+          <div class="intro-kicker">Annual Revenue Leak Estimate</div>
+          <h1 class="intro-h1">
+            Your firm lost money<br>it <em>never saw</em><br>come in.
+          </h1>
+          <p class="intro-lede">
+            In sixty seconds, we'll estimate exactly how much signed-case revenue
+            is leaking out of your firm every year, and we'll email you a printable
+            report you can take to your partner meeting.
+          </p>
+        </div>
+
+        <div class="intro-middle">
+          <div class="intro-stat">
+            <div class="intro-stat-num">6<span class="unit">questions</span></div>
+            <div class="intro-stat-label">Duration of audit</div>
+          </div>
+          <div class="intro-stat">
+            <div class="intro-stat-num">60<span class="unit">seconds</span></div>
+            <div class="intro-stat-label">Time to complete</div>
+          </div>
+          <div class="intro-stat">
+            <div class="intro-stat-num">$0</div>
+            <div class="intro-stat-label">Cost or obligation</div>
+          </div>
+          <div class="intro-stat">
+            <div class="intro-stat-num">100<span class="unit">%</span></div>
+            <div class="intro-stat-label">Confidential to your firm</div>
+          </div>
+        </div>
+
+        <div class="intro-bottom">
+          <button class="btn btn-intro" onclick="goToStep(1)">
+            Begin the audit <span class="btn-arrow">→</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== STEP 1 — IDENTITY ================== -->
+    <section class="step" data-step="1">
+      <div class="step-head">
+        <div class="label">Section II · The Firm</div>
+        <h2 class="display">Who is this report prepared for?</h2>
+        <p class="lead">Fill in the lines below, as you would on the printed form.</p>
+      </div>
+
+      <div class="field-grid cols-3">
+        <div class="field">
+          <label class="field-label" for="firmName">Prepared for <span class="req">*</span></label>
+          <input type="text" class="field-input" id="firmName" placeholder="Smith &amp; Associates LLC" autocomplete="organization">
+          <div class="field-error" id="err-firmName"></div>
+        </div>
+        <div class="field">
+          <label class="field-label" for="attorneyName">Managing attorney <span class="req">*</span></label>
+          <input type="text" class="field-input" id="attorneyName" placeholder="Jane Smith" autocomplete="name">
+          <div class="field-error" id="err-attorneyName"></div>
+        </div>
+        <div class="field">
+          <label class="field-label" for="market">Market <span class="req">*</span></label>
+          <div class="combo" id="marketCombo">
+            <input type="text" class="field-input" id="market" placeholder="Jersey City, NJ" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="marketList">
+            <div class="combo-list" id="marketList" role="listbox"></div>
+          </div>
+          <div class="field-error" id="err-market"></div>
+        </div>
+      </div>
+
+      <div class="field-grid cols-3" style="margin-top: 52px;">
+        <div class="field">
+          <label class="field-label" for="role">Role at the firm</label>
+          <select class="field-select" id="role">
+            <option value="">Select a role</option>
+            <option value="Managing Partner">Managing Partner</option>
+            <option value="Partner">Partner</option>
+            <option value="Associate">Associate</option>
+            <option value="Marketing Director">Marketing Director</option>
+            <option value="Operations / Admin">Operations / Admin</option>
+            <option value="Other">Other</option>
+          </select>
+          <div class="field-error" id="err-role"></div>
+        </div>
+        <div class="field">
+          <label class="field-label" for="email">Email address <span class="req">*</span></label>
+          <input type="email" class="field-input" id="email" placeholder="jane@smithlaw.com" autocomplete="email" inputmode="email">
+          <div class="field-error" id="err-email"></div>
+          <div class="field-hint">The report will be sent here.</div>
+        </div>
+        <div class="field">
+          <label class="field-label" for="phone">Phone number</label>
+          <input type="tel" class="field-input" id="phone" placeholder="(201) 555-0183" autocomplete="tel" inputmode="tel">
+          <div class="field-error" id="err-phone"></div>
+          <div class="field-hint">Optional. US format only.</div>
+        </div>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn btn-ghost" onclick="goToStep(0)"><span class="btn-arrow">←</span> Back</button>
+        <button class="btn btn-primary" onclick="validateAndGo(2)">Continue <span class="btn-arrow">→</span></button>
+      </div>
+    </section>
+
+    <!-- ================== STEP 2 — VOLUME ================== -->
+    <section class="step" data-step="2">
+      <div class="step-head">
+        <div class="label">Section III · The Volume</div>
+        <h2 class="display">How much passes through your intake?</h2>
+        <p class="lead">Rough estimates are fine. You can also tap a preset.</p>
+      </div>
+
+      <div class="field-grid cols-2" style="gap: 56px;">
+
+        <div class="field">
+          <label class="field-label">New case inquiries per month <span class="req">*</span></label>
+          <div class="stepper">
+            <button class="stepper-btn" onclick="adjustLeads(-5)" id="leadsDown">−</button>
+            <div class="stepper-display">
+              <div class="stepper-value"><span id="leadsValue">30</span></div>
+              <div class="stepper-label">Inquiries · Per Month</div>
+            </div>
+            <button class="stepper-btn" onclick="adjustLeads(5)" id="leadsUp">+</button>
+          </div>
+          <div class="stepper-presets" data-presets="leads">
+            <button class="stepper-preset" data-val="15">15</button>
+            <button class="stepper-preset" data-val="30">30</button>
+            <button class="stepper-preset" data-val="50">50</button>
+            <button class="stepper-preset" data-val="100">100</button>
+            <button class="stepper-preset" data-val="150">150+</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Average fee per signed case <span class="req">*</span></label>
+          <div class="stepper">
+            <button class="stepper-btn" onclick="adjustValue(-1000)" id="valueDown">−</button>
+            <div class="stepper-display">
+              <div class="stepper-value"><span class="stepper-value-unit">$</span><span id="valueValue">8,000</span></div>
+              <div class="stepper-label">Average · Per Case</div>
+            </div>
+            <button class="stepper-btn" onclick="adjustValue(1000)" id="valueUp">+</button>
+          </div>
+          <div class="stepper-presets" data-presets="value">
+            <button class="stepper-preset" data-val="5000">$5K</button>
+            <button class="stepper-preset" data-val="8000">$8K</button>
+            <button class="stepper-preset" data-val="15000">$15K</button>
+            <button class="stepper-preset" data-val="25000">$25K</button>
+            <button class="stepper-preset" data-val="40000">$40K+</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="step-nav">
+        <button class="btn btn-ghost" onclick="goToStep(1)"><span class="btn-arrow">←</span> Back</button>
+        <button class="btn btn-primary" onclick="goToStep(3)">Continue <span class="btn-arrow">→</span></button>
+      </div>
+    </section>
+
+    <!-- ================== STEP 3 — OPERATIONS ================== -->
+    <section class="step" data-step="3">
+      <div class="step-head">
+        <div class="label">Section IV · The Operations</div>
+        <h2 class="display">Four questions. The leaks usually hide here.</h2>
+        <p class="lead">Tap one answer per question. Honest answers yield honest numbers.</p>
+      </div>
+
+      <div class="ops-grid">
+
+        <div class="ops-field">
+          <label class="field-label">A. How are after-hours calls handled?</label>
+          <div class="option-grid cols-4" data-q="afterHours">
+            <button class="option" data-val="voicemail">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">Voicemail</span>
+                <span class="option-desc">Recording after 5pm</span>
+              </span>
+            </button>
+            <button class="option" data-val="answering_service">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">Answering service</span>
+                <span class="option-desc">Takes a message</span>
+              </span>
+            </button>
+            <button class="option" data-val="live_247">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">24/7 live staff</span>
+                <span class="option-desc">Human picks up always</span>
+              </span>
+            </button>
+            <button class="option" data-val="ai_247">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">24/7 AI intake</span>
+                <span class="option-desc">AI qualifies &amp; books</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="ops-field">
+          <label class="field-label">B. How quickly do you reply to web-form leads?</label>
+          <div class="option-grid cols-5" data-q="responseTime">
+            <button class="option" data-val="under_5min">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">Under 5 min</span>
+                <span class="option-desc">Automated</span>
+              </span>
+            </button>
+            <button class="option" data-val="under_1hr">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">Within 1 hour</span>
+                <span class="option-desc">Business hours</span>
+              </span>
+            </button>
+            <button class="option" data-val="same_day">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">Same day</span>
+                <span class="option-desc">End of day usually</span>
+              </span>
+            </button>
+            <button class="option" data-val="one_two_days">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">1–2 days</span>
+                <span class="option-desc">When we have time</span>
+              </span>
+            </button>
+            <button class="option" data-val="longer">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">Longer / inconsistent</span>
+                <span class="option-desc">Honestly, they fall through</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="ops-field">
+          <label class="field-label">C. What languages does your intake team cover?</label>
+          <div class="option-grid cols-4" data-q="languages">
+            <button class="option" data-val="en_only">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">English only</span>
+              </span>
+            </button>
+            <button class="option" data-val="en_es">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">EN + Spanish</span>
+              </span>
+            </button>
+            <button class="option" data-val="en_es_ar">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">EN + ES + Arabic</span>
+              </span>
+            </button>
+            <button class="option" data-val="other">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">Other mix</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="ops-field">
+          <label class="field-label">D. When someone asks ChatGPT, Perplexity, or Google AI for a PI lawyer in your market, does your firm get cited?</label>
+          <div class="option-grid cols-3" data-q="aiVisibility">
+            <button class="option" data-val="yes">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">Yes, cited</span>
+                <span class="option-desc">Verified in AI answers</span>
+              </span>
+            </button>
+            <button class="option" data-val="unsure">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">Never checked</span>
+                <span class="option-desc">Most firms haven't</span>
+              </span>
+            </button>
+            <button class="option" data-val="no">
+              <span class="option-check"><svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="2,6 5,9 10,3"/></svg></span>
+              <span class="option-text">
+                <span class="option-label">Not cited</span>
+                <span class="option-desc">No GEO yet</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="step-nav">
+        <button class="btn btn-ghost" onclick="goToStep(2)"><span class="btn-arrow">←</span> Back</button>
+        <button class="btn btn-primary" id="calculateBtn" onclick="submitAudit()" disabled>
+          Calculate the leak <span class="btn-arrow">→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================== STEP 4 — CALCULATING ================== -->
+    <section class="step" data-step="4">
+      <div class="calc">
+        <div class="calc-line"></div>
+        <div class="calc-title">Running your numbers&hellip;</div>
+        <div class="calc-line"></div>
+        <div class="calc-status" id="calcStatus">Analyzing intake patterns</div>
+      </div>
+    </section>
+
+    <!-- ================== STEP 5 — RESULTS ================== -->
+    <section class="step" data-step="5">
+
+      <div class="result-title-block">
+        <div class="result-eyebrow">Annual Revenue Leak Estimate · Finalized</div>
+        <div class="result-header-row">
+          <h1 class="result-h1">
+            The leak, <br>line by line.
+          </h1>
+
+          <div class="result-meta">
+            <div class="result-meta-field">
+              <div class="label">Prepared for</div>
+              <div class="value" id="metaFirm">&nbsp;</div>
+            </div>
+            <div class="result-meta-field">
+              <div class="label">Attorney</div>
+              <div class="value" id="metaAttorney">&nbsp;</div>
+            </div>
+            <div class="result-meta-field">
+              <div class="label">Market</div>
+              <div class="value" id="metaMarket">&nbsp;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-body">
+
+        <div class="result-col">
+          <h3>Where the money is going</h3>
+          <ul class="ledger" id="leakTable"></ul>
+
+          <div class="total-row">
+            <div>
+              <div class="total-label">Est. Annual Loss</div>
+              <div class="total-sub" id="totalSub">Signed cases that never reached you</div>
+            </div>
+            <div class="total-val" id="totalValue">$0</div>
+          </div>
+        </div>
+
+        <div class="result-col">
+          <h3>How we arrived at this</h3>
+          <div class="method">
+            <p><strong>Inputs.</strong> Your monthly leads, case value, intake handling, response time, languages, and AI-search visibility.</p>
+            <p><strong>Model.</strong> Industry benchmarks applied at each funnel stage. Each stage is a leak. Stacked, they reach the total.</p>
+            <p><strong>Assumption.</strong> Marketing spend stays flat. This is money already paid for and lost at intake &mdash; not new spend.</p>
+          </div>
+
+          <div class="recovery">
+            <h4>Every line is <em>recoverable</em> without raising ad spend.</h4>
+            <ul>
+              <li>24/7 AI intake &middot; EN / ES / AR</li>
+              <li>Retainer capture mid-call</li>
+              <li>GEO &middot; cited by ChatGPT &amp; Google AI</li>
+              <li>One firm per market</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============ V2: PEER BENCHMARK ============ -->
+      <div class="peer-benchmark" id="peerBenchmark" style="display:none;">
+        <div class="peer-benchmark-left">
+          <div class="peer-benchmark-kicker">Benchmark &middot; vs. peers at this conference</div>
+          <div class="peer-benchmark-headline" id="peerBenchmarkHeadline">
+            Calculating&hellip;
+          </div>
+        </div>
+        <div class="peer-benchmark-vs">
+          <div class="peer-bench-label">Avg firm &middot; <span id="peerBenchCount">—</span> audited</div>
+          <div class="peer-bench-value" id="peerBenchValue">$0</div>
+        </div>
+      </div>
+
+      <!-- ============ V2: GEO / NEW BUSINESS BLOCK ============ -->
+      <div class="geo-block" id="geoBlock">
+        <div class="geo-block-kicker">→ The new-business opportunity</div>
+        <div class="geo-block-headline">
+          <span id="geoHeadlineText">Brand-new case volume, from firms ChatGPT already recommends.</span>
+        </div>
+
+        <div class="geo-stat-row">
+          <div class="geo-stat">
+            <div class="n">77<span class="suffix">%</span></div>
+            <div class="l">of legal queries trigger<br>an AI Overview</div>
+          </div>
+          <div class="geo-stat">
+            <div class="n">3.2<span class="suffix">×</span></div>
+            <div class="l">higher intent from<br>AI-referred leads</div>
+          </div>
+          <div class="geo-stat">
+            <div class="n">12<span class="suffix">%</span></div>
+            <div class="l">of AI sources rank<br>in Google's top 10</div>
+          </div>
+        </div>
+
+        <div class="geo-new-biz">
+          <div class="geo-new-biz-left">
+            New-business revenue available in <strong id="geoMarketInline">your market</strong>:
+          </div>
+          <div class="geo-new-biz-right" id="geoNewBizValue">+$0</div>
+        </div>
+
+        <ul class="geo-fix-list">
+          <li><strong>AI Citation Audit</strong></li>
+          <li><strong>Structured data + E-E-A-T build-out</strong></li>
+          <li><strong>Authoritative case-result content</strong></li>
+          <li><strong>One firm per market</strong></li>
+        </ul>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn btn-primary" id="emailReportBtn" onclick="emailReport()">
+          Email me the full report <span class="btn-arrow">→</span>
+        </button>
+        <button class="btn btn-ghost" onclick="bookAudit()">
+          Book a 15-min call with Famaash <span class="btn-arrow">→</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ================== STEP 6 — CONFIRMATION ================== -->
+    <section class="step" data-step="6">
+      <div class="confirm">
+        <div class="confirm-seal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#F7F5F0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <div class="confirm-title">Report is on its way.</div>
+        <p class="confirm-msg">
+          We just sent your printable Leak Report to
+          <br><span class="confirm-email" id="confirmEmail">your@email.com</span>
+        </p>
+        <p class="confirm-sub">
+          A Famaash strategist will follow up within 24 hours to walk through your
+          specific leak breakdown, only if you want us to.
+        </p>
+        <div style="margin-top: 40px;">
+          <button class="btn btn-ghost" onclick="resetApp()">Start a new audit <span class="btn-arrow">→</span></button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <button class="reset-btn" onclick="resetApp()">⟲ Reset for next attendee</button>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ================================================================ -->
+<!-- ==================== APPLICATION LOGIC ========================= -->
+<!-- ================================================================ -->
+<script>
+'use strict';
+
+/* ========================================================================
+ * CONFIGURATION — Edit before deploying
+ * ======================================================================== */
+const EMAILJS_CONFIG = {
+  PUBLIC_KEY:        'YOUR_PUBLIC_KEY_HERE',
+  SERVICE_ID:        'YOUR_SERVICE_ID_HERE',
+  TEMPLATE_ATTORNEY: 'YOUR_ATTORNEY_TEMPLATE_ID',
+  TEMPLATE_FAMAASH:  'YOUR_FAMAASH_TEMPLATE_ID',
+  FAMAASH_EMAIL:     'booth@famaash.com'
+};
+
+/* Optional Google Sheets webhook for permanent storage.
+   Create a Google Apps Script web app, paste its URL here.
+   Instructions in README v2. Leave empty to skip. */
+const SHEETS_WEBHOOK_URL = '';
+
+/* Calendly / booking link */
+const BOOKING_URL = 'https://calendly.com/famaash/audit';
+
+if (EMAILJS_CONFIG.PUBLIC_KEY !== 'YOUR_PUBLIC_KEY_HERE' && window.emailjs) {
+  emailjs.init({ publicKey: EMAILJS_CONFIG.PUBLIC_KEY });
+}
+
+/* ========================================================================
+ * LEAK MODEL
+ * ======================================================================== */
+const PI_CONVERSION_RATE = 0.075;
+const AFTER_HOURS_CALL_SHARE = 0.40;
+const WEB_LEAD_SHARE = 0.45;
+const VOICEMAIL_HANG_UP_RATE = 0.74;
+
+const AH_LOSS = { voicemail: 0.40, answering_service: 0.20, live_247: 0.12, ai_247: 0.02 };
+/* Stage loss rates from spec — applied to monthly_leads × case_value × market_weight × 12 */
+const STAGE_RATES = {
+  ah:   0.40,   /* AFTER-HOURS VOICEMAIL — multiplied by Q4 adjustment */
+  zr:   0.26,   /* LEADS WITH ZERO FOLLOW-UP */
+  vm:   0.30,   /* VOICEMAIL DROP-OFF */
+  slow: 0.18,   /* SLOW-RESPONSE DECAY */
+  ai:   0.20,   /* AI-SEARCH INVISIBILITY */
+  lang: 0.18    /* LANGUAGE BARRIER */
+};
+/* Q4 after-hours adjustment from spec */
+const Q4_ADJUSTMENT = { voicemail: 1.00, answering_service: 0.50, live_247: 0.30, ai_247: 0.05 };
+/* Response-time multiplier (0..1) for slow-response decay relative to base 0.18 */
+const RT_MULT  = { under_5min: 0.05, under_1hr: 0.30, same_day: 0.65, one_two_days: 0.85, longer: 1.00 };
+/* AI-visibility multiplier */
+const AI_MULT  = { yes: 0.15, unsure: 0.65, no: 1.00 };
+/* Language multiplier */
+const LG_MULT  = { en_only: 1.00, en_es: 0.40, en_es_ar: 0.05, other: 0.65 };
+/* Zero-follow-up multiplier (also tied to response time) */
+const ZR_MULT  = { under_5min: 0.10, under_1hr: 0.30, same_day: 0.55, one_two_days: 0.80, longer: 1.00 };
+/* Voicemail drop-off multiplier (only matters if calls go to voicemail) */
+const VM_MULT  = { voicemail: 1.00, answering_service: 0.50, live_247: 0.10, ai_247: 0.05 };
+
+const FLOOR_TOTAL = 50000;
+
+/* ===== TIERED MARKET WEIGHTS ===== */
+const MARKETS = [
+  /* Tier 1 — 1.40 */
+  { city:'New York',     state:'NY', weight:1.40, tier:1 },
+  { city:'Los Angeles',  state:'CA', weight:1.40, tier:1 },
+  { city:'Chicago',      state:'IL', weight:1.40, tier:1 },
+  { city:'Houston',      state:'TX', weight:1.40, tier:1 },
+  { city:'Miami',        state:'FL', weight:1.40, tier:1 },
+  { city:'Boston',       state:'MA', weight:1.40, tier:1 },
+  { city:'Washington',   state:'DC', weight:1.40, tier:1 },
+  { city:'San Francisco',state:'CA', weight:1.40, tier:1 },
+  { city:'Philadelphia', state:'PA', weight:1.40, tier:1 },
+  /* Tier 2 — 1.20 */
+  { city:'Jersey City',  state:'NJ', weight:1.20, tier:2 },
+  { city:'Newark',       state:'NJ', weight:1.20, tier:2 },
+  { city:'Clifton',      state:'NJ', weight:1.20, tier:2 },
+  { city:'Atlanta',      state:'GA', weight:1.20, tier:2 },
+  { city:'Dallas',       state:'TX', weight:1.20, tier:2 },
+  { city:'Phoenix',      state:'AZ', weight:1.20, tier:2 },
+  { city:'Seattle',      state:'WA', weight:1.20, tier:2 },
+  { city:'Denver',       state:'CO', weight:1.20, tier:2 },
+  { city:'San Diego',    state:'CA', weight:1.20, tier:2 },
+  { city:'Tampa',        state:'FL', weight:1.20, tier:2 },
+  { city:'Orlando',      state:'FL', weight:1.20, tier:2 },
+  { city:'Minneapolis',  state:'MN', weight:1.20, tier:2 },
+  { city:'Baltimore',    state:'MD', weight:1.20, tier:2 },
+  { city:'Las Vegas',    state:'NV', weight:1.20, tier:2 },
+  { city:'Sacramento',   state:'CA', weight:1.20, tier:2 },
+  /* Multi-state */
+  { city:'Multi-state / Other', state:'',   weight:1.10, tier:2, multi:true }
+];
+const MARKET_DEFAULT_WEIGHT = 1.05;   /* fallback for any city the user types that's not in the list */
+
+function lookupMarketWeight(input) {
+  const v = (input || '').trim().toLowerCase();
+  if (!v) return MARKET_DEFAULT_WEIGHT;
+  const m = MARKETS.find(m => {
+    const label = `${m.city}${m.state ? ', ' + m.state : ''}`.toLowerCase();
+    return label === v;
+  });
+  return m ? m.weight : MARKET_DEFAULT_WEIGHT;
+}
+
+/* ===== CORPORATE-EMAIL BLOCKLIST ===== */
+const FREE_EMAIL_DOMAINS = new Set([
+  'gmail.com','googlemail.com','yahoo.com','yahoo.co.uk','yahoo.ca','yahoo.fr',
+  'ymail.com','rocketmail.com','hotmail.com','hotmail.co.uk','outlook.com',
+  'live.com','msn.com','icloud.com','me.com','mac.com','aol.com','protonmail.com',
+  'proton.me','gmx.com','gmx.us','gmx.de','mail.com','yandex.com','yandex.ru',
+  'fastmail.com','hey.com','tutanota.com','pm.me','duck.com','mailinator.com',
+  'throwaway.email'
+]);
+function isFreeEmail(email) {
+  const at = (email || '').lastIndexOf('@');
+  if (at < 0) return false;
+  const dom = email.slice(at + 1).trim().toLowerCase();
+  return FREE_EMAIL_DOMAINS.has(dom);
+}
+
+function calculateLeak(i) {
+  const monthly = i.monthlyLeads;
+  const fee = i.avgCaseValue;
+  const w = lookupMarketWeight(i.market);
+  const annualBase = monthly * fee * w * 12;
+
+  /* Per-stage formula: monthly × stage_rate × fee × weight × 12, with input-driven multipliers */
+  const ah   = annualBase * STAGE_RATES.ah   * (Q4_ADJUSTMENT[i.afterHours] || 1);
+  const zr   = annualBase * STAGE_RATES.zr   * (ZR_MULT[i.responseTime]   || 1);
+  const vm   = annualBase * STAGE_RATES.vm   * (VM_MULT[i.afterHours]     || 1);
+  const slow = annualBase * STAGE_RATES.slow * (RT_MULT[i.responseTime]   || 1);
+  const ai   = annualBase * STAGE_RATES.ai   * (AI_MULT[i.aiVisibility]   || 1);
+  const lg   = annualBase * STAGE_RATES.lang * (LG_MULT[i.languages]      || 1);
+
+  /* Apply PI conversion rate so leak represents lost revenue, not gross intake value */
+  const conv = PI_CONVERSION_RATE;
+
+  let lines = [
+    { k:'ah',   t:'After-hours voicemail',           s:'About 40% of inquiries arrive outside business hours',    v: Math.round(ah * conv) },
+    { k:'zr',   t:'Leads with zero follow-up',       s:'Industry data shows 26% of online leads receive no reply', v: Math.round(zr * conv) },
+    { k:'vm',   t:'Voicemail drop-off',              s:'About 74% of callers hang up when they reach voicemail',  v: Math.round(vm * conv) },
+    { k:'slow', t:'Slow-response decay',             s:'21x higher conversion within five minutes vs. thirty',    v: Math.round(slow * conv) },
+    { k:'ai',   t:'AI-search invisibility',          s:'Competitors are cited in ChatGPT and Google AI. You are not.', v: Math.round(ai * conv) },
+    { k:'lang', t:'Language barrier',                s:'About 78% of PI firms run intake in English only',        v: Math.round(lg * conv) }
+  ];
+
+  let total = lines.reduce((a, l) => a + l.v, 0);
+  let floored = false;
+
+  /* $50K floor with proportional redistribution */
+  if (total < FLOOR_TOTAL) {
+    floored = true;
+    if (total > 0) {
+      const ratio = FLOOR_TOTAL / total;
+      lines = lines.map(l => ({ ...l, v: Math.round(l.v * ratio) }));
+    } else {
+      /* All zeros — distribute the floor by stage rate weight */
+      const totalRate = Object.values(STAGE_RATES).reduce((a,b) => a+b, 0);
+      lines = lines.map(l => ({ ...l, v: Math.round(FLOOR_TOTAL * (STAGE_RATES[l.k] / totalRate)) }));
+    }
+    total = lines.reduce((a, l) => a + l.v, 0);
+  }
+
+  return { lines, total, floored, marketWeight: w };
+}
+
+/* ========================================================================
+ * STATE
+ * ======================================================================== */
+const state = {
+  step: 0,
+  input: {
+    firmName:'', attorneyName:'', role:'', email:'', phone:'', market:'',
+    monthlyLeads: 30, avgCaseValue: 8000,
+    afterHours: null, responseTime: null, languages: null, aiVisibility: null
+  },
+  report: null,
+  submissionId: null
+};
+
+/* Restore in-progress session if browser refreshed mid-audit */
+try {
+  const saved = localStorage.getItem('famaash_active_session');
+  if (saved) {
+    const parsed = JSON.parse(saved);
+    if (parsed && Date.now() - parsed.ts < 20 * 60 * 1000) {
+      /* Less than 20 min old — but still start fresh; stale sessions shouldn't
+         persist for the next attendee. Booth mode prioritizes fresh start. */
+      localStorage.removeItem('famaash_active_session');
+    }
+  }
+} catch(e) { /* ignore */ }
+
+/* Document number — increments per submission in this browser */
+const docCounter = parseInt(localStorage.getItem('famaash_doc_counter') || '1', 10);
+document.getElementById('docNum').textContent = `WEB-2026-${String(docCounter).padStart(4, '0')}`;
+document.getElementById('docDate').textContent = `Prepared ${new Date().toLocaleDateString('en-US', { month:'long', day:'numeric', year:'numeric' })}`;
+
+/* ========================================================================
+ * NAVIGATION
+ * ======================================================================== */
+function goToStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const target = document.querySelector(`[data-step="${n}"]`);
+  if (target) target.classList.add('active');
+  state.step = n;
+  updateProgress();
+  const main = document.querySelector('main');
+  if (main) main.scrollTo(0, 0);
+}
+
+function updateProgress() {
+  /* 4-step progress map: Welcome=0 | Firm=1 | Operations(steps 2,3,4)=2 | Report(steps 5,6)=3 */
+  let active = 0;
+  if (state.step === 0) active = 0;
+  else if (state.step === 1) active = 1;
+  else if (state.step >= 2 && state.step <= 4) active = 2;
+  else active = 3;
+
+  document.querySelectorAll('.progress-mark').forEach(m => {
+    const mark = parseInt(m.dataset.mark, 10);
+    m.classList.toggle('active', mark === active);
+  });
+}
+
+/* ========================================================================
+ * VALIDATION
+ * ======================================================================== */
+const EMAIL_RE = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+
+function normalizePhone(raw) {
+  return (raw || '').replace(/\D/g, '');
+}
+function formatPhone(raw) {
+  const d = normalizePhone(raw);
+  if (d.length === 10) return `(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6)}`;
+  if (d.length === 11 && d[0] === '1') return `+1 (${d.slice(1,4)}) ${d.slice(4,7)}-${d.slice(7)}`;
+  return raw;
+}
+function isValidPhone(raw) {
+  if (!raw) return true; // optional
+  const d = normalizePhone(raw);
+  return d.length === 10 || (d.length === 11 && d[0] === '1');
+}
+
+function setError(fieldId, msg) {
+  const el = document.getElementById(fieldId);
+  const err = document.getElementById('err-' + fieldId);
+  if (msg) {
+    el.classList.add('invalid');
+    el.classList.remove('valid');
+    if (err) { err.textContent = msg; err.classList.add('show'); }
+  } else {
+    el.classList.remove('invalid');
+    el.classList.add('valid');
+    if (err) { err.textContent = ''; err.classList.remove('show'); }
+  }
+}
+function clearError(fieldId) {
+  const el = document.getElementById(fieldId);
+  const err = document.getElementById('err-' + fieldId);
+  el.classList.remove('invalid', 'valid');
+  if (err) { err.textContent = ''; err.classList.remove('show'); }
+}
+
+function validateField(fieldId) {
+  const el = document.getElementById(fieldId);
+  const val = el.value.trim();
+
+  switch (fieldId) {
+    case 'firmName':
+      if (!val) return setError(fieldId, 'Firm name is required.');
+      if (val.length < 2) return setError(fieldId, 'Firm name is too short.');
+      return setError(fieldId, null);
+    case 'attorneyName':
+      if (!val) return setError(fieldId, 'Your name is required.');
+      if (val.length < 2) return setError(fieldId, 'Name is too short.');
+      return setError(fieldId, null);
+    case 'market':
+      if (!val) return setError(fieldId, 'Market / city is required.');
+      if (val.length < 2) return setError(fieldId, 'Please enter a city.');
+      return setError(fieldId, null);
+    case 'email':
+      if (!val) return setError(fieldId, 'Email is required.');
+      if (!EMAIL_RE.test(val)) return setError(fieldId, 'Please enter a valid email (e.g. jane@firm.com).');
+      if (isFreeEmail(val)) return setError(fieldId, "Please use your firm's corporate email. We can't accept Gmail, Yahoo, Outlook, etc.");
+      return setError(fieldId, null);
+    case 'phone':
+      if (!val) return clearError(fieldId);
+      if (!isValidPhone(val)) return setError(fieldId, 'Enter 10 digits, US format.');
+      /* Auto-format on blur */
+      el.value = formatPhone(val);
+      return setError(fieldId, null);
+  }
+}
+
+/* Attach live validation to required fields */
+['firmName', 'attorneyName', 'market', 'email', 'phone'].forEach(id => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('blur', () => validateField(id));
+  el.addEventListener('input', () => {
+    /* Clear error as user types, only re-validate on blur */
+    const err = document.getElementById('err-' + id);
+    el.classList.remove('invalid', 'valid');
+    if (err) { err.classList.remove('show'); }
+  });
+});
+
+/* ========================================================================
+ * MARKET COMBOBOX (searchable, type-ahead)
+ * ======================================================================== */
+(function initMarketCombo() {
+  const combo = document.getElementById('marketCombo');
+  const input = document.getElementById('market');
+  const list  = document.getElementById('marketList');
+  if (!combo || !input || !list) return;
+
+  let activeIdx = -1;
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c]));
+  }
+  function highlight(label, q) {
+    if (!q) return escapeHtml(label);
+    const safe = escapeHtml(label);
+    const idx  = safe.toLowerCase().indexOf(q.toLowerCase());
+    if (idx < 0) return safe;
+    return safe.slice(0, idx) + '<mark>' + safe.slice(idx, idx + q.length) + '</mark>' + safe.slice(idx + q.length);
+  }
+  function tierLabel(t, multi) {
+    if (multi) return 'Multi-state';
+    if (t === 1) return 'Tier 1';
+    if (t === 2) return 'Tier 2';
+    return '';
+  }
+  function render(q) {
+    const query = (q || '').trim().toLowerCase();
+    let items;
+    if (!query) {
+      items = MARKETS.slice();
+    } else {
+      items = MARKETS.filter(m => {
+        const label = `${m.city}${m.state ? ', ' + m.state : ''}`.toLowerCase();
+        return label.includes(query);
+      });
+    }
+    let html = items.map((m, idx) => {
+      const label = `${m.city}${m.state ? ', ' + m.state : ''}`;
+      return `<div class="combo-option" role="option" data-idx="${idx}" data-label="${escapeHtml(label)}">
+        <span>${highlight(label, query)}</span>
+        <span class="combo-tier">${tierLabel(m.tier, m.multi)}</span>
+      </div>`;
+    }).join('');
+    /* If user typed a city not in our list and it's substantive, allow it */
+    if (query && items.length === 0 && query.length >= 2) {
+      const titleCase = query.replace(/\b\w/g, c => c.toUpperCase());
+      html = `<div class="combo-option combo-custom" role="option" data-idx="-1" data-label="${escapeHtml(titleCase)}">
+        <span>Use &ldquo;<mark>${escapeHtml(titleCase)}</mark>&rdquo;</span>
+        <span class="combo-tier">Custom</span>
+      </div>`;
+    }
+    list.innerHTML = html;
+    activeIdx = -1;
+  }
+  function open()  { combo.classList.add('open');  input.setAttribute('aria-expanded','true');  }
+  function close() { combo.classList.remove('open'); input.setAttribute('aria-expanded','false'); activeIdx = -1; }
+  function select(label) {
+    input.value = label;
+    /* Clear error state, mark as valid since they picked from the list */
+    const err = document.getElementById('err-market');
+    input.classList.remove('invalid');
+    input.classList.add('valid');
+    if (err) { err.classList.remove('show'); }
+    close();
+  }
+  function setActive(idx) {
+    const opts = list.querySelectorAll('.combo-option');
+    opts.forEach(o => o.classList.remove('active'));
+    if (idx >= 0 && idx < opts.length) {
+      opts[idx].classList.add('active');
+      const o = opts[idx];
+      const lt = o.offsetTop, lb = lt + o.offsetHeight;
+      if (lt < list.scrollTop) list.scrollTop = lt;
+      else if (lb > list.scrollTop + list.clientHeight) list.scrollTop = lb - list.clientHeight;
+    }
+    activeIdx = idx;
+  }
+
+  input.addEventListener('focus', () => { render(input.value); open(); });
+  input.addEventListener('input', () => { render(input.value); open(); });
+  input.addEventListener('keydown', (e) => {
+    if (!combo.classList.contains('open')) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { render(input.value); open(); e.preventDefault(); return; }
+      return;
+    }
+    const opts = list.querySelectorAll('.combo-option');
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActive(Math.min(opts.length - 1, activeIdx + 1)); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(Math.max(0, activeIdx - 1)); }
+    else if (e.key === 'Enter')  {
+      if (activeIdx >= 0 && opts[activeIdx]) {
+        e.preventDefault();
+        select(opts[activeIdx].dataset.label);
+      } else {
+        /* Allow Enter to commit current text */
+        close();
+      }
+    }
+    else if (e.key === 'Escape') { close(); }
+  });
+  list.addEventListener('mousedown', (e) => {
+    /* mousedown not click — click would lose focus before we register */
+    const opt = e.target.closest('.combo-option');
+    if (!opt) return;
+    e.preventDefault();
+    select(opt.dataset.label);
+  });
+  document.addEventListener('mousedown', (e) => {
+    if (!combo.contains(e.target)) close();
+  });
+})();
+
+function validateAndGo(next) {
+  const required = ['firmName', 'attorneyName', 'market', 'email'];
+  let firstError = null;
+  required.forEach(f => {
+    validateField(f);
+    if (document.getElementById(f).classList.contains('invalid') && !firstError) {
+      firstError = f;
+    }
+  });
+  validateField('phone'); /* optional, but validates format if filled */
+  if (document.getElementById('phone').classList.contains('invalid') && !firstError) {
+    firstError = 'phone';
+  }
+
+  if (firstError) {
+    document.getElementById(firstError).focus();
+    showToast('Please correct the highlighted fields.');
+    return;
+  }
+
+  state.input.firmName     = document.getElementById('firmName').value.trim();
+  state.input.attorneyName = document.getElementById('attorneyName').value.trim();
+  state.input.role         = document.getElementById('role').value;
+  state.input.email        = document.getElementById('email').value.trim();
+  state.input.phone        = document.getElementById('phone').value.trim();
+  state.input.market       = document.getElementById('market').value.trim();
+
+  goToStep(next);
+}
+
+/* ========================================================================
+ * STEPPERS
+ * ======================================================================== */
+const LEADS_MIN = 5, LEADS_MAX = 300;
+const VALUE_MIN = 1000, VALUE_MAX = 100000;
+
+function adjustLeads(delta) {
+  let v = state.input.monthlyLeads + delta;
+  if (v < LEADS_MIN) v = LEADS_MIN;
+  if (v > LEADS_MAX) v = LEADS_MAX;
+  state.input.monthlyLeads = v;
+  renderLeads();
+}
+function setLeads(v) {
+  state.input.monthlyLeads = Math.max(LEADS_MIN, Math.min(LEADS_MAX, v));
+  renderLeads();
+}
+function renderLeads() {
+  const v = state.input.monthlyLeads;
+  document.getElementById('leadsValue').textContent = v >= 300 ? '300+' : v;
+  document.getElementById('leadsDown').disabled = v <= LEADS_MIN;
+  document.getElementById('leadsUp').disabled = v >= LEADS_MAX;
+  document.querySelectorAll('[data-presets="leads"] .stepper-preset').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.val, 10) === v);
+  });
+}
+
+function adjustValue(delta) {
+  let v = state.input.avgCaseValue + delta;
+  if (v < VALUE_MIN) v = VALUE_MIN;
+  if (v > VALUE_MAX) v = VALUE_MAX;
+  state.input.avgCaseValue = v;
+  renderValue();
+}
+function setValue(v) {
+  state.input.avgCaseValue = Math.max(VALUE_MIN, Math.min(VALUE_MAX, v));
+  renderValue();
+}
+function renderValue() {
+  const v = state.input.avgCaseValue;
+  document.getElementById('valueValue').textContent = v.toLocaleString();
+  document.getElementById('valueDown').disabled = v <= VALUE_MIN;
+  document.getElementById('valueUp').disabled = v >= VALUE_MAX;
+  document.querySelectorAll('[data-presets="value"] .stepper-preset').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.val, 10) === v);
+  });
+}
+
+document.querySelectorAll('[data-presets="leads"] .stepper-preset').forEach(b => {
+  b.addEventListener('click', () => setLeads(parseInt(b.dataset.val, 10)));
+});
+document.querySelectorAll('[data-presets="value"] .stepper-preset').forEach(b => {
+  b.addEventListener('click', () => setValue(parseInt(b.dataset.val, 10)));
+});
+
+renderLeads();
+renderValue();
+
+/* ========================================================================
+ * OPTION PICKERS
+ * ======================================================================== */
+document.querySelectorAll('.option-grid').forEach(grid => {
+  const q = grid.dataset.q;
+  grid.querySelectorAll('.option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      grid.querySelectorAll('.option').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      state.input[q] = btn.dataset.val;
+      checkOpsComplete();
+    });
+  });
+});
+
+function checkOpsComplete() {
+  const { afterHours, responseTime, languages, aiVisibility } = state.input;
+  document.getElementById('calculateBtn').disabled = !(afterHours && responseTime && languages && aiVisibility);
+}
+
+/* ========================================================================
+ * SUBMIT — calculate, store locally, email
+ * ======================================================================== */
+const calcMessages = [
+  'Analyzing intake patterns',
+  'Benchmarking your response times',
+  'Checking AI search visibility',
+  'Modeling after-hours call loss',
+  'Calculating annual revenue impact',
+  'Finalizing your report'
+];
+
+function submitAudit() {
+  goToStep(4);
+  const statusEl = document.getElementById('calcStatus');
+  let i = 0;
+  const interval = setInterval(() => {
+    statusEl.style.opacity = '0';
+    setTimeout(() => {
+      statusEl.textContent = calcMessages[i % calcMessages.length];
+      statusEl.style.opacity = '1';
+      i++;
+    }, 250);
+  }, 650);
+
+  setTimeout(() => {
+    clearInterval(interval);
+    state.report = calculateLeak(state.input);
+    state.submissionId = 'WEB-2026-' + String(docCounter).padStart(4, '0');
+
+    /* ===== PERMANENT LOCAL STORAGE (survives browser close) ===== */
+    saveToLocalStorage();
+
+    /* ===== OPTIONAL SHEETS WEBHOOK ===== */
+    pushToSheets();
+
+    renderResults();
+    goToStep(5);
+  }, 3800);
+}
+
+function saveToLocalStorage() {
+  try {
+    const submissions = JSON.parse(localStorage.getItem('famaash_submissions') || '[]');
+    submissions.push({
+      id: state.submissionId,
+      timestamp: new Date().toISOString(),
+      input: { ...state.input },
+      report: state.report
+    });
+    localStorage.setItem('famaash_submissions', JSON.stringify(submissions));
+    localStorage.setItem('famaash_doc_counter', String(docCounter + 1));
+  } catch(e) {
+    console.error('Local save failed:', e);
+  }
+}
+
+function pushToSheets() {
+  if (!SHEETS_WEBHOOK_URL) return;
+  try {
+    /* Fire-and-forget. no-cors lets Apps Script accept without CORS drama. */
+    fetch(SHEETS_WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: state.submissionId,
+        timestamp: new Date().toISOString(),
+        ...state.input,
+        ...flatLeak(state.report)
+      })
+    });
+  } catch(e) {
+    console.error('Sheets push failed:', e);
+  }
+}
+
+function flatLeak(r) {
+  const out = { total: r.total };
+  r.lines.forEach(l => out['leak_' + l.k] = l.v);
+  return out;
+}
+
+/* ========================================================================
+ * RESULTS
+ * ======================================================================== */
+function formatMoney(n) { return n.toLocaleString('en-US'); }
+
+function renderResults() {
+  document.getElementById('metaFirm').textContent = state.input.firmName;
+  document.getElementById('metaAttorney').textContent = state.input.attorneyName;
+  document.getElementById('metaMarket').textContent = state.input.market;
+
+  /* Floor-copy swap: "Conservative floor for a well-run firm" when floor active */
+  const subEl = document.getElementById('totalSub');
+  if (subEl) {
+    subEl.textContent = state.report.floored
+      ? 'Conservative floor for a well-run firm'
+      : 'Signed cases that never reached you';
+  }
+
+  document.getElementById('totalValue').textContent = '$0';
+  animateCount(document.getElementById('totalValue'), state.report.total, 1500);
+
+  const table = document.getElementById('leakTable');
+  table.innerHTML = state.report.lines.map((l, idx) => {
+    const extraClass = l.k === 'ai' ? 'leak-row-ai' : '';
+    return `
+    <li class="${extraClass}" style="animation-delay: ${0.25 + idx * 0.1}s;">
+      <div class="leak-label">
+        <strong>${l.t}</strong>
+        <span>${l.s}</span>
+      </div>
+      <div class="leak-val">$${formatMoney(l.v)}</div>
+    </li>`;
+  }).join('');
+
+  /* ==== V2: Peer benchmark rendering ==== */
+  renderPeerBenchmark();
+
+  /* ==== V2: GEO new-business computation ==== */
+  renderGeoBlock();
+
+  /* ==== V2: Update live ticker ==== */
+  updateLiveTicker();
+}
+
+/* ========================================================================
+ * V2: PEER BENCHMARK
+ *  Reads historical submissions from localStorage and compares this firm's
+ *  leak against the rolling average. Graceful fallback to the industry
+ *  benchmark ($178K) for the first 5 submissions.
+ * ======================================================================== */
+const PEER_INDUSTRY_FALLBACK = 178000;   // Industry average PI firm leak
+const PEER_MIN_SAMPLE = 5;               // Below this, show industry fallback
+
+function getPeerAverage() {
+  try {
+    const all = JSON.parse(localStorage.getItem('famaash_submissions') || '[]');
+    /* Only count completed audits with a total, exclude the current one if
+       it's already been saved (match by id) */
+    const others = all
+      .filter(s => s && s.report && typeof s.report.total === 'number')
+      .filter(s => s.id !== state.submissionId);
+
+    if (others.length < PEER_MIN_SAMPLE) {
+      return { avg: PEER_INDUSTRY_FALLBACK, count: others.length, source: 'industry' };
+    }
+    const sum = others.reduce((a, s) => a + s.report.total, 0);
+    return { avg: Math.round(sum / others.length), count: others.length, source: 'peers' };
+  } catch (e) {
+    return { avg: PEER_INDUSTRY_FALLBACK, count: 0, source: 'industry' };
+  }
+}
+
+function renderPeerBenchmark() {
+  const { avg, count, source } = getPeerAverage();
+  const ours = state.report.total;
+  const diff = ours - avg;
+  const pct = avg > 0 ? Math.round((diff / avg) * 100) : 0;
+
+  const el = document.getElementById('peerBenchmark');
+  const headlineEl = document.getElementById('peerBenchmarkHeadline');
+  const subEl = document.getElementById('peerBenchmarkSub');  /* may be null — sub was removed */
+  const valueEl = document.getElementById('peerBenchValue');
+  const countEl = document.getElementById('peerBenchCount');
+
+  valueEl.textContent = '$' + formatMoney(avg);
+  countEl.textContent = source === 'peers'
+    ? `${count} firm${count === 1 ? '' : 's'}`
+    : 'industry';
+
+  let headline;
+  if (Math.abs(pct) < 5) {
+    headline = `You are right at <span class="peer-num">the room's average.</span>`;
+  } else if (pct > 0) {
+    headline = `You are leaking <span class="peer-num">${pct}% more</span> than the room.`;
+  } else {
+    headline = `You are <span class="peer-num good">${Math.abs(pct)}% below</span> the room's average.`;
+  }
+
+  headlineEl.innerHTML = headline;
+  if (subEl) subEl.innerHTML = '';  /* sub intentionally blank now */
+  el.style.display = 'grid';
+}
+
+/* ========================================================================
+ * V2: GEO / NEW BUSINESS BLOCK
+ *  Estimates NEW business available from ChatGPT / AI-search citation.
+ *  This is distinct from the AI-invisibility LEAK line (which measures
+ *  existing searchers who end on an AI answer without seeing the firm).
+ *  The new-business figure models INCREMENTAL cases that come specifically
+ *  from being the recommended firm in AI answers within the firm's market.
+ * ======================================================================== */
+function computeGeoNewBusiness(input) {
+  /* Model:
+     - Baseline: monthly inquiries represent ~12% share of total addressable
+       search volume for the firm's market/practice mix
+     - AI answer engines are projected to drive ~18% of new legal-services
+       searches in 2026 (Semrush/BrightEdge legal-vertical tracking)
+     - An AI-cited firm captures roughly 25% of AI-referred intent
+       (split among 2-4 cited firms per answer, with position bias)
+     - AI referrals convert at 3.2× organic due to intent pre-qualification
+     - So: new monthly inquiries ≈ (monthly * 1/0.12) * 0.18 * 0.25 = ~37% of current volume
+     - Apply PI conversion + avg fee to get the annual dollar figure
+  */
+  const currentMonthly = input.monthlyLeads;
+  const aiShareOfMarket = 0.18;
+  const citationCapture = 0.25;
+  const intentMultiplier = 1.0;   // conservative; 3.2x is upper bound
+  const marketSizeInverse = 1 / 0.12;   // imply total market from current share
+
+  const newMonthlyInquiries = currentMonthly * marketSizeInverse * aiShareOfMarket * citationCapture * intentMultiplier;
+
+  /* Cap: no firm realistically captures more than ~60% above current volume
+     from GEO in year one. Realism beats optimism here. */
+  const capped = Math.min(newMonthlyInquiries, currentMonthly * 0.6);
+
+  const annualNewInquiries = capped * 12;
+  const annualNewRevenue = annualNewInquiries * PI_CONVERSION_RATE * input.avgCaseValue;
+
+  /* If the firm already says they're cited (yes), downgrade because they're
+     already capturing some of this. Still an upside, just smaller. */
+  const visibilityFactor = { yes: 0.25, unsure: 0.85, no: 1.0 };
+  return Math.round(annualNewRevenue * (visibilityFactor[input.aiVisibility] || 1.0));
+}
+
+function renderGeoBlock() {
+  const newBiz = computeGeoNewBusiness(state.input);
+  const marketInline = document.getElementById('geoMarketInline');
+  const newBizEl = document.getElementById('geoNewBizValue');
+  const headlineEl = document.getElementById('geoHeadlineText');
+
+  marketInline.textContent = state.input.market || 'your market';
+
+  /* Animate the green new-business number */
+  newBizEl.textContent = '+$0';
+  setTimeout(() => animateCountGreen(newBizEl, newBiz, 1400), 300);
+
+  /* Headline varies by visibility answer — short and direct */
+  const headlines = {
+    yes:    `You are cited &mdash; competitors are closing. <em>Hold the position or lose it.</em>`,
+    unsure: `Most firms do not know if AI cites them. <em>The ones who find out first, win.</em>`,
+    no:     `Brand-new case volume, from firms <em>ChatGPT already recommends.</em>`
+  };
+  headlineEl.innerHTML = headlines[state.input.aiVisibility] || headlines.no;
+
+  /* Store on the state/report for email and sheets */
+  if (state.report) state.report.geoNewBusiness = newBiz;
+}
+
+function animateCountGreen(el, target, duration) {
+  const start = performance.now();
+  const step = (now) => {
+    const p = Math.min((now - start) / duration, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = '+$' + formatMoney(Math.floor(target * e));
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = '+$' + formatMoney(target);
+  };
+  requestAnimationFrame(step);
+}
+
+/* ========================================================================
+ * V2: LIVE TICKER
+ *  Reads localStorage for running totals and updates the ticker bar.
+ *  Called on page load, after every completed audit, and when a meeting
+ *  gets booked via bookAudit().
+ * ======================================================================== */
+function updateLiveTicker() {
+  try {
+    const all = JSON.parse(localStorage.getItem('famaash_submissions') || '[]');
+    const meetings = parseInt(localStorage.getItem('famaash_meetings') || '0', 10);
+
+    const count = all.length;
+    const totalLeak = all.reduce((a, s) => a + ((s.report && s.report.total) || 0), 0);
+    const avgLeak = count > 0 ? Math.round(totalLeak / count) : 0;
+
+    /* Boost to industry-plausible baseline so an empty booth doesn't look dead */
+    const displayCount = Math.max(count, 0);
+    const displayTotal = totalLeak;
+    const displayAvg = count > 0 ? avgLeak : 178000;
+
+    animateTickerNumber('tkAudits', displayCount, false);
+    animateTickerNumber('tkLeak', displayTotal, true);
+    animateTickerNumber('tkAvg', displayAvg, true);
+    animateTickerNumber('tkMeetings', meetings, false);
+  } catch (e) {
+    console.error('Ticker update failed:', e);
+  }
+}
+
+function animateTickerNumber(elId, target, isMoney) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const current = parseInt((el.textContent || '0').replace(/[^0-9-]/g, ''), 10) || 0;
+  if (current === target) {
+    el.textContent = isMoney ? ('$' + formatMoney(target)) : formatMoney(target);
+    return;
+  }
+  const duration = 800;
+  const start = performance.now();
+  const step = (now) => {
+    const p = Math.min((now - start) / duration, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    const val = Math.floor(current + (target - current) * e);
+    el.textContent = isMoney ? ('$' + formatMoney(val)) : formatMoney(val);
+    if (p < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+function animateCount(el, target, duration) {
+  const start = performance.now();
+  const step = (now) => {
+    const p = Math.min((now - start) / duration, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    el.textContent = '$' + formatMoney(Math.floor(target * e));
+    if (p < 1) requestAnimationFrame(step);
+    else el.textContent = '$' + formatMoney(target);
+  };
+  requestAnimationFrame(step);
+}
+
+/* ========================================================================
+ * EMAIL
+ * ======================================================================== */
+async function emailReport() {
+  const btn = document.getElementById('emailReportBtn');
+  btn.disabled = true;
+  btn.innerHTML = 'Sending… <span class="btn-arrow">→</span>';
+
+  const configured = EMAILJS_CONFIG.PUBLIC_KEY !== 'YOUR_PUBLIC_KEY_HERE';
+  const params = buildEmailParams();
+
+  try {
+    if (configured && window.emailjs) {
+      await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_ATTORNEY, params);
+      await emailjs.send(EMAILJS_CONFIG.SERVICE_ID, EMAILJS_CONFIG.TEMPLATE_FAMAASH,
+        { ...params, to_email: EMAILJS_CONFIG.FAMAASH_EMAIL });
+    } else {
+      /* Dev fallback — log + mailto so booth staff can send manually */
+      console.log('[Famaash Audit]', params);
+      const subject = encodeURIComponent(`[AUDIT] Leak Audit: ${state.input.firmName} · $${formatMoney(state.report.total)}/yr`);
+      const body = encodeURIComponent(buildPlainTextReport());
+      window.open(`mailto:${EMAILJS_CONFIG.FAMAASH_EMAIL}?subject=${subject}&body=${body}`, '_blank');
+    }
+    document.getElementById('confirmEmail').textContent = state.input.email;
+    goToStep(6);
+  } catch (err) {
+    console.error('EmailJS error:', err);
+    showToast('Email failed. Your data is saved locally. Grab a printed copy from our team.');
+    btn.disabled = false;
+    btn.innerHTML = 'Email me the full report <span class="btn-arrow">→</span>';
+  }
+}
+
+function buildEmailParams() {
+  const i = state.input, r = state.report;
+  return {
+    to_email:       i.email,
+    to_name:        i.attorneyName,
+    doc_id:         state.submissionId,
+    firm_name:      i.firmName,
+    attorney_name:  i.attorneyName,
+    role:           i.role || 'Not specified',
+    phone:          i.phone || 'Not provided',
+    market:         i.market,
+    monthly_leads:  i.monthlyLeads,
+    avg_case_value: '$' + formatMoney(i.avgCaseValue),
+    after_hours:    LABELS.afterHours[i.afterHours],
+    response_time:  LABELS.responseTime[i.responseTime],
+    languages:      LABELS.languages[i.languages],
+    ai_visibility:  LABELS.aiVisibility[i.aiVisibility],
+    leak_ah:        '$' + formatMoney(r.lines[0].v),
+    leak_zr:        '$' + formatMoney(r.lines[1].v),
+    leak_vm:        '$' + formatMoney(r.lines[2].v),
+    leak_slow:      '$' + formatMoney(r.lines[3].v),
+    leak_ai:        '$' + formatMoney(r.lines[4].v),
+    leak_lang:      '$' + formatMoney(r.lines[5].v),
+    leak_total:     '$' + formatMoney(r.total),
+    geo_new_biz:    '$' + formatMoney(r.geoNewBusiness || 0),
+    audit_date:     new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+    /* Branded HTML body — plug into EmailJS template as {{{html_content}}} (triple-brace, no escaping) */
+    html_content:   buildHtmlEmailReport(),
+    message_html:   buildHtmlEmailReport()
+  };
+}
+
+/* ========================================================================
+ * BRANDED HTML EMAIL — mirrors the booth kiosk aesthetic
+ * Designed for email clients (table-based, inline styles, no JS/external CSS)
+ * Plug into EmailJS template body with: {{{html_content}}}
+ * ======================================================================== */
+function buildHtmlEmailReport() {
+  const i = state.input, r = state.report;
+  const auditDate = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  const money = (n) => '$' + formatMoney(n);
+
+  const leakRows = r.lines.map(l => `
+    <tr>
+      <td style="padding:14px 0;border-bottom:1px dotted rgba(0,0,0,0.13);vertical-align:top;">
+        <div style="font-family:Georgia,'Times New Roman',serif;font-weight:600;font-size:17px;color:#0D0D14;line-height:1.2;margin-bottom:4px;">${l.t}</div>
+        <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#6B6B80;line-height:1.45;">${l.s}</div>
+      </td>
+      <td style="padding:14px 0;border-bottom:1px dotted rgba(0,0,0,0.13);text-align:right;vertical-align:top;white-space:nowrap;">
+        <div style="font-family:'Courier New',Courier,monospace;font-size:16px;font-weight:500;color:#C9A961;">${money(l.v)}</div>
+      </td>
+    </tr>
+  `).join('');
+
+  return `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Famaash Leak Audit</title></head>
+<body style="margin:0;padding:0;background:#E8E4DB;font-family:Arial,Helvetica,sans-serif;color:#0D0D14;">
+
+<!-- Wrapper -->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#E8E4DB;padding:32px 16px;">
+  <tr><td align="center">
+
+    <!-- Document -->
+    <table role="presentation" width="640" cellpadding="0" cellspacing="0" border="0" style="width:640px;max-width:640px;background:#F7F5F0;border:0.5px solid rgba(0,0,0,0.13);">
+
+      <!-- Masthead -->
+      <tr>
+        <td style="padding:32px 40px 16px 40px;border-bottom:0.5px solid rgba(0,0,0,0.13);">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+              <td style="vertical-align:middle;">
+                <div style="font-family:Georgia,'Times New Roman',serif;font-weight:600;font-size:22px;letter-spacing:-0.01em;color:#0D0D14;">famaash</div>
+              </td>
+              <td align="right" style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#6B6B80;line-height:1.85;">
+                Confidential · For the Named Firm<br>
+                Doc No. <span style="color:#0D0D14;">${state.submissionId}</span><br>
+                ${auditDate}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Eyebrow -->
+      <tr><td style="padding:36px 40px 0 40px;">
+        <div style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:#0D4A3D;font-weight:500;">
+          Annual Revenue Leak Estimate · Finalized
+        </div>
+      </td></tr>
+
+      <!-- Headline + meta row -->
+      <tr><td style="padding:14px 40px 28px 40px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td style="vertical-align:bottom;">
+              <h1 style="margin:0;font-family:Georgia,'Times New Roman',serif;font-weight:500;font-size:48px;line-height:0.98;letter-spacing:-0.025em;color:#0D0D14;">
+                The leak,<br>line by line.
+              </h1>
+            </td>
+            <td width="220" style="vertical-align:bottom;padding-left:24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F0EDE6;border-left:2px solid #0D4A3D;padding:0;">
+                <tr><td style="padding:14px 16px;">
+                  <div style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:#6B6B80;margin-bottom:3px;">Prepared for</div>
+                  <div style="font-family:Georgia,'Times New Roman',serif;font-size:16px;font-weight:500;color:#0D0D14;margin-bottom:10px;">${i.firmName}</div>
+                  <div style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:#6B6B80;margin-bottom:3px;">Managing attorney</div>
+                  <div style="font-family:Georgia,'Times New Roman',serif;font-size:16px;font-weight:500;color:#0D0D14;margin-bottom:10px;">${i.attorneyName}</div>
+                  <div style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.18em;text-transform:uppercase;color:#6B6B80;margin-bottom:3px;">Market</div>
+                  <div style="font-family:Georgia,'Times New Roman',serif;font-size:16px;font-weight:500;color:#0D0D14;">${i.market}</div>
+                </td></tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </td></tr>
+
+      <!-- Inputs summary -->
+      <tr><td style="padding:0 40px 24px 40px;">
+        <div style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#6B6B80;margin-bottom:10px;">Your inputs</div>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#1A1A24;">
+          <tr>
+            <td style="padding:5px 0;color:#6B6B80;width:46%;">Monthly inquiries</td>
+            <td style="padding:5px 0;text-align:right;font-weight:500;">${i.monthlyLeads}</td>
+            <td style="padding:5px 0;color:#6B6B80;width:46%;padding-left:24px;">Avg case value</td>
+            <td style="padding:5px 0;text-align:right;font-weight:500;">${money(i.avgCaseValue)}</td>
+          </tr>
+          <tr>
+            <td style="padding:5px 0;color:#6B6B80;">After-hours</td>
+            <td style="padding:5px 0;text-align:right;font-weight:500;">${LABELS.afterHours[i.afterHours]}</td>
+            <td style="padding:5px 0;color:#6B6B80;padding-left:24px;">Response time</td>
+            <td style="padding:5px 0;text-align:right;font-weight:500;">${LABELS.responseTime[i.responseTime]}</td>
+          </tr>
+          <tr>
+            <td style="padding:5px 0;color:#6B6B80;">Languages</td>
+            <td style="padding:5px 0;text-align:right;font-weight:500;">${LABELS.languages[i.languages]}</td>
+            <td style="padding:5px 0;color:#6B6B80;padding-left:24px;">AI visibility</td>
+            <td style="padding:5px 0;text-align:right;font-weight:500;">${LABELS.aiVisibility[i.aiVisibility]}</td>
+          </tr>
+        </table>
+      </td></tr>
+
+      <!-- Ledger -->
+      <tr><td style="padding:0 40px;">
+        <h3 style="margin:0 0 14px 0;font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:600;color:#0D0D14;padding-bottom:8px;border-bottom:0.5px solid rgba(0,0,0,0.08);">
+          Where the money is going
+        </h3>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+          ${leakRows}
+        </table>
+      </td></tr>
+
+      <!-- Total -->
+      <tr><td style="padding:18px 40px 28px 40px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1.5px solid #0D0D14;padding-top:18px;">
+          <tr>
+            <td style="vertical-align:baseline;">
+              <div style="font-family:Georgia,'Times New Roman',serif;font-size:18px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:#0D0D14;">Total Annual Leak</div>
+              <div style="font-family:'Courier New',Courier,monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:#6B6B80;margin-top:6px;">Estimated · recoverable without raising ad spend</div>
+            </td>
+            <td align="right" style="vertical-align:baseline;white-space:nowrap;">
+              <div style="font-family:Georgia,'Times New Roman',serif;font-size:52px;font-weight:700;color:#C9A961;letter-spacing:-0.025em;line-height:1;">${money(r.total)}</div>
+            </td>
+          </tr>
+        </table>
+      </td></tr>
+
+      <!-- Recovery block -->
+      <tr><td style="padding:0 40px 36px 40px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0D0D14;color:#F7F5F0;">
+          <tr><td style="padding:24px 28px;">
+            <h4 style="margin:0 0 14px 0;font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:500;line-height:1.2;color:#F7F5F0;">
+              The good news: <span style="color:#C9A961;font-weight:600;">every line is recoverable</span> without raising ad spend.
+            </h4>
+            <div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.65;color:rgba(247,245,240,0.8);">
+              <div style="padding:3px 0 3px 18px;position:relative;"><span style="color:#C9A961;position:absolute;left:0;">→</span>24/7 AI intake · English, Spanish & Arabic · under 30 seconds</div>
+              <div style="padding:3px 0 3px 18px;position:relative;"><span style="color:#C9A961;position:absolute;left:0;">→</span>Retainer capture mid-call · signed before they hang up</div>
+              <div style="padding:3px 0 3px 18px;position:relative;"><span style="color:#C9A961;position:absolute;left:0;">→</span>GEO optimization · cited by ChatGPT, Perplexity & Google AI</div>
+              <div style="padding:3px 0 3px 18px;position:relative;"><span style="color:#C9A961;position:absolute;left:0;">→</span>One firm per market. You own the domain, site, leads, data.</div>
+            </div>
+          </td></tr>
+        </table>
+      </td></tr>
+
+      <!-- GEO new-business block (v2) -->
+      <tr><td style="padding:0 40px 28px 40px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0D0D14;color:#F7F5F0;">
+          <tr><td style="padding:26px 28px;">
+            <div style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#C9A961;margin-bottom:12px;">
+              → New-business opportunity · beyond the leak
+            </div>
+            <div style="font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:1.2;color:#F7F5F0;margin-bottom:18px;">
+              If your firm becomes the one <span style="color:#C9A961;font-weight:600;">ChatGPT &amp; Google AI recommend</span> in ${i.market}, you could capture additional case volume worth:
+            </div>
+            <div style="font-family:Arial,Helvetica,sans-serif;font-weight:700;font-size:42px;color:#3BE38F;letter-spacing:-0.025em;line-height:1;margin-bottom:14px;">
+              +${'$' + formatMoney(r.geoNewBusiness || 0)}/yr
+            </div>
+            <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:rgba(247,245,240,0.7);line-height:1.5;">
+              77% of legal queries now trigger an AI Overview. Firms cited in AI answers capture 3.2× the intent of organic search traffic. The first PI firm in ${i.market} to get cited &mdash; owns the market. One firm per market.
+            </div>
+          </td></tr>
+        </table>
+      </td></tr>
+
+      <!-- CTA -->
+      <tr><td style="padding:0 40px 36px 40px;" align="center">
+        <a href="${BOOKING_URL}" style="display:inline-block;background:#0D0D14;color:#F7F5F0;padding:16px 40px;font-family:Arial,Helvetica,sans-serif;font-size:13px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;">
+          Book a 15-min call with Famaash →
+        </a>
+      </td></tr>
+
+      <!-- Method note -->
+      <tr><td style="padding:0 40px 28px 40px;">
+        <div style="font-family:Arial,Helvetica,sans-serif;font-size:11.5px;line-height:1.65;color:#6B6B80;padding-top:18px;border-top:0.5px solid rgba(0,0,0,0.08);">
+          <strong style="color:#0D0D14;font-weight:500;">Methodology.</strong> This estimate uses industry benchmarks for PI intake conversion (7.5%), after-hours call share (40%), voicemail hang-up rate (74%), and five-minute lead-response decay. Figures are rounded annual losses assuming current marketing spend is constant. This is money already paid for and lost at intake, not new spend required to recover.
+        </div>
+      </td></tr>
+
+      <!-- Footer -->
+      <tr><td style="padding:20px 40px 32px 40px;border-top:0.5px solid rgba(0,0,0,0.13);background:#F0EDE6;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#6B6B80;line-height:1.7;">
+              Famaash · AI intake &amp; GEO for PI firms<br>
+              <a href="https://famaash.com" style="color:#0D4A3D;text-decoration:none;">famaash.com</a> · <a href="mailto:booth@famaash.com" style="color:#0D4A3D;text-decoration:none;">booth@famaash.com</a>
+            </td>
+            <td align="right" style="font-family:'Courier New',Courier,monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:#9999AA;">
+              Prepared ${auditDate}
+            </td>
+          </tr>
+        </table>
+      </td></tr>
+
+    </table>
+
+  </td></tr>
+</table>
+
+</body></html>`;
+}
+
+function buildPlainTextReport() {
+  const p = buildEmailParams();
+  return `FAMAASH REVENUE LEAK AUDIT · ${p.audit_date}
+Doc ID: ${p.doc_id}
+
+FIRM:        ${p.firm_name}
+ATTORNEY:    ${p.attorney_name} (${p.role})
+EMAIL:       ${p.to_email}
+PHONE:       ${p.phone}
+MARKET:      ${p.market}
+
+INPUTS:
+  Monthly leads:   ${p.monthly_leads}
+  Avg case value:  ${p.avg_case_value}
+  After-hours:     ${p.after_hours}
+  Response time:   ${p.response_time}
+  Languages:       ${p.languages}
+  AI visibility:   ${p.ai_visibility}
+
+ANNUAL LEAK BREAKDOWN:
+  Missed after-hours calls:  ${p.leak_ah}
+  Leads with zero follow-up: ${p.leak_zr}
+  Voicemail drop-off:        ${p.leak_vm}
+  Slow-response decay:       ${p.leak_slow}
+  AI-search invisibility:    ${p.leak_ai}
+  Language barrier leads:    ${p.leak_lang}
+  ────────────────────────────────────────────
+  TOTAL ANNUAL LEAK:         ${p.leak_total}
+
+NEW-BUSINESS OPPORTUNITY (GEO):
+  If your firm becomes the one AI recommends
+  in ${p.market}, estimated additional revenue:
+  +${p.geo_new_biz} / year`;
+}
+
+const LABELS = {
+  afterHours:   { voicemail:'Voicemail', answering_service:'Answering service', live_247:'24/7 live staff', ai_247:'24/7 AI intake' },
+  responseTime: { under_5min:'Under 5 min', under_1hr:'Within 1 hour', same_day:'Same day', one_two_days:'1–2 days', longer:'Longer / inconsistent' },
+  languages:    { en_only:'English only', en_es:'EN + Spanish', en_es_ar:'EN + ES + Arabic', other:'Other' },
+  aiVisibility: { yes:'Yes', no:'No', unsure:'Not sure' }
+};
+
+/* ========================================================================
+ * UTILITIES
+ * ======================================================================== */
+function bookAudit() {
+  /* V2: track meeting bookings for live ticker */
+  try {
+    const current = parseInt(localStorage.getItem('famaash_meetings') || '0', 10);
+    localStorage.setItem('famaash_meetings', String(current + 1));
+    updateLiveTicker();
+  } catch (e) { /* ignore */ }
+  window.open(BOOKING_URL, '_blank');
+}
+
+function resetApp() {
+  if (state.step > 0 && state.step < 6) {
+    if (!confirm('Start a new audit? Current progress will be lost.')) return;
+  }
+
+  ['firmName', 'attorneyName', 'email', 'phone', 'market'].forEach(id => {
+    document.getElementById(id).value = '';
+    clearError(id);
+  });
+  document.getElementById('role').value = '';
+  document.querySelectorAll('.option.selected').forEach(o => o.classList.remove('selected'));
+  document.getElementById('calculateBtn').disabled = true;
+
+  state.input = {
+    firmName:'', attorneyName:'', role:'', email:'', phone:'', market:'',
+    monthlyLeads: 30, avgCaseValue: 8000,
+    afterHours: null, responseTime: null, languages: null, aiVisibility: null
+  };
+  state.report = null;
+  state.submissionId = null;
+  renderLeads();
+  renderValue();
+
+  /* Refresh doc counter */
+  const nextCounter = parseInt(localStorage.getItem('famaash_doc_counter') || '1', 10);
+  document.getElementById('docNum').textContent = `WEB-2026-${String(nextCounter).padStart(4, '0')}`;
+
+  goToStep(0);
+}
+
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('success', type === 'success');
+  t.classList.add('visible');
+  setTimeout(() => t.classList.remove('visible'), 3400);
+}
+
+/* Enter key advances where appropriate */
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'SELECT') {
+    if (state.step === 0) goToStep(1);
+    else if (state.step === 1) { e.preventDefault(); validateAndGo(2); }
+    else if (state.step === 2) goToStep(3);
+  }
+});
+
+/* Export submissions for booth staff (type: window.famaashExport() in console) */
+window.famaashExport = function() {
+  const data = localStorage.getItem('famaash_submissions');
+  if (!data) return console.log('No submissions stored.');
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `famaash-njaj-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  return `Exported ${JSON.parse(data).length} submissions`;
+};
+
+updateProgress();
+updateLiveTicker();
+</script>
+
+</body>
+</html>

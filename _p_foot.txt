@@ -1,0 +1,54 @@
+<footer class="foot" data-screen-label="Footer">
+  <div class="foot__inner">
+    <div class="foot__top">
+      <div class="foot__brand">
+        <img src="assets/famaash-logo-white.svg" alt="Famaash" />
+        <div class="foot__tag">The operating partner for personal injury law firms.</div>
+      </div>
+      <div class="foot__news">
+        <span class="foot__news-l">PI Benchmark Report, quarterly</span>
+        <div class="foot__news-row">
+          <input type="email" placeholder="Work email" aria-label="Email" />
+          <button type="button">Subscribe</button>
+        </div>
+      </div>
+    </div>
+    <div class="foot__cols">
+      <div class="foot__col">
+        <h4>Capabilities</h4>
+        <ul>
+          <li><a href="personal-injury/client-acquisition.html">Client Acquisition</a></li>
+          <li><a href="personal-injury/intake-conversion.html">Intake &amp; Conversion</a></li>
+          <li><a href="personal-injury/case-operations.html">Case Operations</a></li>
+          <li><a href="personal-injury/command-center.html">Command Center</a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="approach.html">Our Approach</a></li>
+          <li><a href="case-studies.html">Case Studies</a></li>
+          <li><a href="insights.html">Insights</a></li>
+        </ul>
+      </div>
+      <div class="foot__col">
+        <h4>Compliance &amp; Trust</h4>
+        <ul>
+          <li><a href="compliance.html">Compliance posture</a></li>
+          <li><a href="security.html">Security</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="terms.html">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__bot">
+      <span>© 2026 Famaash LLC.</span>
+      <div class="foot__legal">
+        <a href="privacy.html">Privacy</a><span>,</span>
+        <a href="terms.html">Terms</a><span>,</span>
+        <a href="compliance.html">Compliance</a>
+      </div>
+    </div>
+  </div>
+</footer>

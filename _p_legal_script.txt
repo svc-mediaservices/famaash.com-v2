@@ -1,0 +1,29 @@
+
+// Active-section TOC scrollspy
+(function(){
+  var links = document.querySelectorAll('.legal-toc__link');
+  if (!links.length) return;
+  var byHref = {};
+  var sections = [];
+  links.forEach(function(a){
+    var href = a.getAttribute('href');
+    if (!href || href.charAt(0) !== '#') return;
+    byHref[href] = a;
+    var s = document.getElementById(href.slice(1));
+    if (s) sections.push({el: s, link: a});
+  });
+  if (!sections.length) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      var rec = sections.find(function(s){ return s.el === e.target; });
+      if (!rec) return;
+      if (e.isIntersecting && e.intersectionRatio > 0.15) {
+        links.forEach(function(l){ l.classList.remove('is-active'); });
+        rec.link.classList.add('is-active');
+      }
+    });
+  }, { rootMargin: '-100px 0px -60% 0px', threshold: [0, 0.2, 0.6] });
+  sections.forEach(function(s){ io.observe(s.el); });
+  // initial
+  if (sections[0]) sections[0].link.classList.add('is-active');
+})();
