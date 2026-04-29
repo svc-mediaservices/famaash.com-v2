@@ -3,16 +3,81 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Security — Famaash</title>
-<meta name="description" content="How Famaash secures client data. Encryption, access controls, vendor management, incident response." />
-<link rel="canonical" href="https://famaash.com/security" />
-<link rel="stylesheet" href="_shared.css?v=22" />
-<link rel="stylesheet" href="homepage.css?v=67" />
+<title>Book a Discovery Call · Famaash</title>
+<meta name="description" content="A 60-minute working session, partner-led. Walk through your firm's intake, marketing, and case operations with the Famaash team." />
+<link rel="canonical" href="https://famaash.com/book.html" />
+<meta property="og:title" content="Book a Discovery Call · Famaash" />
+<meta property="og:description" content="A 60-minute working session, partner-led." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://famaash.com/book.html" />
+
 <link rel="icon" type="image/svg+xml" href="/assets/famaash-icon-dark.svg" />
 <link rel="apple-touch-icon" href="/assets/famaash-logo-dark.png" />
-</head>
-<body data-screen-label="21d Security">
 
+<link rel="stylesheet" href="_shared.css?v=5" />
+<link rel="stylesheet" href="homepage.css?v=67" />
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+  .book-page {
+    background: var(--cream, #F7F5F0);
+    padding-top: 96px;
+  }
+  .book-hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 56px 32px 32px;
+    text-align: center;
+  }
+  .book-hero__eyebrow {
+    font-family: 'DM Mono', ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent, #0D4A3D);
+    margin-bottom: 16px;
+  }
+  .book-hero__h1 {
+    font-family: 'Cormorant', Georgia, serif;
+    font-weight: 500;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1.05;
+    color: var(--ink, #07070C);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+  .book-hero__sub {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--muted, #6B6B80);
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .book-cal {
+    max-width: 1200px;
+    margin: 32px auto 80px;
+    padding: 0 24px;
+  }
+  .book-cal__frame {
+    width: 100%;
+    height: 820px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 32px rgba(7,7,12,0.06);
+    overflow: hidden;
+  }
+  @media (max-width: 720px) {
+    .book-page { padding-top: 72px; }
+    .book-hero { padding: 32px 20px 16px; }
+    .book-cal { padding: 0 12px; margin-bottom: 48px; }
+    .book-cal__frame { height: 760px; }
+  }
+</style>
+</head>
+<body data-screen-label="Book a Discovery Call">
+
+<!-- ========== TOP NAV ========== -->
 <header class="nav" id="topNav">
   <div class="nav__inner">
     <a href="index.html" class="nav__brand" aria-label="Famaash home">
@@ -29,7 +94,7 @@
       <li><a class="nav__item" href="approach.html">Our Approach</a></li>
       <li><a class="nav__item" href="case-studies.html">Case Studies</a></li>
       <li><a class="nav__item" href="insights.html">Insights</a></li>
-      <li><a class="nav__item active" href="about.html">About</a></li>
+      <li><a class="nav__item" href="about.html">About</a></li>
     </ul>
 
     <div class="nav__cta">
@@ -133,146 +198,32 @@
   </div>
 </header>
 
-<section class="legal-hero" data-screen-label="Hero">
-  <div class="legal-hero__inner">
-    <div class="legal-hero__meta">Last updated &middot; April <span class="num">2026</span></div>
-    <div class="legal-hero__eyebrow">Security</div>
-    <h1 class="legal-hero__h1">How we secure client data.</h1>
-    <p class="legal-hero__lead">Encryption, access controls, vendor management, and incident response. The detail your CIO will want; the plain-English version your partner will read.</p>
-    <div class="legal-hero__rule" aria-hidden="true"></div>
-  </div>
-</section>
+<main class="book-page">
+  <section class="book-hero">
+    <div class="book-hero__eyebrow">Discovery</div>
+    <h1 class="book-hero__h1">Book a Discovery Call</h1>
+    <p class="book-hero__sub">A 60-minute working session, partner-led. Walk through your firm's intake, marketing, and case operations with the Famaash team. No charge, no pitch deck, no obligation.</p>
+  </section>
 
+  <section class="book-cal">
+    <div class="book-cal__frame" id="my-cal-inline-njaj-followup"></div>
+  </section>
+</main>
 
+<!-- Cal.com inline embed -->
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "Cal");
 
-<section class="legal-doc" data-screen-label="Document">
-  <div class="legal-doc__inner">
-    <aside class="legal-toc" aria-label="On this page">
-      <div class="legal-toc__eyebrow">On this page</div>
-      <ol class="legal-toc__list">
-          <li class="legal-toc__item"><a class="legal-toc__link" href="#program">Security program</a></li>
-          <li class="legal-toc__item"><a class="legal-toc__link" href="#data">Data protection</a></li>
-          <li class="legal-toc__item"><a class="legal-toc__link" href="#access">Access &amp; identity</a></li>
-          <li class="legal-toc__item"><a class="legal-toc__link" href="#infrastructure">Infrastructure</a></li>
-          <li class="legal-toc__item"><a class="legal-toc__link" href="#vendors">Vendor management</a></li>
-          <li class="legal-toc__item"><a class="legal-toc__link" href="#monitoring">Monitoring &amp; logging</a></li>
-          <li class="legal-toc__item"><a class="legal-toc__link" href="#incident">Incident response</a></li>
-          <li class="legal-toc__item"><a class="legal-toc__link" href="#bcp">Business continuity</a></li>
-          <li class="legal-toc__item"><a class="legal-toc__link" href="#certifications">Certifications</a></li>
-          <li class="legal-toc__item"><a class="legal-toc__link" href="#disclosure">Vulnerability disclosure</a></li>
-          <li class="legal-toc__item"><a class="legal-toc__link" href="#contact">Contact</a></li>
-      </ol>
-    </aside>
-    <div class="legal-body">
-        <section id="program">
-          <h2 class="legal-h2">Security program</h2>
-          <div class="legal-h2-rule" aria-hidden="true"></div>
-          <p class="legal-lead">A written information security program ("WISP") owned by the Head of Security and reviewed quarterly by the partners.</p>
-          <p>The program is mapped to SOC <span class="num">2</span> Trust Services Criteria and the NIST Cybersecurity Framework, with HIPAA Security Rule controls layered on for engagements that handle PHI. Policies are reviewed at least annually; exceptions require partner-level approval and are time-bound.</p>
-        </section>
+  Cal("init", "njaj-followup", {origin:"https://app.cal.com"});
 
-        <section id="data">
-          <h2 class="legal-h2">Data protection</h2>
-          <div class="legal-h2-rule" aria-hidden="true"></div>
-          <p class="legal-lead">Encryption in transit and at rest, by default, on every system that touches client data.</p>
-          <ul class="legal-list legal-list--def">
-            <li><span class="legal-list__term">In transit</span><span class="legal-list__def">TLS <span class="num">1.2</span> minimum, TLS <span class="num">1.3</span> preferred. HSTS enforced on all public-facing surfaces. No plain-text protocols.</span></li>
-            <li><span class="legal-list__term">At rest</span><span class="legal-list__def">AES-<span class="num">256</span> for storage volumes, object stores, and backups. Customer-managed keys available on enterprise plans.</span></li>
-            <li><span class="legal-list__term">Segregation</span><span class="legal-list__def">Each client tenant is logically isolated. Production data does not cross client boundaries; non-production environments use synthetic or anonymised data.</span></li>
-            <li><span class="legal-list__term">Backups</span><span class="legal-list__def">Daily encrypted backups, retained <span class="num">35</span> days, with quarterly restore drills.</span></li>
-          </ul>
-        </section>
+  Cal.ns["njaj-followup"]("inline", {
+    elementOrSelector:"#my-cal-inline-njaj-followup",
+    config: {"layout":"column_view","useSlotsViewOnSmallScreen":"true"},
+    calLink: "faisal-shabir/njaj-followup",
+  });
 
-        <section id="access">
-          <h2 class="legal-h2">Access &amp; identity</h2>
-          <div class="legal-h2-rule" aria-hidden="true"></div>
-          <p class="legal-lead">Least-privilege role-based access, multi-factor on every administrative surface, no shared accounts.</p>
-          <ul class="legal-list legal-list--def">
-            <li><span class="legal-list__term">SSO</span><span class="legal-list__def">SAML <span class="num">2.0</span> single sign-on for staff. Hardware-key MFA required for all privileged accounts.</span></li>
-            <li><span class="legal-list__term">RBAC</span><span class="legal-list__def">Roles defined per engagement. Access reviewed quarterly. Departures trigger same-day revocation.</span></li>
-            <li><span class="legal-list__term">JIT elevation</span><span class="legal-list__def">Standing production access is the exception. Elevation requests are logged, time-bound, and partner-approved.</span></li>
-            <li><span class="legal-list__term">Endpoint</span><span class="legal-list__def">Disk encryption, EDR agent, MDM enrollment, automated patching. Personal devices cannot access client data.</span></li>
-          </ul>
-        </section>
-
-        <section id="infrastructure">
-          <h2 class="legal-h2">Infrastructure</h2>
-          <div class="legal-h2-rule" aria-hidden="true"></div>
-          <p class="legal-lead">Production runs on hyperscale cloud providers in US regions, with environment isolation and infrastructure-as-code change control.</p>
-          <p>Network segmentation is enforced at VPC and service-mesh layers. Private services are not internet-exposed. WAF and DDoS protection are enabled on every public endpoint. Secrets are stored in a managed vault, never in source control. All infrastructure changes flow through pull-request review and automated security scanning.</p>
-        </section>
-
-        <section id="vendors">
-          <h2 class="legal-h2">Vendor management</h2>
-          <div class="legal-h2-rule" aria-hidden="true"></div>
-          <p class="legal-lead">Every subprocessor that touches client data is reviewed before engagement and re-reviewed annually.</p>
-          <p>Reviews cover SOC <span class="num">2</span> reports, data-handling commitments, breach-notification terms, and termination provisions. Subprocessors that handle PHI sign BAAs. The current subprocessor list is available to clients on request and is updated whenever a material change occurs, with <span class="num">30</span> days&rsquo; notice.</p>
-        </section>
-
-        <section id="monitoring">
-          <h2 class="legal-h2">Monitoring &amp; logging</h2>
-          <div class="legal-h2-rule" aria-hidden="true"></div>
-          <p class="legal-lead">Centralised, immutable audit logs covering authentication, privilege changes, data access, and infrastructure modification.</p>
-          <p>Logs are retained for <span class="num">12</span> months in a write-once store and shipped to a SIEM with <span class="num">24</span>/<span class="num">7</span> alerting on the highest-risk events. Anomaly detection is layered on top of rule-based alerts. We test alerting paths quarterly with simulated events.</p>
-        </section>
-
-        <section id="incident">
-          <h2 class="legal-h2">Incident response</h2>
-          <div class="legal-h2-rule" aria-hidden="true"></div>
-          <p class="legal-lead">A documented incident-response plan with named on-call roles, escalation paths, and client-notification timelines.</p>
-          <ul class="legal-list legal-list--def">
-            <li><span class="legal-list__term">Detection</span><span class="legal-list__def">SIEM alerting, EDR telemetry, and on-call rotation. Time-to-acknowledge target: <span class="num">15</span> minutes.</span></li>
-            <li><span class="legal-list__term">Containment</span><span class="legal-list__def">Account isolation, credential rotation, network segmentation. Forensic evidence is preserved.</span></li>
-            <li><span class="legal-list__term">Notification</span><span class="legal-list__def">Affected clients are notified within <span class="num">72</span> hours of confirmation, sooner if required by contract or by HIPAA.</span></li>
-            <li><span class="legal-list__term">Post-incident</span><span class="legal-list__def">Written root-cause analysis with corrective actions, shared with affected clients on request.</span></li>
-          </ul>
-        </section>
-
-        <section id="bcp">
-          <h2 class="legal-h2">Business continuity</h2>
-          <div class="legal-h2-rule" aria-hidden="true"></div>
-          <p class="legal-lead">Multi-region failover, tested annually. RPO <span class="num">15</span> minutes, RTO <span class="num">4</span> hours for tier-<span class="num">1</span> services.</p>
-          <p>Tabletop exercises are run twice a year covering ransomware, vendor outage, and key-personnel loss. Backups are tested quarterly with end-to-end restore drills, and results are reviewed by the partner group.</p>
-        </section>
-
-        <section id="certifications">
-          <h2 class="legal-h2">Certifications &amp; assurance</h2>
-          <div class="legal-h2-rule" aria-hidden="true"></div>
-          <p class="legal-lead">SOC <span class="num">2</span> Type II audit in progress; report issuance expected Q<span class="num">3</span> <span class="num">2026</span>.</p>
-          <ul class="legal-list legal-list--def">
-            <li><span class="legal-list__term">SOC 2 Type II</span><span class="legal-list__def">In progress. Audit firm engaged; controls in operation since Q<span class="num">4</span> <span class="num">2025</span>. Report available under NDA on issuance.</span></li>
-            <li><span class="legal-list__term">HIPAA</span><span class="legal-list__def">Administrative, physical, and technical safeguards mapped. BAA available for healthcare engagements.</span></li>
-            <li><span class="legal-list__term">ISO 27001</span><span class="legal-list__def">Aligned. Formal certification scheduled for <span class="num">2027</span>.</span></li>
-            <li><span class="legal-list__term">Penetration testing</span><span class="legal-list__def">Annual third-party penetration test. Executive summary available under NDA. Critical findings remediated within <span class="num">30</span> days.</span></li>
-          </ul>
-        </section>
-
-        <section id="disclosure">
-          <h2 class="legal-h2">Vulnerability disclosure</h2>
-          <div class="legal-h2-rule" aria-hidden="true"></div>
-          <p class="legal-lead">Responsible disclosure is welcomed. Email security@famaash.com with details and reproduction steps.</p>
-          <p>We acknowledge receipt within <span class="num">2</span> business days, communicate triage status within <span class="num">5</span> business days, and remediate critical findings within <span class="num">30</span> days. We do not pursue researchers acting in good faith under coordinated disclosure.</p>
-        </section>
-
-        <section id="contact">
-          <h2 class="legal-h2">Contact</h2>
-          <div class="legal-h2-rule" aria-hidden="true"></div>
-          <p class="legal-lead">Email <strong>security@famaash.com</strong> for security questions, audit requests, or vulnerability reports.</p>
-          <p>For SOC <span class="num">2</span> reports and the subprocessor list, request through your engagement partner or the security team directly.</p>
-        </section>
-    </div>
-  </div>
-</section>
-
-<section class="legal-cta" data-screen-label="CTA Banner">
-  <div class="legal-cta__inner">
-    <div class="legal-cta__eyebrow">Need our SOC 2 report?</div>
-    <h2 class="legal-cta__h">Email security@famaash.com.</h2>
-    <div class="legal-cta__row">
-      <a class="btn-cream" href="mailto:security@famaash.com">Contact security team <span class="arrow">→</span></a>
-    </div>
-  </div>
-</section>
+  Cal.ns["njaj-followup"]("ui", {"hideEventTypeDetails":false,"layout":"column_view"});
+</script>
 
 <footer class="foot" data-screen-label="Footer">
   <div class="foot__inner">
@@ -319,7 +270,7 @@
       </div>
     </div>
     <div class="foot__bot">
-      <span>© 2026 Famaash LLC.</span>
+      <span>&copy; 2026 Famaash LLC.</span>
       <div class="foot__legal">
         <a href="privacy.html">Privacy</a><span>,</span>
         <a href="terms.html">Terms</a><span>,</span>
@@ -329,8 +280,8 @@
   </div>
 </footer>
 
+<!-- Mega-dropdown nav behavior -->
 <script>
-// ===== Mega-dropdown (matches preview/famaash-nav-preview.html) =====
 (function() {
   const trigger = document.getElementById('capTrigger');
   const dropdown = document.getElementById('capDropdown');
@@ -389,55 +340,6 @@
     item.addEventListener('click', switchTo);
   });
 })();
-
-// ===== Fade-up on scroll =====
-(function() {
-  const els = document.querySelectorAll('.fade-up');
-  if (!('IntersectionObserver' in window)) {
-    els.forEach(el => el.classList.add('in'));
-    return;
-  }
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('in');
-        io.unobserve(e.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
-  els.forEach(el => io.observe(el));
-})();
-
-
-// Active-section TOC scrollspy
-(function(){
-  var links = document.querySelectorAll('.legal-toc__link');
-  if (!links.length) return;
-  var byHref = {};
-  var sections = [];
-  links.forEach(function(a){
-    var href = a.getAttribute('href');
-    if (!href || href.charAt(0) !== '#') return;
-    byHref[href] = a;
-    var s = document.getElementById(href.slice(1));
-    if (s) sections.push({el: s, link: a});
-  });
-  if (!sections.length) return;
-  var io = new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      var rec = sections.find(function(s){ return s.el === e.target; });
-      if (!rec) return;
-      if (e.isIntersecting && e.intersectionRatio > 0.15) {
-        links.forEach(function(l){ l.classList.remove('is-active'); });
-        rec.link.classList.add('is-active');
-      }
-    });
-  }, { rootMargin: '-100px 0px -60% 0px', threshold: [0, 0.2, 0.6] });
-  sections.forEach(function(s){ io.observe(s.el); });
-  // initial
-  if (sections[0]) sections[0].link.classList.add('is-active');
-})();
-
 </script>
 
 </body>

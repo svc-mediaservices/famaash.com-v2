@@ -23,6 +23,8 @@
   "logo": "https://famaash.com/assets/famaash-logo-dark.png"
 }
 </script>
+<link rel="icon" type="image/svg+xml" href="/assets/famaash-icon-dark.svg" />
+<link rel="apple-touch-icon" href="/assets/famaash-logo-dark.png" />
 </head>
 <body data-screen-label="01 Homepage">
 
@@ -47,7 +49,7 @@
     </ul>
 
     <div class="nav__cta">
-      <a class="btn-primary" href="audit.html">Book a Discovery Call <span class="arrow">→</span></a>
+      <a class="btn-primary" href="book.html">Book a Discovery Call <span class="arrow">→</span></a>
     </div>
 
     <div class="mega" id="capDropdown" role="menu" aria-hidden="true">
@@ -151,11 +153,11 @@
 <section class="hero" data-screen-label="Hero">
   <div class="hero__inner">
     <div class="hero__left">
-      <div class="hero__eyebrow">Built only for personal injury</div>
-      <h1 class="hero__h1">Run the firm<br/>you always pictured<br/>running.</h1>
-      <p class="hero__lead">The calls answered. The cases moving. The team trained. The dashboard that finally tells you what each signed case cost. One operating partner runs all of it, under your name, under your supervision, with one number to call when something matters.</p>
+      <div class="hero__eyebrow">AI Consulting &amp; Development</div>
+      <h1 class="hero__h1">Enterprise AI for Fortune 500 firms.<br/>Now built for personal injury law.</h1>
+      <p class="hero__lead">Famaash builds custom AI solutions for consulting firms, tech companies, and Big Four practices. Our newest practice brings the same systems thinking to plaintiff PI firms. Intake, marketing, and case operations under one operating partner.</p>
       <div class="hero__cta-row">
-        <a class="btn-primary" href="/audit.html">Book a Discovery Call <span class="arrow">→</span></a>
+        <a class="btn-primary" href="/book.html">Book a Discovery Call <span class="arrow">→</span></a>
         <a class="btn-ghost" href="#capabilities">See how it works</a>
       </div>
     </div>
@@ -265,57 +267,213 @@
   </div>
 </section>
 
+<!-- ========== SECTION 12.5: CLIENT LOGOS ========== -->
+<section class="logos" data-screen-label="Trusted By">
+  <style>
+    .logos__viewport {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
+              mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
+    }
+    .logos__marquee {
+      display: flex;
+      width: max-content;
+      animation: logosScroll 60s linear infinite;
+    }
+    .logos__marquee:hover { animation-play-state: paused; }
+    .logos__track {
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+    }
+    .logos__track .logo-mark { margin: 0 36px; }
+    .logos__track .logos__sep { margin: 0; }
+    @keyframes logosScroll {
+      from { transform: translate3d(0, 0, 0); }
+      to   { transform: translate3d(-50%, 0, 0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .logos__marquee { animation: none; }
+    }
+  </style>
+  <div class="logos__inner">
+    <div class="logos__ornament" aria-hidden="true">
+      <span class="logos__ornament-rule"></span>
+      <span class="logos__ornament-dot"></span>
+      <span class="logos__ornament-rule"></span>
+    </div>
+    <div class="logos__head">Trusted by leading firms across the country</div>
+    <div class="logos__viewport" aria-label="Client firms">
+      <div class="logos__marquee">
+
+        <!-- Track A -->
+        <div class="logos__track" aria-hidden="false">
+          <div class="logo-mark" aria-label="Sarofiem & Antoun">
+            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+              <path d="M20 4 L34 11 V21 C34 28 28 33.5 20 36 C12 33.5 6 28 6 21 V11 Z"/>
+              <path d="M14 19 L20 24 L26 17" stroke-width="1.4"/>
+            </svg>
+            <div class="logo-mark__txt">
+              <span class="logo-mark__name">Sarofiem &amp; Antoun</span>
+              <span class="logo-mark__sub">Jersey City, NJ</span>
+            </div>
+          </div>
+          <span class="logos__sep" aria-hidden="true"></span>
+          <div class="logo-mark" aria-label="Delgado Trial Group">
+            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+              <circle cx="20" cy="20" r="14"/>
+              <path d="M20 8 V32 M8 20 H32" stroke-width="0.6" opacity="0.55"/>
+              <text x="20" y="24" text-anchor="middle" font-family="serif" font-size="13" font-weight="500" fill="currentColor" stroke="none">D</text>
+            </svg>
+            <div class="logo-mark__txt">
+              <span class="logo-mark__name">Delgado Trial Group</span>
+              <span class="logo-mark__sub">Miami, FL</span>
+            </div>
+          </div>
+          <span class="logos__sep" aria-hidden="true"></span>
+          <div class="logo-mark" aria-label="Brennan & Hayes">
+            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+              <rect x="6" y="6" width="28" height="28" rx="1"/>
+              <path d="M13 28 V14 L20 22 L27 14 V28" stroke-width="1.3"/>
+            </svg>
+            <div class="logo-mark__txt">
+              <span class="logo-mark__name">Brennan &amp; Hayes</span>
+              <span class="logo-mark__sub">Boston, MA</span>
+            </div>
+          </div>
+          <span class="logos__sep" aria-hidden="true"></span>
+          <div class="logo-mark" aria-label="Patel & Garcia">
+            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+              <path d="M20 5 L35 13 L35 27 L20 35 L5 27 L5 13 Z"/>
+              <path d="M20 13 V27 M14 17 L20 20 L26 17" stroke-width="1.2"/>
+            </svg>
+            <div class="logo-mark__txt">
+              <span class="logo-mark__name">Patel &amp; Garcia</span>
+              <span class="logo-mark__sub">Houston, TX</span>
+            </div>
+          </div>
+          <span class="logos__sep" aria-hidden="true"></span>
+        </div>
+
+        <!-- Track B (duplicate for seamless loop) -->
+        <div class="logos__track" aria-hidden="true">
+          <div class="logo-mark">
+            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+              <path d="M20 4 L34 11 V21 C34 28 28 33.5 20 36 C12 33.5 6 28 6 21 V11 Z"/>
+              <path d="M14 19 L20 24 L26 17" stroke-width="1.4"/>
+            </svg>
+            <div class="logo-mark__txt">
+              <span class="logo-mark__name">Sarofiem &amp; Antoun</span>
+              <span class="logo-mark__sub">Jersey City, NJ</span>
+            </div>
+          </div>
+          <span class="logos__sep" aria-hidden="true"></span>
+          <div class="logo-mark">
+            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+              <circle cx="20" cy="20" r="14"/>
+              <path d="M20 8 V32 M8 20 H32" stroke-width="0.6" opacity="0.55"/>
+              <text x="20" y="24" text-anchor="middle" font-family="serif" font-size="13" font-weight="500" fill="currentColor" stroke="none">D</text>
+            </svg>
+            <div class="logo-mark__txt">
+              <span class="logo-mark__name">Delgado Trial Group</span>
+              <span class="logo-mark__sub">Miami, FL</span>
+            </div>
+          </div>
+          <span class="logos__sep" aria-hidden="true"></span>
+          <div class="logo-mark">
+            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+              <rect x="6" y="6" width="28" height="28" rx="1"/>
+              <path d="M13 28 V14 L20 22 L27 14 V28" stroke-width="1.3"/>
+            </svg>
+            <div class="logo-mark__txt">
+              <span class="logo-mark__name">Brennan &amp; Hayes</span>
+              <span class="logo-mark__sub">Boston, MA</span>
+            </div>
+          </div>
+          <span class="logos__sep" aria-hidden="true"></span>
+          <div class="logo-mark">
+            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+              <path d="M20 5 L35 13 L35 27 L20 35 L5 27 L5 13 Z"/>
+              <path d="M20 13 V27 M14 17 L20 20 L26 17" stroke-width="1.2"/>
+            </svg>
+            <div class="logo-mark__txt">
+              <span class="logo-mark__name">Patel &amp; Garcia</span>
+              <span class="logo-mark__sub">Houston, TX</span>
+            </div>
+          </div>
+          <span class="logos__sep" aria-hidden="true"></span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ========== SECTION 3: TRUST STRIP ========== -->
-<section class="trust" aria-label="Compliance markers">
+<section class="trust trust--feature fade-up" aria-label="Enterprise pedigree">
   <div class="trust__inner">
-    <span class="trust__item">
-      <svg class="trust__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 3 L20 6 V12 C20 16.5 16.5 19.8 12 21 C7.5 19.8 4 16.5 4 12 V6 Z"/>
-        <path d="M8.5 12 L11 14.5 L15.5 9.5"/>
-      </svg>
-      SOC 2
-    </span>
-    <span class="trust__item">
-      <svg class="trust__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 3 L19 6 V11.5 C19 16 15.8 19.4 12 21 C8.2 19.4 5 16 5 11.5 V6 Z"/>
-        <path d="M12 9 V15 M9 12 H15"/>
-      </svg>
-      HIPAA
-    </span>
-    <span class="trust__item">
-      <svg class="trust__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 4 V20"/>
-        <path d="M7 20 H17"/>
-        <path d="M5 7 H19"/>
-        <path d="M5 7 L3 13 H7 Z"/>
-        <path d="M19 7 L17 13 H21 Z"/>
-      </svg>
-      ABA Op. 512
-    </span>
-    <span class="trust__item">
-      <svg class="trust__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M12 3 L19 6 V11.5 C19 16 15.8 19.4 12 21 C8.2 19.4 5 16 5 11.5 V6 Z"/>
-        <path d="M9 11.5 L11.5 14 L16 9"/>
-        <circle cx="12" cy="11" r="0.6" fill="currentColor"/>
-      </svg>
-      UPL Indemnified
-    </span>
-    <span class="trust__item">
-      <svg class="trust__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M5 19 L18 6 L20 8 L7 21 Z"/>
-        <path d="M16 8 L18 10"/>
-        <path d="M5 19 L4 21 L6 20"/>
-      </svg>
-      Attorney-reviewed
-    </span>
-    <span class="trust__item">
-      <svg class="trust__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <rect x="3" y="6" width="18" height="13" rx="0.5"/>
-        <path d="M3 6 L8 6 L8 11 L3 11 Z" fill="currentColor" opacity="0.18" stroke="none"/>
-        <path d="M9 8 H20 M9 11 H20 M3 14 H21 M3 17 H21" stroke-width="1"/>
-      </svg>
-      50-state Compliant
-    </span>
+    <div class="trust-stat">
+      <div class="trust-stat__num">
+        <span class="tnum" data-count="200">0</span><span class="trust-stat__plus">+</span>
+      </div>
+      <div class="trust-stat__lbl">Enterprise Engagements</div>
+    </div>
+    <div class="trust-stat">
+      <div class="trust-stat__num">
+        <span class="tnum" data-count="50">0</span><span class="trust-stat__plus">+</span>
+      </div>
+      <div class="trust-stat__lbl">AI Systems Deployed</div>
+    </div>
+    <div class="trust-stat">
+      <div class="trust-stat__num">
+        <span class="tnum" data-count="13">0</span>
+      </div>
+      <div class="trust-stat__lbl">Years Building</div>
+    </div>
+    <div class="trust-stat">
+      <div class="trust-stat__num">
+        <span class="tnum" data-count="4">0</span>
+      </div>
+      <div class="trust-stat__lbl">Industries Served</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== SECTION 3.5: ENTERPRISE PEDIGREE STRIP ========== -->
+<section class="pedigree" data-screen-label="Enterprise Pedigree">
+  <div class="container">
+    <div class="pedigree__head">
+      <span class="pedigree__eyebrow fade-up">Thirteen years building enterprise AI</span>
+      <h2 class="pedigree__h fade-up">Before we built this for PI firms,<br/>we built it for McKinsey, BCG, and three of the four Big Four.</h2>
+      <p class="pedigree__sub fade-up">The same systems thinking that powered enterprise consulting AI workflows now runs intake, marketing, and case operations for plaintiff personal injury firms. The discipline scaled down. The accountability stayed.</p>
+    </div>
+
+    <div class="pedigree__grid" role="list">
+      <article class="pedigree__card pedigree__card--stagger" role="listitem" style="--pedigree-delay: 0ms;">
+        <span class="pedigree__dot" aria-hidden="true"></span>
+        <h3 class="pedigree__sector">Strategy Consulting</h3>
+        <p class="pedigree__proof">Tier-1 firm research workflows, 200+ engagements analyzed</p>
+      </article>
+      <article class="pedigree__card pedigree__card--stagger" role="listitem" style="--pedigree-delay: 100ms;">
+        <span class="pedigree__dot" aria-hidden="true"></span>
+        <h3 class="pedigree__sector">Big Four Advisory</h3>
+        <p class="pedigree__proof">Three of the four advisory practices, analyst augmentation across sectors</p>
+      </article>
+      <article class="pedigree__card pedigree__card--stagger" role="listitem" style="--pedigree-delay: 200ms;">
+        <span class="pedigree__dot" aria-hidden="true"></span>
+        <h3 class="pedigree__sector">Enterprise Healthcare</h3>
+        <p class="pedigree__proof">Multi-hospital systems and MSOs, HIPAA-compliant intake at scale</p>
+      </article>
+      <article class="pedigree__card pedigree__card--stagger" role="listitem" style="--pedigree-delay: 300ms;">
+        <span class="pedigree__dot" aria-hidden="true"></span>
+        <h3 class="pedigree__sector">Financial Services</h3>
+        <p class="pedigree__proof">RIAs and regional banks, FINRA-aware content workflows</p>
+      </article>
+    </div>
+
+    <p class="pedigree__foot fade-up">Same operators. Now built for personal injury.</p>
   </div>
 </section>
 
@@ -952,7 +1110,7 @@
     <h2 class="select__h">We onboard a limited number of PI firms each quarter.</h2>
     <p class="select__p">Famaash isn't for every firm. We work with PI partners who want to scale, who care about compliance, and who've felt the pain of fragmented vendors. We have to be selective, to deliver what we promise.</p>
     <p class="select__p">If that's you, the next step is an audit. We'll show you exactly how many leads your firm is missing right now and what they were worth.</p>
-    <div class="select__cta"><a class="btn-primary" href="/audit.html">Book a Discovery Call <span class="arrow">→</span></a></div>
+    <div class="select__cta"><a class="btn-primary" href="/book.html">Book a Discovery Call <span class="arrow">→</span></a></div>
     <hr class="select__rule" />
   </div>
 </section>
@@ -1241,145 +1399,6 @@
   </div>
 </section>
 
-<!-- ========== SECTION 12.5: CLIENT LOGOS ========== -->
-<section class="logos" data-screen-label="Trusted By">
-  <style>
-    .logos__viewport {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
-              mask-image: linear-gradient(to right, transparent 0, #000 8%, #000 92%, transparent 100%);
-    }
-    .logos__marquee {
-      display: flex;
-      width: max-content;
-      animation: logosScroll 60s linear infinite;
-    }
-    .logos__marquee:hover { animation-play-state: paused; }
-    .logos__track {
-      display: flex;
-      align-items: center;
-      flex: 0 0 auto;
-    }
-    .logos__track .logo-mark { margin: 0 36px; }
-    .logos__track .logos__sep { margin: 0; }
-    @keyframes logosScroll {
-      from { transform: translate3d(0, 0, 0); }
-      to   { transform: translate3d(-50%, 0, 0); }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .logos__marquee { animation: none; }
-    }
-  </style>
-  <div class="logos__inner">
-    <div class="logos__head">Trusted by leading firms across the country</div>
-    <div class="logos__viewport" aria-label="Client firms">
-      <div class="logos__marquee">
-
-        <!-- Track A -->
-        <div class="logos__track" aria-hidden="false">
-          <div class="logo-mark" aria-label="Sarofiem & Antoun">
-            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
-              <path d="M20 4 L34 11 V21 C34 28 28 33.5 20 36 C12 33.5 6 28 6 21 V11 Z"/>
-              <path d="M14 19 L20 24 L26 17" stroke-width="1.4"/>
-            </svg>
-            <div class="logo-mark__txt">
-              <span class="logo-mark__name">Sarofiem &amp; Antoun</span>
-              <span class="logo-mark__sub">Jersey City, NJ</span>
-            </div>
-          </div>
-          <span class="logos__sep" aria-hidden="true"></span>
-          <div class="logo-mark" aria-label="Delgado Trial Group">
-            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
-              <circle cx="20" cy="20" r="14"/>
-              <path d="M20 8 V32 M8 20 H32" stroke-width="0.6" opacity="0.55"/>
-              <text x="20" y="24" text-anchor="middle" font-family="serif" font-size="13" font-weight="500" fill="currentColor" stroke="none">D</text>
-            </svg>
-            <div class="logo-mark__txt">
-              <span class="logo-mark__name">Delgado Trial Group</span>
-              <span class="logo-mark__sub">Miami, FL</span>
-            </div>
-          </div>
-          <span class="logos__sep" aria-hidden="true"></span>
-          <div class="logo-mark" aria-label="Brennan & Hayes">
-            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
-              <rect x="6" y="6" width="28" height="28" rx="1"/>
-              <path d="M13 28 V14 L20 22 L27 14 V28" stroke-width="1.3"/>
-            </svg>
-            <div class="logo-mark__txt">
-              <span class="logo-mark__name">Brennan &amp; Hayes</span>
-              <span class="logo-mark__sub">Boston, MA</span>
-            </div>
-          </div>
-          <span class="logos__sep" aria-hidden="true"></span>
-          <div class="logo-mark" aria-label="Patel & Garcia">
-            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
-              <path d="M20 5 L35 13 L35 27 L20 35 L5 27 L5 13 Z"/>
-              <path d="M20 13 V27 M14 17 L20 20 L26 17" stroke-width="1.2"/>
-            </svg>
-            <div class="logo-mark__txt">
-              <span class="logo-mark__name">Patel &amp; Garcia</span>
-              <span class="logo-mark__sub">Houston, TX</span>
-            </div>
-          </div>
-          <span class="logos__sep" aria-hidden="true"></span>
-        </div>
-
-        <!-- Track B (duplicate for seamless loop) -->
-        <div class="logos__track" aria-hidden="true">
-          <div class="logo-mark">
-            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
-              <path d="M20 4 L34 11 V21 C34 28 28 33.5 20 36 C12 33.5 6 28 6 21 V11 Z"/>
-              <path d="M14 19 L20 24 L26 17" stroke-width="1.4"/>
-            </svg>
-            <div class="logo-mark__txt">
-              <span class="logo-mark__name">Sarofiem &amp; Antoun</span>
-              <span class="logo-mark__sub">Jersey City, NJ</span>
-            </div>
-          </div>
-          <span class="logos__sep" aria-hidden="true"></span>
-          <div class="logo-mark">
-            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
-              <circle cx="20" cy="20" r="14"/>
-              <path d="M20 8 V32 M8 20 H32" stroke-width="0.6" opacity="0.55"/>
-              <text x="20" y="24" text-anchor="middle" font-family="serif" font-size="13" font-weight="500" fill="currentColor" stroke="none">D</text>
-            </svg>
-            <div class="logo-mark__txt">
-              <span class="logo-mark__name">Delgado Trial Group</span>
-              <span class="logo-mark__sub">Miami, FL</span>
-            </div>
-          </div>
-          <span class="logos__sep" aria-hidden="true"></span>
-          <div class="logo-mark">
-            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
-              <rect x="6" y="6" width="28" height="28" rx="1"/>
-              <path d="M13 28 V14 L20 22 L27 14 V28" stroke-width="1.3"/>
-            </svg>
-            <div class="logo-mark__txt">
-              <span class="logo-mark__name">Brennan &amp; Hayes</span>
-              <span class="logo-mark__sub">Boston, MA</span>
-            </div>
-          </div>
-          <span class="logos__sep" aria-hidden="true"></span>
-          <div class="logo-mark">
-            <svg class="logo-mark__seal" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
-              <path d="M20 5 L35 13 L35 27 L20 35 L5 27 L5 13 Z"/>
-              <path d="M20 13 V27 M14 17 L20 20 L26 17" stroke-width="1.2"/>
-            </svg>
-            <div class="logo-mark__txt">
-              <span class="logo-mark__name">Patel &amp; Garcia</span>
-              <span class="logo-mark__sub">Houston, TX</span>
-            </div>
-          </div>
-          <span class="logos__sep" aria-hidden="true"></span>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ========== SECTION 12: COMPARISON TABLE ========== -->
 <section class="sec-cream sec-pad" data-screen-label="The Honest Comparison">
   <div class="container">
@@ -1574,10 +1593,9 @@
   (function buildSpark() {
     const root = document.getElementById('spark');
     if (!root) return;
-    // 18 bars covering 6A → 10P, hourly + a 6:30P peak spike
-    // Realistic PI intake call volume curve with light random jitter
-    const heights = [13, 19, 23, 39, 41, 35, 33, 41, 47, 49, 55, 57, 61, 72, 55, 43, 31, 18];
-    const peakIdx = 13; // 6:30P spike (between 6P and 7P)
+    // 17 bars covering 6A → 10P (hourly), peak at 4P
+    const heights = [12, 18, 24, 30, 36, 42, 46, 50, 54, 60, 72, 58, 48, 38, 28, 20, 14];
+    const peakIdx = 10; // 4P spike
     heights.forEach((h, i) => {
       const bar = document.createElement('span');
       bar.className = 'spark__bar' + (i === peakIdx ? ' spark__bar--peak' : '');
@@ -1686,7 +1704,7 @@
     });
   }, { threshold: 0.18, rootMargin: '0px 0px -10% 0px' });
 
-  document.querySelectorAll('.fade-up, #intake, #cc, #diagram, #timeline').forEach(el => io.observe(el));
+  document.querySelectorAll('.fade-up, .pedigree__card--stagger, #intake, #cc, #diagram, #timeline').forEach(el => io.observe(el));
 
   // ----- Testimonial slider (horizontal, user-controlled) -----
   (function() {

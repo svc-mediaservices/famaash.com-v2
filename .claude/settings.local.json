@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(sed -n '165,167p;274,276p' index.html)",
+      "Bash(sed -n '165,167p;265,267p' index-old.html)",
+      "Bash(awk 'NR>=160 && NR<=280 && /class=\"pipeline\"|class=\"intake\"/{print NR\": \"$0}' index.html)",
+      "Bash(sed -n '165,266p' index-old.html)",
+      "Bash(sed -i '165,275d' index.html)",
+      "Bash(sed -i '164r .intake_block.tmp' index.html)",
+      "Bash(sed -n '163,170p' index.html)",
+      "Bash(sed -n '264,270p' index.html)"
+    ]
+  }
+}
