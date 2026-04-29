@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live at NJAJ · Famaash</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-style: normal !important; }
+
+  :root {
+    --cream:       #F7F5F0;
+    --cream-2:     #EFEBE2;
+    --cream-3:     #E5DFD2;
+    --ink:         #07070C;
+    --ink-soft:    #0F0F18;
+    --on-cream:    #1A1A24;
+    --muted:       #6B6B80;
+    --muted-2:     #9999AA;
+    --accent:      #0D4A3D;
+    --accent-h:    #0A3A30;
+    --accent-lt:   #E5EFE9;
+    --accent-mid:  #4A8B7A;
+    --gold:        #C9A961;
+    --gold-soft:   #D9BD7C;
+    --gold-deep:   #8B7333;
+    --rule:        rgba(0,0,0,0.10);
+    --rule-soft:   rgba(0,0,0,0.06);
+    --rule-strong: rgba(0,0,0,0.20);
+    --num-feats:   "tnum" 1, "lnum" 1;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--cream);
+    color: var(--on-cream);
+    font-family: 'DM Sans', sans-serif;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: ""; position: fixed; inset: 0; opacity: 0.035;
+    pointer-events: none; z-index: 1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  body::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.035) 100%);
+  }
+
+  .app {
+    position: relative; z-index: 2;
+    height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 36px 64px 32px;
+    max-width: 2200px; margin: 0 auto;
+  }
+
+  .corner {
+    position: fixed; width: 18px; height: 18px;
+    border: 1px solid var(--ink); z-index: 3;
+  }
+  .corner.tl { top: 30px; left: 36px; border-right: none; border-bottom: none; }
+  .corner.tr { top: 30px; right: 36px; border-left: none; border-bottom: none; }
+  .corner.bl { bottom: 30px; left: 36px; border-right: none; border-top: none; }
+  .corner.br { bottom: 30px; right: 36px; border-left: none; border-top: none; }
+
+  /* HEADER (admin bar inline) */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+    flex-shrink: 0;
+    gap: 20px;
+  }
+  .brand { display: flex; align-items: center; flex-shrink: 0; }
+  .brand img { height: 22px; width: auto; }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-lt);
+    border: 1px solid rgba(13,74,61,0.25);
+    padding: 6px 12px;
+    font-weight: 500;
+  }
+  .live-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px rgba(13,74,61,0.2);
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(13,74,61,0.2); }
+    50%      { box-shadow: 0 0 0 7px rgba(13,74,61,0.04); }
+  }
+  .header-meta {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 500;
+  }
+  .header-meta .num { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .admin {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding-left: 14px;
+    border-left: 1px solid var(--rule);
+  }
+  .admin-btn {
+    background: transparent;
+    border: 1px solid var(--rule-strong);
+    color: var(--ink);
+    padding: 5px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9.5px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .admin-btn:hover { background: var(--accent); color: var(--cream); border-color: var(--accent); }
+  .admin-btn.danger { border-color: rgba(185,28,28,0.4); color: #B91C1C; }
+  .admin-btn.danger:hover { background: #B91C1C; color: #fff; border-color: #B91C1C; }
+
+  /* HEADLINE */
+  .title-block {
+    padding: 32px 0 18px;
+    flex-shrink: 0;
+  }
+  .kicker {
+    font-size: 12px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Cormorant', serif;
+    font-size: clamp(40px, 4.4vw, 80px);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.022em;
+    color: var(--on-cream);
+    max-width: 1500px;
+  }
+  h1 em {
+    color: var(--gold);
+    font-style: normal !important;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 36px 48px;
+    background: var(--accent);
+    color: var(--cream);
+    position: relative;
+    overflow: hidden;
+    margin: 10px 0 20px;
+    flex-shrink: 0;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 560px; height: 560px;
+    background: radial-gradient(circle, rgba(201,169,97,0.18), transparent 65%);
+    pointer-events: none;
+  }
+  .hero-label {
+    font-size: 12px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+    position: relative;
+    font-weight: 500;
+  }
+  .hero-number {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-feature-settings: var(--num-feats);
+    font-size: clamp(96px, 11vw, 200px);
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+    color: var(--cream);
+    white-space: nowrap;
+    position: relative;
+  }
+  .hero-subline {
+    font-family: 'Cormorant', serif;
+    font-size: clamp(20px, 2vw, 30px);
+    line-height: 1.25;
+    color: rgba(247,245,240,0.82);
+    margin-top: 18px;
+    font-weight: 400;
+    max-width: 900px;
+    position: relative;
+  }
+  .hero-subline em {
+    color: var(--gold);
+    font-weight: 600;
+    font-style: normal !important;
+  }
+
+  /* STATS */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    padding: 18px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    flex: 1;
+    min-height: 0;
+  }
+  .stat {
+    padding: 6px 32px;
+    border-right: 1px solid var(--rule-soft);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.35s;
+  }
+  .stat:first-child { padding-left: 0; }
+  .stat:last-child { border-right: none; padding-right: 0; }
+  .stat.pop { animation: statpop 0.7s cubic-bezier(0.22, 1, 0.36, 1); }
+  @keyframes statpop {
+    0% { background: transparent; }
+    30% { background: var(--accent-lt); }
+    100% { background: transparent; }
+  }
+
+  .stat-head { display: flex; align-items: center; gap: 12px; }
+  .stat-icon { width: 28px; height: 28px; color: var(--accent); flex-shrink: 0; }
+  .stat-icon svg { width: 28px; height: 28px; }
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.4;
+    font-weight: 500;
+  }
+  .stat-value {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-feature-settings: var(--num-feats);
+    font-size: clamp(40px, 4vw, 76px);
+    line-height: 1;
+    letter-spacing: -0.025em;
+    color: var(--on-cream);
+  }
+  .stat-value .unit { font-size: 0.5em; color: var(--muted); font-weight: 500; margin-left: 4px; }
+  .stat.recov .stat-value { color: var(--accent); }
+
+  /* FOOT — only largest leak (no CTA box) */
+  .foot {
+    display: flex;
+    padding-top: 18px;
+    flex-shrink: 0;
+  }
+  .foot-largest {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 18px;
+    background: var(--cream-2);
+    border-left: 3px solid var(--gold);
+    flex: 1;
+  }
+  .foot-largest-icon { width: 32px; height: 32px; color: var(--gold); flex-shrink: 0; }
+  .foot-largest-icon svg { width: 32px; height: 32px; }
+  .foot-largest-label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .foot-largest-val {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--on-cream);
+    font-variant-numeric: tabular-nums;
+  }
+  .foot-largest-val .firm {
+    font-family: 'Cormorant', serif;
+    font-weight: 500;
+    color: var(--muted);
+    margin-left: 8px;
+    font-size: 16px;
+  }
+
+  /* ENTRIES OVERLAY */
+  .entries { position: fixed; inset: 0; z-index: 9999; }
+  .entries.hidden { display: none; }
+  .entries-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.65); }
+  .entries-panel {
+    position: relative;
+    max-width: 1100px;
+    margin: 4vh auto;
+    max-height: 92vh;
+    background: var(--cream);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .entries-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 22px 28px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .entries-eyebrow {
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500; margin-bottom: 4px;
+  }
+  .entries-title {
+    font-family: 'Cormorant', serif; font-size: 22px; font-weight: 500; color: var(--ink);
+  }
+  .entries-actions { display: flex; gap: 8px; align-items: center; }
+  .entries-close {
+    background: transparent; border: none;
+    font-size: 26px; cursor: pointer; color: var(--muted);
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .entries-close:hover { color: var(--ink); }
+  .entries-body { overflow-y: auto; padding: 8px 0; }
+  .entries-empty { padding: 60px; text-align: center; color: var(--muted); font-size: 14px; }
+  .entry-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 160px 90px;
+    gap: 16px;
+    align-items: center;
+    padding: 12px 28px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .entry-row:hover { background: var(--cream-2); }
+  .entry-id { font-weight: 600; font-size: 12px; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .entry-date { font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
+  .entry-firm-name { font-family: 'Cormorant', serif; font-size: 17px; font-weight: 500; color: var(--ink); }
+  .entry-firm-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .entry-leak { font-weight: 600; font-size: 16px; color: var(--gold); text-align: right; font-variant-numeric: tabular-nums; }
+  .entry-del {
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--muted);
+    padding: 5px 9px;
+    font-family: inherit; font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+    cursor: pointer;
+  }
+  .entry-del:hover { border-color: #B91C1C; color: #B91C1C; }
+
+  /* === RESPONSIVE === */
+  /* 16" laptop / 1440-1680 wide */
+  @media (max-width: 1500px) {
+    .app { padding: 28px 48px 24px; }
+    h1 { font-size: clamp(36px, 4vw, 60px); }
+    .hero { padding: 28px 36px; margin: 8px 0 16px; }
+    .hero-number { font-size: clamp(80px, 9.5vw, 150px); }
+    .stats { padding: 14px 0; }
+    .stat-value { font-size: clamp(36px, 3.6vw, 60px); }
+    .title-block { padding: 24px 0 14px; }
+    .corner.tl, .corner.tr { top: 22px; }
+    .corner.bl, .corner.br { bottom: 22px; }
+  }
+
+  /* short heights — 16" MBP at 900px or shorter */
+  @media (max-height: 920px) {
+    .app { padding: 20px 48px 18px; }
+    .title-block { padding: 16px 0 10px; }
+    .kicker { margin-bottom: 10px; font-size: 10px; }
+    h1 { font-size: clamp(32px, 3.4vw, 52px); }
+    .hero { padding: 22px 32px; margin: 6px 0 12px; }
+    .hero-label { margin-bottom: 10px; font-size: 11px; }
+    .hero-number { font-size: clamp(64px, 8vw, 120px); }
+    .hero-subline { font-size: clamp(16px, 1.6vw, 22px); margin-top: 12px; }
+    .stats { padding: 10px 0; }
+    .stat-value { font-size: clamp(32px, 3vw, 48px); }
+    .stat { gap: 6px; }
+    .foot { padding-top: 12px; }
+    .foot-largest { padding: 10px 14px; }
+    .foot-largest-val { font-size: 15px; }
+  }
+
+  @media (max-width: 1100px) {
+    .stats { grid-template-columns: 1fr; gap: 8px; }
+    .stat { border-right: none; border-bottom: 1px solid var(--rule-soft); padding: 10px 0; }
+    .stat:last-child { border-bottom: none; }
+  }
+
+  @media (max-width: 700px) {
+    .app { padding: 18px 20px 14px; }
+    .corner { display: none; }
+    header { flex-wrap: wrap; gap: 12px; }
+    .header-right { gap: 8px; }
+    .admin { padding-left: 10px; }
+    .admin-btn { padding: 4px 8px; font-size: 9px; }
+    .hero { padding: 20px 18px; }
+    h1 { font-size: clamp(32px, 8vw, 48px); }
+    .entry-row { grid-template-columns: 1fr; gap: 6px; padding: 12px 18px; }
+  }
+
+  /* ApoloSign 32" landscape */
+  @media (min-width: 1800px) and (orientation: landscape) {
+    .app { padding: 56px 96px 48px; max-width: 100%; }
+    h1 { font-size: clamp(64px, 5vw, 96px); }
+    .hero-number { font-size: clamp(160px, 14vw, 240px); }
+    .stat-value { font-size: clamp(64px, 5.5vw, 96px); }
+    .kicker { font-size: 14px; }
+    .brand img { height: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<div class="app">
+
+  <header>
+    <a href="/" class="brand" aria-label="Famaash home"><img src="assets/famaash-logo-dark.png" alt="Famaash" /></a>
+
+    <div class="header-right">
+      <div class="live-pill"><span class="live-dot"></span>Live · NJAJ 2026</div>
+      <div class="header-meta">
+        <span class="num" id="timeNow">—</span> &middot; Day <span class="num" id="dayNum">1</span>
+      </div>
+      <div class="admin">
+        <button class="admin-btn" onclick="openEntries()">Entries</button>
+        <button class="admin-btn" onclick="exportCSV()">Export</button>
+        <button class="admin-btn danger" onclick="resetAll()">Reset</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="title-block">
+    <div class="kicker">Real-time · from this booth</div>
+    <h1>
+      NJAJ firms audited here are losing
+      <em id="totalLeakInline">$0</em>
+      every year at intake.
+    </h1>
+  </div>
+
+  <div class="hero">
+    <div class="hero-label">Collective annual revenue leak &middot; identified today</div>
+    <div class="hero-number" id="heroTotal">$0</div>
+    <div class="hero-subline">
+      Every dollar is <em>recoverable</em> &mdash; no new ad spend required.
+    </div>
+  </div>
+
+  <div class="stats">
+
+    <div class="stat" id="statFirms">
+      <div class="stat-head">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div class="stat-label">Firms audited</div>
+      </div>
+      <div class="stat-value" id="valFirms">0</div>
+    </div>
+
+    <div class="stat" id="statAvg">
+      <div class="stat-head">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          </svg>
+        </div>
+        <div class="stat-label">Average per firm</div>
+      </div>
+      <div class="stat-value" id="valAvg">$0</div>
+    </div>
+
+    <div class="stat recov" id="statRecov">
+      <div class="stat-head">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+          </svg>
+        </div>
+        <div class="stat-label">Recoverable</div>
+      </div>
+      <div class="stat-value"><span id="valRecov">100</span><span class="unit">%</span></div>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    <div class="foot-largest">
+      <div class="foot-largest-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+        </svg>
+      </div>
+      <div class="foot-largest-text">
+        <div class="foot-largest-label">Largest leak today</div>
+        <div class="foot-largest-val">
+          <span class="num" id="biggestLeak">—</span>
+          <span class="firm" id="biggestFirm"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="entries hidden" id="entriesOverlay">
+  <div class="entries-backdrop" onclick="closeEntries()"></div>
+  <div class="entries-panel">
+    <div class="entries-header">
+      <div>
+        <div class="entries-eyebrow">SUBMISSIONS</div>
+        <div class="entries-title" id="entriesTitle">0 audits</div>
+      </div>
+      <div class="entries-actions">
+        <button class="admin-btn" onclick="exportCSV()" style="color:var(--accent);border-color:var(--accent);">Export CSV</button>
+        <button class="entries-close" onclick="closeEntries()" aria-label="Close">×</button>
+      </div>
+    </div>
+    <div class="entries-body" id="entriesBody"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const POLL_MS = 3000;
+
+function formatBigMoney(n) {
+  if (!n) return '$0';
+  if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
+  if (n >= 10_000) return '$' + Math.round(n / 1000) + 'K';
+  return '$' + n.toLocaleString('en-US');
+}
+function formatMoneyFull(n) { return '$' + (n || 0).toLocaleString('en-US'); }
+
+const lastValues = {};
+
+function tick() {
+  try {
+    const all = JSON.parse(localStorage.getItem('famaash_submissions') || '[]');
+    const firmCount = all.length;
+    const totalLeak = all.reduce((a, s) => a + ((s.report && s.report.total) || 0), 0);
+    const avgLeak = firmCount > 0 ? Math.round(totalLeak / firmCount) : 0;
+
+    let biggest = null;
+    all.forEach(s => {
+      if (s && s.report && (!biggest || s.report.total > biggest.total)) {
+        biggest = { total: s.report.total, firm: s.input && s.input.firmName };
+      }
+    });
+
+    setText('totalLeakInline', formatBigMoney(totalLeak));
+    setText('heroTotal', formatMoneyFull(totalLeak));
+    setPop('valFirms', firmCount.toLocaleString('en-US'), 'statFirms');
+    setPop('valAvg', formatBigMoney(avgLeak), 'statAvg');
+
+    if (biggest) {
+      document.getElementById('biggestLeak').textContent = formatMoneyFull(biggest.total) + '/yr';
+      document.getElementById('biggestFirm').textContent = biggest.firm ? `· ${biggest.firm}` : '';
+    } else {
+      document.getElementById('biggestLeak').textContent = '—';
+      document.getElementById('biggestFirm').textContent = '';
+    }
+
+    if (all.length > 0) {
+      const first = new Date(all[0].timestamp || Date.now());
+      const today = new Date();
+      const days = Math.max(1, Math.floor((today - first) / (1000 * 60 * 60 * 24)) + 1);
+      setText('dayNum', days);
+    }
+
+    if (!document.getElementById('entriesOverlay').classList.contains('hidden')) {
+      renderEntries(all);
+    }
+  } catch (e) { console.error('tick failed:', e); }
+
+  const now = new Date();
+  const h = now.getHours(); const m = now.getMinutes();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const h12 = ((h + 11) % 12) + 1;
+  setText('timeNow', `${h12}:${String(m).padStart(2, '0')} ${ampm}`);
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const v = String(val);
+  if (el.textContent !== v) el.textContent = v;
+}
+function setPop(id, val, cardId) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (lastValues[id] === val) return;
+  lastValues[id] = val;
+  el.textContent = val;
+  const card = document.getElementById(cardId);
+  if (card) {
+    card.classList.remove('pop');
+    void card.offsetWidth;
+    card.classList.add('pop');
+  }
+}
+
+function openEntries() {
+  const all = JSON.parse(localStorage.getItem('famaash_submissions') || '[]');
+  renderEntries(all);
+  document.getElementById('entriesOverlay').classList.remove('hidden');
+}
+function closeEntries() {
+  document.getElementById('entriesOverlay').classList.add('hidden');
+}
+function renderEntries(all) {
+  const body = document.getElementById('entriesBody');
+  const title = document.getElementById('entriesTitle');
+  const total = all.reduce((a, s) => a + ((s.report && s.report.total) || 0), 0);
+  title.textContent = `${all.length} audit${all.length === 1 ? '' : 's'} · ${formatMoneyFull(total)} total leak`;
+  if (all.length === 0) {
+    body.innerHTML = '<div class="entries-empty">No submissions yet.</div>';
+    return;
+  }
+  body.innerHTML = all.slice().reverse().map(s => `
+    <div class="entry-row">
+      <div>
+        <div class="entry-id">${s.id || '—'}</div>
+        <div class="entry-date">${new Date(s.timestamp).toLocaleString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' })}</div>
+      </div>
+      <div>
+        <div class="entry-firm-name">${escapeHtml(s.input.firmName || '—')}</div>
+        <div class="entry-firm-sub">${escapeHtml(s.input.attorneyName || '')} · ${escapeHtml(s.input.market || '')}</div>
+      </div>
+      <div class="entry-leak">${formatMoneyFull((s.report && s.report.total) || 0)}</div>
+      <button class="entry-del" onclick="deleteEntry('${s.id}')">Delete</button>
+    </div>
+  `).join('');
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function deleteEntry(id) {
+  if (!confirm('Delete this entry?')) return;
+  const all = JSON.parse(localStorage.getItem('famaash_submissions') || '[]');
+  localStorage.setItem('famaash_submissions', JSON.stringify(all.filter(s => s.id !== id)));
+  tick();
+}
+function resetAll() {
+  if (!confirm('Wipe ALL submissions? This cannot be undone.')) return;
+  if (!confirm('Are you absolutely sure? Every audit will be erased.')) return;
+  localStorage.removeItem('famaash_submissions');
+  localStorage.removeItem('famaash_doc_counter');
+  tick();
+}
+function exportCSV() {
+  const all = JSON.parse(localStorage.getItem('famaash_submissions') || '[]');
+  if (!all.length) { alert('Nothing to export.'); return; }
+  const headers = ['id','timestamp','firm','attorney','role','email','phone','market','monthly_leads','avg_case_value','after_hours','response_time','languages','ai_visibility','total_leak','leak_ah','leak_zr','leak_vm','leak_slow','leak_ai','leak_lang','best_case','floored'];
+  const rows = all.map(s => [
+    s.id, s.timestamp, s.input.firmName, s.input.attorneyName, s.input.role,
+    s.input.email, s.input.phone, s.input.market, s.input.monthlyLeads, s.input.avgCaseValue,
+    s.input.afterHours, s.input.responseTime, s.input.languages, s.input.aiVisibility,
+    s.report.total,
+    ...(['ah','zr','vm','slow','ai','lang'].map(k => (s.report.lines.find(l => l.k === k) || {}).v || 0)),
+    s.report.bestCase ? 'yes' : 'no',
+    s.report.floored ? 'yes' : 'no'
+  ].map(v => `"${String(v ?? '').replace(/"/g,'""')}"`).join(','));
+  const csv = [headers.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `famaash-leaderboard-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'r' && e.ctrlKey && e.shiftKey) { e.preventDefault(); resetAll(); }
+  if (e.key === 'e' && e.ctrlKey && e.shiftKey) { e.preventDefault(); openEntries(); }
+  if (e.key === 'Escape') closeEntries();
+});
+
+tick();
+setInterval(tick, POLL_MS);
+</script>
+
+</body>
+</html>

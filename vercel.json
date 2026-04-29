@@ -2,7 +2,7 @@
   "cleanUrls": true,
   "rewrites": [
     { "source": "/audit", "destination": "/audit.html" },
-    { "source": "/audit-leaderboard", "destination": "/audit.html" },
+    { "source": "/audit-leaderboard", "destination": "/audit-leaderboard.html" },
     { "source": "/geo", "destination": "/personal-injury/client-acquisition.html" },
     { "source": "/njaj", "destination": "/njaj.html" },
     { "source": "/call", "destination": "/book.html" }
