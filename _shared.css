@@ -243,7 +243,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   .mega__industries { border-right: none; border-bottom: 1px solid var(--ink-line); padding: 28px 24px; }
   .mega__capabilities { padding: 28px 24px; }
 }
-@media (max-width: 900px) { .nav__items { display: none; } }
+/* mobile nav drawer rules live in homepage.css under @media (max-width: 760px) */
 
 /* =====================================================
    === PAGE: PI · CLIENT ACQUISITION ===
@@ -480,13 +480,15 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 }
 .metric-sec__qmark {
   position: absolute;
-  font-family: var(--font-display);
-  font-size: 96px;
+  font-family: 'Cormorant', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 140px;
   color: var(--gold);
   line-height: 1;
-  top: -36px;
-  left: -8px;
-  opacity: 0.4;
+  top: -56px;
+  left: -12px;
+  opacity: 0.55;
 }
 .metric-sec__quote p {
   font-family: var(--font-display);
@@ -682,8 +684,8 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   font-size: 14px;
   color: rgba(247,245,240,0.82);
 }
-.geo-prompt::before { content: '"'; color: var(--gold); margin-right: 2px; }
-.geo-prompt::after  { content: '"'; color: var(--gold); margin-left: 2px; }
+.geo-prompt::before { content: '\201C'; color: var(--gold); margin-right: 2px; font-family: 'Cormorant', Georgia, serif; font-style: italic; }
+.geo-prompt::after  { content: '\201D'; color: var(--gold); margin-left: 2px; font-family: 'Cormorant', Georgia, serif; font-style: italic; }
 .geo-rank {
   font-family: var(--font-body);
   font-weight: 600;
@@ -1150,13 +1152,69 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
   .geo-tile { border-right: 0; border-bottom: 1px solid var(--ink-line); }
   .geo-tile:last-child { border-bottom: 0; }
 
-  .bench-table__head, .bench-table__row, .bench-table__total {
-    grid-template-columns: 1.4fr 1fr;
-    gap: 8px;
-    padding: 14px 16px;
-  }
   .bench-table__head { display: none; }
-  .bench-table__row .num, .bench-table__total .num { text-align: left; font-size: 16px; }
+  .bench-table__row, .bench-table__total {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-areas:
+      "name name name name"
+      "spend leads signed cpsc";
+    column-gap: 12px;
+    row-gap: 10px;
+    padding: 16px;
+  }
+  .bench-table__row > span:first-child,
+  .bench-table__total > span:first-child {
+    grid-area: name;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .bench-table__row > .num,
+  .bench-table__total > .num {
+    text-align: left;
+    font-size: 16px;
+    display: block;
+    min-width: 0;
+    line-height: 1.2;
+  }
+  .bench-table__row > .num:nth-child(2),
+  .bench-table__total > .num:nth-child(2) { grid-area: spend; }
+  .bench-table__row > .num:nth-child(3),
+  .bench-table__total > .num:nth-child(3) { grid-area: leads; }
+  .bench-table__row > .num:nth-child(4),
+  .bench-table__total > .num:nth-child(4) { grid-area: signed; }
+  .bench-table__row > .num.cpsc,
+  .bench-table__total > .num.cpsc { grid-area: cpsc; }
+  .bench-table__row > .num::before,
+  .bench-table__total > .num::before {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold-deep);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .bench-table__row > .num:nth-child(2)::before,
+  .bench-table__total > .num:nth-child(2)::before { content: 'Spend'; }
+  .bench-table__row > .num:nth-child(3)::before,
+  .bench-table__total > .num:nth-child(3)::before { content: 'Leads'; }
+  .bench-table__row > .num:nth-child(4)::before,
+  .bench-table__total > .num:nth-child(4)::before { content: 'Signed'; }
+  .bench-table__row > .num.cpsc::before,
+  .bench-table__total > .num.cpsc::before { content: 'CPSC'; }
+  .bench-table__row > .num .dollar,
+  .bench-table__total > .num .dollar {
+    display: inline;
+  }
+  .bench-table__row > .num .muted,
+  .bench-table__total > .num .muted {
+    display: inline;
+    font-size: 9px;
+    margin-left: 4px;
+    white-space: nowrap;
+  }
 
   .meth-grid { grid-template-columns: 1fr; }
   .meth-col { border-right: 0; border-bottom: 1px solid rgba(201,169,97,0.3); }

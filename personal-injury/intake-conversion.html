@@ -24,12 +24,17 @@
 </script>
 <link rel="icon" type="image/svg+xml" href="/assets/famaash-icon-dark.svg" />
 <link rel="apple-touch-icon" href="/assets/famaash-logo-dark.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;500;600;700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body data-screen-label="11 PI Intake & Conversion">
 
 <!-- ========== TOP NAV (mega-dropdown) ========== -->
 <header class="nav" id="topNav">
   <div class="nav__inner">
+      <input type="checkbox" id="navToggle" class="nav__toggle-input" aria-label="Open menu" />
+      <label for="navToggle" class="nav__hamburger" aria-hidden="true"><span></span><span></span><span></span></label>
     <a href="../index.html" class="nav__brand" aria-label="Famaash home">
       <img src="../assets/famaash-logo-white.svg" alt="Famaash" />
     </a>
@@ -690,5 +695,6 @@
 })();
 </script>
 
+<script src="/mobile-nav.js" defer></script>
 </body>
 </html>
