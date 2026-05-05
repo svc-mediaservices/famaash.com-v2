@@ -491,7 +491,7 @@
    50-STATE COMPLIANCE MAP (dark)
    ========================================================== */
 .compliance50 { background: var(--ink); color: var(--on-ink); padding: 100px 32px; }
-.compliance50__head { max-width: 760px; margin: 0 auto 56px; text-align: center; }
+.compliance50__head { max-width: 760px; margin: 0 auto 56px;  }
 .compliance50__eyebrow { color: var(--gold); margin-bottom: 24px; }
 .compliance50__h {
   font-family: 'Cormorant', serif; font-weight: 500;
