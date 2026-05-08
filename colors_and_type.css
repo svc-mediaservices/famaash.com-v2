@@ -4,41 +4,10 @@
    Single source of truth for color and type variables.
    ===================================================== */
 
-@font-face {
-  font-family: 'Cormorant';
-  src: url('fonts/Cormorant-VariableFont_wght.ttf') format('truetype-variations');
-  font-weight: 300 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'DM Sans';
-  src: url('fonts/DMSans-VariableFont.ttf') format('truetype-variations');
-  font-weight: 100 1000;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'DM Mono';
-  src: url('fonts/DMMono-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'DM Mono';
-  src: url('fonts/DMMono-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'DM Mono';
-  src: url('fonts/DMMono-Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
+/* Local @font-face declarations removed — the /fonts/ TTF files don't exist
+   in this repo, so the browser was registering broken @font-face entries that
+   took precedence over the Google Fonts <link> on each page and falling back
+   to Georgia. DM Sans / DM Mono now load exclusively from Google Fonts. */
 
 :root {
   /* ---------- COLOR, SURFACES (DARK) ---------- */
@@ -85,7 +54,7 @@
   --dim-cream:   #6B7280;
 
   /* ---------- TYPE, FAMILIES ---------- */
-  --font-display: 'Cormorant', Georgia, 'Times New Roman', serif;
+  --font-display: 'DM Sans', Georgia, 'Times New Roman', serif;
   --font-body:    'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono:    'DM Mono', ui-monospace, monospace;
 
